@@ -16,7 +16,7 @@ eventBus.$off = (event, callback) => {
   if (eventBus.callbacks[event]) {
     if (callback) {
       eventBus.callbacks[event] = eventBus.callbacks[event].filter(
-        (cb) => cb !== callback
+        (cb) => cb !== callback,
       );
     } else {
       delete eventBus.callbacks[event];

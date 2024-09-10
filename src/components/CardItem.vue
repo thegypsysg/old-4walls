@@ -2,22 +2,51 @@
   <v-container class="mt-md-4">
     <v-row>
       <v-col cols="12">
-        <p align="center" class="header-title">Looking for a Break. ?</p>
+        <div>
+          <p class="text-center" :class="isSmall ? 'text-caption' : undefined">
+            <span class="mdi mdi-office-building-outline"></span> EXCLUSIVE
+            LOCATIONS
+          </p>
+          <p
+            align="center"
+            class="header-title mt-4"
+            :class="isSmall ? 'cust-title-2' : 'cust-title-1'"
+          >
+            Discover the Best Locations in the UAE
+          </p>
+          <p
+            class="text-center text-grey-darken-1 mx-16 mt-n4"
+            :class="isSmall ? 'text-caption' : undefined"
+            :style="{
+              letterSpacing: isSmall ? '2px' : '4px',
+              lineHeight: isSmall ? '20px' : '30px',
+            }"
+          >
+            EXPLORE DIVERSE NEIGHBORHOODS, EACH OFFERING UNIQUE AMENITIES AND
+            LIFESTYLE OPPORTUNITIES.
+          </p>
+        </div>
       </v-col>
     </v-row>
     <v-row class="mb-md-8 d-flex">
       <v-col cols="12">
-        <div class="d-flex justify-center" :class="isSmall ? 'flex-column' : ''" style="gap: 30px">
+        <div
+          class="d-flex justify-center"
+          :class="isSmall ? 'flex-column' : ''"
+          style="gap: 30px"
+        >
           <div v-for="(card, i) in card1" :key="i">
             <v-lazy :options="{ threshold: 0.5 }" min-height="200">
               <v-card
                 class="mx-auto card-item"
-                :min-width="isSmall? 200: 300"
-                height="300"
+                :min-width="isSmall ? 200 : 300"
+                height="400"
                 elevation="0"
               >
+                <div class="overlay"></div>
+                <!-- :src="`@/assets/images/banner/4walls-${card.img}.jpg`" -->
                 <v-img
-                src="@/assets/partner-1.png"
+                  :src="card.img"
                   height="100%"
                   width="100%"
                   class="card-image"
@@ -25,20 +54,33 @@
                 >
                   <template #placeholder> <div class="skeleton" /> </template
                 ></v-img>
-                <div class="card-tag">{{ card.jobs }} Jobs</div>
 
-                <v-card-title class="card-title"
-                  >{{ card.title }}</v-card-title
-                >
+                <v-card-title class="card-title d-flex flex-column">
+                  <span class="text-caption font-weight-thin"
+                    >{{ card.jobs }} Properties</span
+                  >
+                  <span>{{ card.title }}</span>
+                </v-card-title>
               </v-card>
             </v-lazy>
           </div>
         </div>
       </v-col>
+      <v-col cols="12" class="d-flex justify-center mt-6">
+        <v-btn class="bg-black text-white pl-12 pr-8" height="40" variant="text"
+          >Explore all Cities
+          <v-icon icon="mdi-arrow-right" class="ml-8"></v-icon>
+        </v-btn>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
+<script setup>
+import img1 from "@/assets/images/banner/4walls-GOA.jpg";
+import img2 from "@/assets/images/banner/4walls-BATAM.jpg";
+import img3 from "@/assets/images/banner/4walls-MUMBAI.jpg";
+</script>
 <script>
 export default {
   name: "CardItem",
@@ -47,16 +89,21 @@ export default {
       screenWidth: window.innerWidth,
       card1: [
         {
-          img: 'partner-1',
-          jobs: 12,
-          title: "Staycation"
+          img: img1,
+          jobs: 2,
+          title: "Goa",
         },
         {
-          img: 'partner-2',
-          jobs: 14,
-          title: "Vacation"
+          img: img2,
+          jobs: 4,
+          title: "Batam",
         },
-      ]
+        {
+          img: img3,
+          jobs: 5,
+          title: "Mumbai",
+        },
+      ],
     };
   },
   computed: {
@@ -65,10 +112,10 @@ export default {
     },
   },
   created() {
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener("resize", this.handleResize);
   },
   unmounted() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener("resize", this.handleResize);
   },
   methods: {
     handleResize() {
@@ -85,6 +132,18 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap");
+
+.cust-title-2 {
+  font-family: "DM Serif Display", system-ui;
+  font-weight: 400;
+  font-size: 33px;
+  line-height: 35px;
+}
+.cust-title-1 {
+  font-family: "DM Serif Display", system-ui;
+  font-weight: 400;
+}
 .card-container {
   display: flex;
   gap: 20px;
@@ -97,10 +156,19 @@ export default {
 .card-item {
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
   cursor: pointer;
   flex-grow: 1;
   width: 100%;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Warna overlay dan transparansi */
+  z-index: 1;
 }
 
 .card-image {
@@ -122,14 +190,10 @@ export default {
 .card-title {
   position: absolute;
   bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 5px;
   color: white;
-  font-size: 30px;
-  font-weight: bold;
   padding: 10px;
-  text-align: center;
-  width: 100%;
+  z-index: 2;
 }
 
 .card-title-2 {

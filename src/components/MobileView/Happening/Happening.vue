@@ -1,79 +1,112 @@
 <template>
-  <v-container>
-    
-<div>
-  <p align="center" class="header-title mt-4">Trending Categories</p>
-</div> 
-    <div class="happening d-flex justify-center flex-column align-center mb-md-8 mb-sm-2">
-      <v-lazy :options="{ threshold: 0.5 }" min-height="270">
-        <v-card class="happening-item" elevation="0">
-          <v-img
-            min-width="270"
-            min-height="370"
-            class="happening-item-img"
-            src="@/assets/happening-img-1.png"
-            transition="fade-transition"
-          >
-            <template #placeholder>
-              <div class="skeleton" />
-            </template>
-          </v-img>
-          <span class="happening-info">Events</span>
-          <div class="happening-link" />
-        </v-card>
-      </v-lazy>
-      <v-lazy :options="{ threshold: 0.5 }" min-height="130">
-        <v-card class="happening-item" elevation="0">
-          <v-img
-            min-width="270"
-            min-height="370"
-            class="happening-item-img"
-            src="@/assets/happening-img-2.png"
-            transition="fade-transition"
-          >
-            <template #placeholder>
-              <!-- <v-row align="center" class="fill-height ma-0" justify="center">
-                <v-skeleton-loader />
-              </v-row> -->
-              <div class="skeleton" />
-            </template>
-          </v-img>
-          <span class="happening-info">Parking Info</span>
-          <div class="happening-link" />
-        </v-card>
-      </v-lazy>
-      <v-lazy :options="{ threshold: 0.5 }" min-height="130">
-        <v-card class="happening-item" elevation="0">
-          <v-img
-            min-width="270"
-            min-height="370"
-            class="happening-item-img"
-            src="@/assets/happening-img-3.png"
-            transition="fade-transition"
-          >
-            <template #placeholder>
-              <!-- <v-row align="center" class="fill-height ma-0" justify="center">
-                <v-skeleton-loader type="image" />
-              </v-row> -->
-              <div class="skeleton" />
-            </template>
-          </v-img>
-          <div class="happening-info">Promotions</div>
-          <div class="happening-link" />
-        </v-card>
-      </v-lazy>
+  <v-container id="happeningTarget">
+    <div>
+      <p class="text-center text-caption">
+        <span class="mdi mdi-domain"></span> FEATURED HOMES
+      </p>
+      <p align="center" class="header-title cust-title mt-4">
+        Our New Homes For Sale and Rent
+      </p>
+      <p
+        class="text-center text-grey-darken-1 mt-n4 mx-16 text-caption"
+        style="letter-spacing: 2px; line-height: 20px"
+      >
+        OUR PORTFOLIO INCLUDES HIGH-QUALITY VILLAS, SPACIOUS APARTMENTS, AND
+        THOUGHTFULLY DESIGNED TOWNHOUSES.
+      </p>
+    </div>
+    <div
+      class="happening d-flex justify-center flex-column align-center mb-md-8 mb-sm-2"
+    >
+      <div
+        class="happening d-flex flex-column justify-center align-center mb-8 mt-16"
+      >
+        <v-lazy :options="{ threshold: 0.5 }" min-height="270">
+          <v-card class="happening-item" elevation="0">
+            <div class="happening-info text-white">
+              <h3 class="font-weight-black">BUY</h3>
+              <p class="font-weight-bold text-body-2">24 Properties</p>
+            </div>
+
+            <div class="overlay"></div>
+            <v-img
+              min-width="270"
+              min-height="370"
+              class="happening-item-img"
+              src="@/assets/images/banner/4walls-BUY.jpg"
+              transition="fade-transition"
+            >
+              <template #placeholder>
+                <div class="skeleton" />
+              </template>
+            </v-img>
+          </v-card>
+        </v-lazy>
+        <v-lazy :options="{ threshold: 0.5 }" min-height="270">
+          <v-card class="happening-item" elevation="0">
+            <div class="happening-info">
+              <h3 class="font-weight-black text-red-darken-2">RENT</h3>
+              <p class="font-weight-bold text-white text-body-2">
+                24 Properties
+              </p>
+            </div>
+
+            <div class="overlay"></div>
+            <v-img
+              min-width="270"
+              min-height="370"
+              class="happening-item-img"
+              src="@/assets/images/banner/4walls-RENT.jpg"
+              transition="fade-transition"
+            >
+              <template #placeholder>
+                <div class="skeleton" />
+              </template>
+            </v-img>
+          </v-card>
+        </v-lazy>
+      </div>
     </div>
   </v-container>
 </template>
 
 <script>
+import { eventBus } from "@/util/bus";
+import { onMounted, watch, nextTick } from "vue";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Happening",
+  setup() {
+    onMounted(() => {
+      watch(
+        () => eventBus.scrollToSection,
+        async (newValue) => {
+          if (newValue) {
+            await nextTick();
+            const element = document.getElementById(newValue);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+              eventBus.scrollToSection = null;
+            }
+          }
+        },
+      );
+    });
+  },
 };
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap");
+
+.cust-title {
+  font-family: "DM Serif Display", system-ui;
+  font-weight: 400;
+  font-size: 33px;
+  line-height: 35px;
+}
+
 .happening {
   gap: 20px;
 }
@@ -104,7 +137,6 @@ export default {
 .happening-item {
   position: relative;
   overflow: hidden;
-  border-radius: 20px !important;
 }
 .happening-item-img {
   max-width: 100%;
@@ -121,7 +153,7 @@ export default {
 
 .happening-info {
   position: absolute;
-  bottom: 20px;
+  top: 20px;
   color: white;
   z-index: 100;
   font-size: 30px;
@@ -134,6 +166,16 @@ export default {
   font-weight: 700;
 }
 
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Warna overlay dan transparansi */
+  z-index: 1;
+}
+
 .happening-link {
   background: rgba(0, 0, 0, 0.429);
   -webkit-transition: all 0.4s;
@@ -142,10 +184,6 @@ export default {
   width: 100%;
   position: absolute;
   bottom: -100px;
-}
-
-.happening-item:hover .happening-link {
-  bottom: 0;
 }
 
 .skeleton {

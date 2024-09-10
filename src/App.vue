@@ -35,6 +35,7 @@
         :title-header="titleHeader"
         :is-desktop="isDesktop"
         :is-profile="isProfile"
+        :is-signin="isSignIn"
       />
       <RouterView v-slot="{ Component }">
         <Transition name="page-opacity" mode="out-in">
@@ -48,6 +49,8 @@
 <script>
 import { RouterView } from "vue-router";
 import Header from "@/components/Header.vue";
+import app from "@/util/eventBus";
+import axios from "@/util/axios";
 
 export default {
   name: "App",
@@ -57,6 +60,7 @@ export default {
     return {
       currentRoute: this.$route.path,
       isDesktop: true,
+      token: null,
     };
   },
   computed: {
@@ -64,6 +68,10 @@ export default {
       let title = "";
       if (this.currentRoute === "/my-profile") {
         title = "My Profile";
+      } else if (this.currentRoute === "/sign-in") {
+        title = "Sign-Up / Sign-in";
+      } else if (this.currentRoute === "/social-sign-up") {
+        title = "Social Registration";
       } else if (this.currentRoute === "/discount-types") {
         title = "Promotions by Discount";
       } else if (this.currentRoute === "/category") {
@@ -82,7 +90,17 @@ export default {
       return title;
     },
     isProfile() {
-      return this.currentRoute === "/my-profile";
+      return (
+        this.currentRoute === "/my-profile" ||
+        this.currentRoute === "/sign-in" ||
+        this.currentRoute === "/social-sign-up"
+      );
+    },
+    isSignIn() {
+      return (
+        this.currentRoute === "/sign-in" ||
+        this.currentRoute === "/social-sign-up"
+      );
     },
   },
   watch: {
@@ -90,8 +108,79 @@ export default {
       this.currentRoute = this.$route.path;
     },
   },
+  created() {
+    const url = new URL(window.location.href);
+    const tokenParam = url.searchParams.get("token");
+    if (tokenParam) {
+      localStorage.setItem("token", tokenParam);
+    }
+
+    this.getApplicant(tokenParam);
+  },
   mounted() {
     this.isDesktop = window.innerWidth >= 768;
+  },
+  methods: {
+    getApplicant(tokenParam) {
+      this.isLoading = true;
+      const token = localStorage.getItem("token");
+      axios
+        .get(`/gypsy-applicant`, {
+          headers: {
+            Authorization: `Bearer ${tokenParam ? tokenParam : token}`,
+          },
+        })
+        .then((response) => {
+          const data = response.data.data;
+          console.log(data);
+          if (data && data.basic_steps == null) {
+            this.token = tokenParam ? tokenParam : token;
+            app.config.globalProperties.$eventBus.$emit(
+              "getTokenStart",
+              tokenParam ? tokenParam : token,
+            );
+            localStorage.setItem("applicant_data", JSON.stringify(data));
+          } else if (
+            data &&
+            data.basic_steps == "C" &&
+            this.currentRoute == "/"
+          ) {
+            this.$router.push(`/${data.slug}`);
+            app.config.globalProperties.$eventBus.$emit("getTrendingCardData2");
+          } else if (data == null) {
+            app.config.globalProperties.$eventBus.$emit(
+              "changeHeaderPath",
+              "/",
+            );
+          }
+
+          if (data.slug) {
+            this.path = `/${data.slug}`;
+            app.config.globalProperties.$eventBus.$emit(
+              "changeHeaderPath",
+              `/${data.slug}`,
+            );
+          } else {
+            this.path = "/";
+            app.config.globalProperties.$eventBus.$emit(
+              "changeHeaderPath",
+              "/",
+            );
+          }
+          // else {
+          //   app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+          // }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
+
+          // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
   },
 };
 </script>

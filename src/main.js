@@ -20,7 +20,8 @@ import { registerPlugins } from "@/plugins";
 import "aos/dist/aos.css";
 
 const app = createApp(App).use(router);
-app.config.globalProperties.$appId = 2;
+app.config.globalProperties.$appId = 6;
+app.config.globalProperties.$superAppId = 1;
 app.config.globalProperties.$fileURL = "https://admin1.the-gypsy.sg/img/app/";
 
 registerPlugins(app);

@@ -22,9 +22,9 @@
     margin: 0 auto;
   }
   .header-title {
-    font-size: 24px !important;
+    font-size: 24px;
     font-weight: 700;
-    line-height: 33px !important;
+    line-height: 33px;
   }
   .header-title-sub {
     font-size: 16px !important;
@@ -44,6 +44,12 @@
     font-weight: 700;
     line-height: 22px;
     padding: 10px !important;
+  }
+  .btn_log__out {
+    font-size: 12px !important;
+    font-weight: 700;
+    line-height: 22px;
+    padding: 10px 15px !important;
   }
   .v-toolbar__extension {
     height: 95px !important;

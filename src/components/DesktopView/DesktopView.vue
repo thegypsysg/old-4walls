@@ -4,7 +4,7 @@
       <v-progress-circular :size="50" color="#fa2964" indeterminate />
     </div>
     <div v-if="!isLoading">
-      <Banner :app-details="appDetails1" />
+      <Banner :appDetails="appDetails1[0]" />
       <!-- <OtherPromotion :items="otherPromotionDataFinal[0]" /> -->
       <Happening />
       <CardItem />
@@ -67,9 +67,7 @@ export default {
   },
   mounted() {
     this.getCountryMall();
-    Promise.all([
-      this.getAppDetails1(),
-    ])
+    Promise.all([this.getAppDetails1()])
       .then(() => {
         this.isLoading = false;
       })
@@ -79,13 +77,13 @@ export default {
       });
     app.config.globalProperties.$eventBus.$on(
       "getActiveDataByCountryCity",
-      this.getActiveDataByCountryCity
+      this.getActiveDataByCountryCity,
     );
   },
   beforeUnmount() {
     app.config.globalProperties.$eventBus.$off(
       "getActiveDataByCountryCity",
-      this.getActiveDataByCountryCity
+      this.getActiveDataByCountryCity,
     );
   },
   methods: {
@@ -93,47 +91,47 @@ export default {
     getCountryMall() {
       this.isLoading = true;
       axios
-        .get(`/mall-country-list`)
+        .get(`/app-cities/country-cities/${this.$appId}`)
         .then((response) => {
           const data = response.data.data;
           this.country = data.map((country) => {
             return {
               id: country.country_id,
               title: country.country_name,
-              count: country.mall_count,
-              oneCity: country.one_city == "Y" ? true : false,
+              count: country?.mall_count || 0,
+              // oneCity: country.one_city == "Y" ? true : false,
               path: "#",
-              flag: country.flag,
+              // flag: country.flag,
             };
           });
+          // console.log(this.country);
           const defaultCountry = data
             .filter((c) => c.country_name == this.countryDevice)
             .map((country) => {
               return {
                 id: country.country_id,
                 title: country.country_name,
-                count: country.mall_count,
-                oneCity: country.one_city == "Y" ? true : false,
+                count: country?.mall_count || 0,
+                // oneCity: country.one_city == "Y" ? true : false,
                 path: "#",
-                flag: country.flag,
+                // flag: country.flag,
               };
             });
           console.log("map country body", defaultCountry);
           this.setItemSelectedComplete(
-            defaultCountry.length > 0 ? defaultCountry[0] : this.country[0]
+            defaultCountry.length > 0 ? defaultCountry[0] : this.country[0],
           );
           localStorage.setItem(
             "mallCount",
             defaultCountry.length > 0
               ? defaultCountry[0].count
-              : this.country[0].count
+              : this.country[0].count,
           );
           this.setItemSelected(
             defaultCountry.length > 0
               ? defaultCountry[0].title
-              : this.country[0].title
+              : this.country[0].title,
           );
-
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -362,16 +360,16 @@ export default {
                 this.itemSelectedComplete?.id || 1
               }/${this.itemSelected2Complete?.id || 1}`
             : this.itemSelectedComplete?.id == 1 &&
-              !this.itemSelected2Complete?.id
-            ? `/malls/active-list/${this.latitude}/${this.longitude}/featured/${
-                this.itemSelectedComplete?.id || 1
-              }/1`
-            : this.itemSelectedComplete?.id != 1 &&
-              !this.itemSelected2Complete?.id
-            ? `/malls/active-list/${this.latitude}/${this.longitude}/featured/${
-                this.itemSelectedComplete?.id || 1
-              }`
-            : `/malls/active-list/${this.latitude}/${this.longitude}/featured/1/1`
+                !this.itemSelected2Complete?.id
+              ? `/malls/active-list/${this.latitude}/${this.longitude}/featured/${
+                  this.itemSelectedComplete?.id || 1
+                }/1`
+              : this.itemSelectedComplete?.id != 1 &&
+                  !this.itemSelected2Complete?.id
+                ? `/malls/active-list/${this.latitude}/${this.longitude}/featured/${
+                    this.itemSelectedComplete?.id || 1
+                  }`
+                : `/malls/active-list/${this.latitude}/${this.longitude}/featured/1/1`,
         )
         .then((response) => {
           const data = response.data.data;
@@ -395,27 +393,27 @@ export default {
                   item.one_city == "Y"
                     ? `${item.town_name}, ${item.city_name}`
                     : item.town_name &&
-                      item.city_name &&
-                      item.country_name &&
-                      item.one_city != "Y"
-                    ? `${item.town_name}, ${item.city_name}, ${item.country_name}`
-                    : item.country_name &&
-                      item.city_name &&
-                      item.town_name == null
-                    ? `${item.city_name}, ${item.country_name}`
-                    : item.country_name &&
-                      item.city_name == null &&
-                      item.town_name == null
-                    ? `${item.country_name}`
-                    : item.city_name &&
-                      item.country_name == null &&
-                      item.town_name == null
-                    ? `${item.city_name}`
-                    : item.town_name &&
-                      item.country_name == null &&
-                      item.city_name == null
-                    ? `${item.town_name}`
-                    : "-",
+                        item.city_name &&
+                        item.country_name &&
+                        item.one_city != "Y"
+                      ? `${item.town_name}, ${item.city_name}, ${item.country_name}`
+                      : item.country_name &&
+                          item.city_name &&
+                          item.town_name == null
+                        ? `${item.city_name}, ${item.country_name}`
+                        : item.country_name &&
+                            item.city_name == null &&
+                            item.town_name == null
+                          ? `${item.country_name}`
+                          : item.city_name &&
+                              item.country_name == null &&
+                              item.town_name == null
+                            ? `${item.city_name}`
+                            : item.town_name &&
+                                item.country_name == null &&
+                                item.city_name == null
+                              ? `${item.town_name}`
+                              : "-",
                 distance: item.distance || 0,
                 distanceText: this.formatDistance(item.distance),
                 featured: item.featured || "N",
@@ -450,16 +448,16 @@ export default {
                 this.itemSelected2Complete?.id || 1
               }`
             : this.itemSelectedComplete?.id == 1 &&
-              !this.itemSelected2Complete?.id
-            ? `/mall-merchant-outlets/list-by-status/all/${this.latitude}/${
-                this.longitude
-              }/${this.itemSelectedComplete?.id || 1}/1`
-            : this.itemSelectedComplete?.id != 1 &&
-              !this.itemSelected2Complete?.id
-            ? `/mall-merchant-outlets/list-by-status/all/${this.latitude}/${
-                this.longitude
-              }/${this.itemSelectedComplete?.id || 1}`
-            : `/mall-merchant-outlets/list-by-status/all/${this.latitude}/${this.longitude}/1/1`
+                !this.itemSelected2Complete?.id
+              ? `/mall-merchant-outlets/list-by-status/all/${this.latitude}/${
+                  this.longitude
+                }/${this.itemSelectedComplete?.id || 1}/1`
+              : this.itemSelectedComplete?.id != 1 &&
+                  !this.itemSelected2Complete?.id
+                ? `/mall-merchant-outlets/list-by-status/all/${this.latitude}/${
+                    this.longitude
+                  }/${this.itemSelectedComplete?.id || 1}`
+                : `/mall-merchant-outlets/list-by-status/all/${this.latitude}/${this.longitude}/1/1`,
         )
         .then((response) => {
           const data = response.data.data;
@@ -484,16 +482,16 @@ export default {
                 this.itemSelectedComplete?.id || 1
               }/${this.itemSelected2Complete?.id || 1}`
             : this.itemSelectedComplete?.id == 1 &&
-              !this.itemSelected2Complete?.id
-            ? `/mall-promotions/featured/${this.latitude}/${this.longitude}/${
-                this.itemSelectedComplete?.id || 1
-              }/1`
-            : this.itemSelectedComplete?.id != 1 &&
-              !this.itemSelected2Complete?.id
-            ? `/mall-promotions/featured/${this.latitude}/${this.longitude}/${
-                this.itemSelectedComplete?.id || 1
-              }`
-            : `/mall-promotions/featured/${this.latitude}/${this.longitude}/1/1`
+                !this.itemSelected2Complete?.id
+              ? `/mall-promotions/featured/${this.latitude}/${this.longitude}/${
+                  this.itemSelectedComplete?.id || 1
+                }/1`
+              : this.itemSelectedComplete?.id != 1 &&
+                  !this.itemSelected2Complete?.id
+                ? `/mall-promotions/featured/${this.latitude}/${this.longitude}/${
+                    this.itemSelectedComplete?.id || 1
+                  }`
+                : `/mall-promotions/featured/${this.latitude}/${this.longitude}/1/1`,
         )
         .then((response) => {
           const data = response.data.data;

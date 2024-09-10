@@ -1,5 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/HomeView.vue";
+import MyProfile from "@/views/MyProfileView.vue";
+import PrivacyTerms from "@/views/PrivacyTerms.vue";
+import SignUp from "@/views/SignUpForm.vue";
+import OTPEmailForm from "@/views/OTPEmailForm.vue";
+import CreatePasswordForm from "@/views/CreatePasswordForm.vue";
+import SocialLogin from "@/views/SocialLoginForm.vue";
 // import MyProfile from "@/views/MyProfileView.vue";
 // import PromotionDiscountDetail from "@/components/PromotionDetail/PromotionDiscountDetail.vue";
 // import PromotionCategoryDetail from "@/components/PromotionDetail/PromotionCategoryDetail.vue";
@@ -30,11 +36,53 @@ const routes = [
     path: "/",
     component: Home,
   },
-  // {
-  //   path: "/my-profile",
-  //   name: "My Profile",
-  //   component: MyProfile,
-  // },
+  {
+    path: "/my-profile",
+    name: "My Profile",
+    component: MyProfile,
+  },
+  {
+    path: "/privacy-policy",
+    name: "Privacy Policy",
+    component: PrivacyTerms,
+  },
+  {
+    path: "/our-terms",
+    name: "OurTerms",
+    component: PrivacyTerms,
+  },
+  {
+    path: "/sign-in",
+    name: "Welcome",
+    component: SignUp,
+  },
+  {
+    path: "/sign-up-email",
+    name: "SignUpEmail",
+    component: OTPEmailForm,
+  },
+  {
+    path: "/signup-email",
+    name: "Create Password",
+    component: CreatePasswordForm,
+  },
+  {
+    path: "/social-sign-up",
+    name: "Social Sign Up",
+    component: SocialLogin,
+    beforeRouteEnter(to, from, next) {
+      const email = to.query.email || "";
+      const name = to.query.name || "";
+      const avatar = to.query.avatar || "";
+
+      // Anda dapat menyimpan nilai-nilai ini dalam state Vuex atau menggunakan mereka langsung dalam komponen
+      next((vm) => {
+        vm.email = email;
+        vm.name = name;
+        vm.avatar = avatar;
+      });
+    },
+  },
   // {
   //   path: "/discount-types",
   //   name: "Promotion Discount Types",

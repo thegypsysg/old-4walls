@@ -5,39 +5,54 @@
       backgroundImage: `url(${$fileURL + appDetails?.app_main_image})`,
     }"
   >
-    <!-- <v-container
-      style="height: calc(100vh - 90px); display: flex; align-items: center"
+    <div class="overlay"></div>
+    <v-container
+      style="
+        height: calc(100vh - 90px);
+        display: flex;
+        align-items: center;
+        position: relative;
+        z-index: 100;
+      "
     >
       <v-row>
-        <v-col cols="12">
+        <v-col class="pt-16 pl-16" cols="12">
           <div
-            class="hero__text"
+            class="hero__text pt-16"
             data-aos="fade-right"
             data-aos-offset="200"
             data-aos-duration="2000"
             data-aos-easing="ease-in-sine"
+            style="z-index: 100"
           >
-            <h1 style="color: rgb(255, 236, 75)">Welcome !!!</h1>
-            <h2 style="color: #fff">Are you going to a Mall?</h2>
+            <h2 style="color: #fff" class="w-lg-33 pr-lg-5">
+              Explore Homes for Sale & Rent
+            </h2>
+            <!-- <h2 style="color: #fff">for Sale & Rent</h2> -->
+            <!-- <router-link :to="{ hash: '#happeningTarget' }"> -->
             <v-btn
-              class="btn-primary v-btn v-btn--has-bg theme--light elevation-0 v-size--default"
-              style="
-                background-color: rgb(255, 236, 75);
-                border-color: rgb(255, 236, 75);
-              "
+              @click="scrollToSection"
+              class="btn-primary text-white v-btn v-btn--has-bg theme--light elevation-0 v-size--default mt-8"
+              style="background-color: #fa2964"
             >
-              <span>Promotions</span>
+              <span>View Options</span>
             </v-btn>
+            <!-- </router-link> -->
           </div>
         </v-col>
       </v-row>
-    </v-container> -->
+    </v-container>
   </div>
 </template>
 
 <script setup>
 import { onMounted } from "vue";
+import { eventBus } from "@/util/bus";
 import AOS from "aos";
+
+function scrollToSection() {
+  eventBus.scrollToSection = "happeningTarget"; // Ganti dengan ID section yang diinginkan
+}
 
 onMounted(() => {
   AOS.init();
@@ -52,6 +67,16 @@ export default {
 </script>
 
 <style scoped>
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin-top: 70px;
+  min-height: calc(100vh - 70px);
+  background: rgba(0, 0, 0, 0.5); /* Warna overlay dan transparansi */
+  z-index: 1;
+}
 h1 {
   color: #ffec4b;
   font-size: 64px;
@@ -60,16 +85,15 @@ h1 {
 }
 h2 {
   color: #fff;
-  font-size: 30px;
-  font-weight: 700;
-  margin-bottom: 36px;
+  font-size: 40px;
+  font-weight: 800;
 }
 @media (max-width: 959px) {
   h1 {
     font-size: 48px;
   }
   h2 {
-    font-size: 24px;
+    font-size: 43px;
   }
 }
 </style>
