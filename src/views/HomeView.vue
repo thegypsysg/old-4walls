@@ -1,10 +1,10 @@
 <template>
-  <DesktopView v-if="isDesktop" />
-  <MobileView v-else />
+  <DesktopView />
 </template>
 
 <script setup>
 import DesktopView from "@/components/DesktopView/DesktopView.vue";
+import Main from "@/components/Main.vue";
 import MobileView from "@/components/MobileView/MobileView.vue";
 </script>
 
@@ -26,26 +26,6 @@ export default {
     this.getLocation();
   },
   methods: {
-    // getLocation() {
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(
-    //       (position) => {
-    //         if (position) {
-    //           this.latitude = position.coords.latitude;
-    //           this.longitude = position.coords.longitude;
-    //           console.log(this.latitude, this.longitude);
-    //           localStorage.setItem("latitude", this.latitude);
-    //           localStorage.setItem("longitude", this.longitude);
-    //         }
-    //       },
-    //       (error) => {
-    //         console.log("Error getting location:", error.message);
-    //       }
-    //     );
-    //   } else {
-    //     console.log("Geolocation is not supported by this browser.");
-    //   }
-    // },
     getLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -60,8 +40,8 @@ export default {
               // Mengirim permintaan ke API Geocoding untuk mendapatkan nama negara
               axios
                 .get(
-                  // `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${this.latitude}&lon=${this.longitude}`
-                  `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${26.907524}&lon=${75.739639}`
+                  `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${this.latitude}&lon=${this.longitude}`
+                  // `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${26.907524}&lon=${75.739639}`
                 )
                 .then((response) => {
                   if (

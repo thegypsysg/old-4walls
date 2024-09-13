@@ -4,19 +4,12 @@
       <v-progress-circular :size="50" color="#fa2964" indeterminate />
     </div>
     <div v-if="!isLoading">
-      <Banner :appDetails="appDetails1[0]" />
-      <!-- <OtherPromotion :items="otherPromotionDataFinal[0]" /> -->
-      <Happening />
-      <CardItem />
-      <Partners />
-      <Footer />
+      <Main/>
     </div>
   </div>
 </template>
 
 <script setup>
-import Banner from "@/components/Banner.vue";
-import Footer from "@/components/Footer.vue";
 import Happening from "./Happening/Happening.vue";
 </script>
 
@@ -24,8 +17,7 @@ import Happening from "./Happening/Happening.vue";
 import { mapState, mapMutations } from "vuex";
 import app from "@/util/eventBus";
 import axios from "@/util/axios";
-import Partners from "../Partners.vue";
-import CardItem from "../CardItem.vue";
+import Main from "../Main.vue";
 export default {
   name: "DesktopView",
   components: { Happening },
