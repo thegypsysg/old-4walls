@@ -632,16 +632,16 @@ export default {
           })
           .then((response) => {
             console.log(response);
-            if (response) {
-              window.location.assign(response.data.target_url);
-            } else {
-              window.location.href = "/sign-in";
-            }
-            console.log(response.data.target_url);
+            // if (response) {
+            //   window.location.assign(response.data.target_url);
+            // } else {
+            //   window.location.href = "/sign-in";
+            // }
+            console.log("target_url", response.data.target_url);
           })
           .catch((error) => {
             console.log(error);
-            window.location.href = "/sign-in";
+            // window.location.href = "/sign-in";
           });
       }
     },

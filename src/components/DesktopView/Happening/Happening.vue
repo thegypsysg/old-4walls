@@ -21,15 +21,13 @@
           <v-hover v-slot:default="{ isHovering, props }">
             <v-responsive class="rounded fade-in-up">
               <v-img :src="img.url" cover aspect-ratio="0.65" style="height: 100%;">
-                <div v-bind="props" :style="[
-                  isHovering ? 'background-color: rgba(0, 0, 0, 0.0)' : 'background-color: rgba(0, 0, 0, 0.3)',
-                  'transition: background-color 0.3s ease'
-                ]" class="fill-height px-8 py-8 text-white font-weight-light">
-                  <div class="d-flex flex-column justify-space-between fill-height">
-                    <div class="text-center font-weight-bold">
-                      <div class="text-h2 font-weight-bold text-white">{{ img.title }}</div>
-                      <div>{{ img.properties_count }} Properties</div>
-                    </div>
+                <div v-bind="props" :style="[isHovering ? 'background-color: rgba(0, 0, 0, 0.0)' : 'background-color: rgba(0, 0, 0, 0.3)', 'transition: background-color 0.3s ease']" class="fill-height d-flex flex-column align-center justify-between px-8 py-8 text-white font-weight-light">
+                  <div class="text-center font-weight-bold">
+                    <div class="text-h2 font-weight-bold text-white">{{ img.title }}</div>
+                    <div>{{ img.properties_count }} Properties</div>
+                  </div>
+                  <div class="text-center mt-auto mb-auto">
+                    <v-btn class="ma-2" color="pink darken-1" dark rounded>View Options</v-btn>
                   </div>
                 </div>
               </v-img>
@@ -38,11 +36,8 @@
         </v-col>
       </template>
     </v-row>
-
   </div>
 </template>
-
-
 <script lang="ts" setup>
 
 const images = [
