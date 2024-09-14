@@ -21,6 +21,10 @@
     <v-container class="mx-auto px-4" style="max-width: 1400px">
       <ForSale class="mt-10" />
     </v-container>
+
+    <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px">
+      <Guide class="mt-10" />
+    </v-container>
     <Footer />
   </div>
 </template>
@@ -35,7 +39,16 @@ import FeaturedMove from './partials/featured-move'
 import Interested from './partials/interested'
 import Portfolio from './partials/portfolio'
 import ForSale from './partials/for-sale'
+import Guide from './partials/guide'
 
 </script>
 
-<style scoped></style>
+<style>
+.carousel__prev {
+  left: -33px;
+}
+
+.carousel__next {
+  right: -33px;
+}
+</style>
