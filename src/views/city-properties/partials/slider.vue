@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Carousel v-bind="settings" :breakpoints :items-to-show="4">
+    <Carousel v-bind="settings" :breakpoints>
       <Slide v-for="(city, i) in cities" :key="i">
         <v-responsive class="border pa-4 ma-6">
           <div>
@@ -24,7 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 
 const cities = [
@@ -76,6 +75,11 @@ const settings: breakpoints = {
 };
 
 const breakpoints = {
+  // 200px and up
+  200: {
+    itemsToShow: 1.5,
+    snapAlign: 'center',
+  },
   // 640px and up
   640: {
     itemsToShow: 2,
