@@ -11,6 +11,7 @@
       <Slider />
       <FeaturedProject />
       <FeaturedMove />
+      <Interested class="mt-10" />
     </v-container>
     <Footer />
   </div>
@@ -21,6 +22,7 @@ import Banner from './partials/banner'
 import Slider from './partials/slider'
 import FeaturedProject from './partials/featured-project'
 import FeaturedMove from './partials/featured-move'
+import Interested from './partials/interested'
 
 </script>
 
