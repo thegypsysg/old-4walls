@@ -44,6 +44,14 @@ import Guide from './partials/guide'
 </script>
 
 <style>
+.v-field--variant-filled .v-field__overlay {
+  background-color: white !important;
+}
+
+.v-field__outline {
+  display: none;
+}
+
 .carousel__prev {
   left: -33px;
 }

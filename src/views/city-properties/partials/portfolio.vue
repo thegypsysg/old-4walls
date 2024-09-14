@@ -12,7 +12,7 @@
       OUR PORTFOLIO INCLIDES HIGH-QUALITY VILLAS, SPACIOUS APARTMENTS, AND THOUGHTFUL DESIGNED TOWNHOUSES
     </div>
 
-    <div class="d-flex ga-10 justify-center mt-10">
+    <div class="d-flex flex-column flex-md-row ga-10 justify-center mt-10">
       <template v-for="(p, i) in portfolios" :key="i">
         <v-btn class="font-weight-bold">{{ p.name }} (<span class="text-red">{{ p.count }}</span>)</v-btn>
       </template>

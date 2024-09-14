@@ -1,7 +1,7 @@
 <template>
   <div v-for="(item, j) in sale_items" :key="j">
-    <div class="d-flex justify-space-between">
-      <div class="text-h4 font-weight-bold">{{ item }}</div>
+    <div class="d-flex justify-space-between align-center">
+      <div class="text-md-h4 font-weight-bold">{{ item }}</div>
       <div class="text-cyan-darken-2">View All</div>
 
     </div>

@@ -76,7 +76,7 @@ const listData = [
   },
   {
     under_construction: true,
-    img: 'https://opus-bay.com/wp-content/uploads/2023/02/State-Of-The-Art-Paradise-Image-Mob.png',
+    img: 'https://cdn.brighton.co.id/Uploads/Images/6318465/pKYG70sK/FB-IMG-1694173028951-watermarked.webp',
     name: 'MARCS BOULEVARD',
     description: 'Experience the height of sophistication in our stunning villas. Our villas are designed with the utmost attention to detail, featuring spacious living areas, private pools, and stunning views of the surrounding landscape.',
     company: {
@@ -89,7 +89,7 @@ const listData = [
   },
   {
     under_construction: true,
-    img: 'https://opus-bay.com/wp-content/uploads/2023/02/State-Of-The-Art-Paradise-Image-Mob.png',
+    img: 'https://pic.rumah123.com/r123/1920x1080-fit/primary_property/project/2746/1634624603_616e645bac614ads_images_2746.jpg?noWatermark',
     name: 'Orchard Park',
     description: 'Discover our selection of contemporary apartments located in the heart of the city. Our apartments are designed with the modern lifestyle in mind, featuring spacious living areas, modern kitchens, and stunning views of the cityscape.',
     company: {
