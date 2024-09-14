@@ -4,7 +4,7 @@
       <v-progress-circular :size="50" color="#fa2964" indeterminate />
     </div>
     <div v-if="!isLoading">
-      <Main/>
+      <Main />
     </div>
   </div>
 </template>
