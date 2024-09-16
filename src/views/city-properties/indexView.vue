@@ -10,9 +10,11 @@
     <v-container class="mx-auto px-4" style="max-width: 1400px">
       <Slider />
     </v-container>
+    <div class="mx-auto px-10 w-100">
+      <FeaturedProject />
+    </div>
 
     <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px">
-      <FeaturedProject />
       <FeaturedMove />
       <Interested class="mt-10" />
       <Portfolio class="mt-10" />
@@ -58,5 +60,9 @@ import Guide from './partials/guide'
 
 .carousel__next {
   right: -33px;
+}
+
+.carousel__track {
+  align-items: start;
 }
 </style>

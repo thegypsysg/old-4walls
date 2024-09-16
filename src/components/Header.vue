@@ -14,7 +14,7 @@
       </div>
     </router-link>
 
-    <div v-if="!isHeader && !isProfile" class="text-center desktop__app">
+    <div v-if="!isHeader && !isProfile && !isBatamProperties" class="text-center desktop__app">
       <v-btn style="background: #f4f5f7; color: black" variant="text" color="black" icon="mdi-share-outline" width="40"
         height="40" class="mr-2">
         <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
@@ -237,15 +237,16 @@
     </form>
 
     <div v-if="isBatamProperties" class="d-none d-md-flex ga-2 w-100">
-      <div class="text-h5 font-weight-bold mt-4"><span class="text-red-darken-4">Batam</span> Properties</div>
+      <div class="text-h4 font-weight-black text-no-wrap"><span class="text-red-darken-4">Batam</span> Properties
+      </div>
       <div class="d-flex justify-center w-100">
         <div class="d-flex gap-2 align-center text-caption">
-          <label class="text-no-wrap">Indonesia (5 Properties)</label>
+          <label class="text-subtitle-1 text-no-wrap">Indonesia (5 Properties)</label>
           <v-select v-model="selected" :items="['Property 1', 'Property 2', 'Property 3']"
             label="Select an option"></v-select>
         </div>
         <div class="d-flex gap-2 align-center text-caption">
-          <label class="text-no-wrap">Batam (5 Properties)</label>
+          <label class="text-subtitle-1 text-no-wrap">Batam (5 Properties)</label>
           <v-select v-model="selected" :items="['Property 1', 'Property 2', 'Property 3']"
             label="Select an option"></v-select>
         </div>
@@ -320,7 +321,7 @@
                 <template v-if="itemSelectedComplete || itemSelectedComplete != null">
                   <span class="text-blue-darken-4">{{
                     itemSelectedComplete?.title
-                    }}</span><span class="text-red">
+                  }}</span><span class="text-red">
                     ({{ itemSelectedComplete?.count }}
                     {{
                       itemSelectedComplete?.count == "1" ||
@@ -748,7 +749,7 @@
                 <p class="text-grey">
                   <span>{{ `${item?.town}` }}</span> (<span class="text-red">{{
                     `${item?.distanceText}`
-                    }}</span><span class="text-black"> away</span>)
+                  }}</span><span class="text-black"> away</span>)
                 </p>
               </div>
             </div>
