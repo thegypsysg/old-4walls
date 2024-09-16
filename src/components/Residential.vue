@@ -35,7 +35,7 @@
       <v-row>
         <v-col>
           <GridCard
-            :image="data[0]?.image"
+            :image="this.$fileURL + data[0]?.image"
             :properties_name="data[0]?.property_name"
             properties_count="23"
           />
@@ -44,7 +44,7 @@
     </v-col>
     <v-col cols="12" md="4" class="d-flex flex-column">
       <GridCard
-        :image="data[1]?.long_image"
+        :image="this.$fileURL + data[1]?.long_image"
         :properties_name="data[1]?.property_name"
         properties_count="7"
       />
@@ -54,7 +54,7 @@
       <v-row>
         <v-col>
           <GridCard
-            :image="data[2]?.image"
+            :image="this.$fileURL + data[2]?.image"
             :properties_name="data[2]?.property_name"
             properties_count="12"
           />
@@ -63,7 +63,7 @@
       <v-row>
         <v-col>
           <GridCard
-            :image="data[3]?.image"
+            :image="this.$fileURL + data[3]?.image"
             :properties_name="data[3]?.property_name"
             properties_count="12"
           />
@@ -75,9 +75,20 @@
 <script setup>
 import GridCard from "./GridCard.vue";
 
+
+import { onMounted } from "vue";
+import { eventBus } from "@/util/bus";
+import AOS from "aos";
 const props = defineProps({
   data: {
     type: Array,
   },
+});
+function scrollToSection() {
+  eventBus.scrollToSection = "happeningTarget"; // Ganti dengan ID section yang diinginkan
+}
+
+onMounted(() => {
+  AOS.init();
 });
 </script>
