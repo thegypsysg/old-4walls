@@ -6,6 +6,7 @@ import SignUp from "@/views/SignUpForm.vue";
 import OTPEmailForm from "@/views/OTPEmailForm.vue";
 import CreatePasswordForm from "@/views/CreatePasswordForm.vue";
 import SocialLogin from "@/views/SocialLoginForm.vue";
+import DiscoverLocation from "@/views/city-properties/indexView.vue";
 // import MyProfile from "@/views/MyProfileView.vue";
 // import PromotionDiscountDetail from "@/components/PromotionDetail/PromotionDiscountDetail.vue";
 // import PromotionCategoryDetail from "@/components/PromotionDetail/PromotionCategoryDetail.vue";
@@ -82,6 +83,10 @@ const routes = [
         vm.avatar = avatar;
       });
     },
+  },
+  {
+    path: "/batam-properties",
+    component: DiscoverLocation,
   },
   // {
   //   path: "/discount-types",

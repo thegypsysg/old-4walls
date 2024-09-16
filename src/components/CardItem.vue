@@ -19,34 +19,23 @@
           <v-col cols="12" md="4">
             <v-hover v-slot:default="{ isHovering, props }">
               <v-responsive class="rounded">
-                <v-img
-                  :src="img.image"
-                  cover
-                  style="height: 100%"
-                  aspect-ratio="0.75"
-                >
+                <v-img :src="img.image" cover style="height: 100%" aspect-ratio="0.75">
                   <!-- class="fade-in-up" this code is error when run fade-in-up class animation -->
-                  <div
-                    v-bind="props"
-                    :style="[
-                      isHovering
-                        ? 'background-color: rgba(0, 0, 0, 0.0)'
-                        : 'background-color: rgba(0, 0, 0, 0.3)',
-                      'transition: background-color 0.3s ease',
-                    ]"
-                    class="fill-height px-8 py-8 text-white font-weight-light"
-                  >
+                  <div v-bind="props" :style="[
+                    isHovering
+                      ? 'background-color: rgba(0, 0, 0, 0.0)'
+                      : 'background-color: rgba(0, 0, 0, 0.3)',
+                    'transition: background-color 0.3s ease',
+                  ]" class="fill-height px-8 py-8 text-white font-weight-light">
                     <div class="d-flex flex-column justify-end fill-height">
-                      <div
-                        class="d-flex flex-column flex-md-row justify-space-between align-center ga-3"
-                      >
+                      <div class="d-flex flex-column flex-md-row justify-space-between align-center ga-3">
                         <div class="font-weight-light text-center text-md-left">
                           <div>{{ img.properties_count }} Properties</div>
                           <div class="text-h4 font-weight-bold text-white">
                             {{ img.title }}
                           </div>
                         </div>
-                        <v-btn color="red-darken-2">VIEW</v-btn>
+                        <v-btn color="red-darken-2" :href="img.url">VIEW</v-btn>
                       </div>
                     </div>
                   </div>
@@ -88,6 +77,7 @@ function get4WallsLocationData() {
               ? fileURL + item.web_long_image + ".jpg"
               : "",
             properties_count: 14,
+            url: '/batam-properties'
           };
         });
       // let itemFinal = [];
