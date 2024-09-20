@@ -5,13 +5,15 @@
       class="trending fade-in-up rounded">
       <div v-bind="props"
         :style="[isHovering ? 'background-color: rgba(0, 0, 0, 0.0)' : 'background-color: rgba(0, 0, 0, 0.3)', 'transition: background-color 0.3s ease']"
-        class="fill-height d-flex flex-column align-center justify-between px-8 py-8 text-white font-weight-light">
+        class="fill-height d-flex flex-column align-center justify-between pa-2 pa-md-8 text-white font-weight-light">
         <div class="text-center font-weight-bold">
-          <div class="text-h4 font-weight-bold text-white">{{ title }}</div>
-          <div>24 Properties</div>
+          <div class="text-h6 text-md-h4 font-weight-bold text-white">{{ title }}</div>
+          <div class="text-body-2 font-weight-bold">24 Properties</div>
         </div>
         <div class="text-center mt-auto mb-auto">
-          <v-btn class="ma-2" color="pink darken-1" dark rounded>View Options</v-btn>
+          <v-btn class="ma-2 text-caption" :size="$vuetify.display.mdAndUp ? 'small' : 'x-small'" color="pink darken-1"
+            rounded>View
+            Options</v-btn>
         </div>
       </div>
     </v-responsive>
@@ -19,13 +21,15 @@
       class="trending fade-in-up rounded">
       <div v-bind="props"
         :style="[isHovering ? 'background-color: rgba(0, 0, 0, 0.0)' : 'background-color: rgba(0, 0, 0, 0.3)', 'transition: background-color 0.3s ease']"
-        class="fill-height d-flex flex-column align-center justify-between px-8 py-8 text-white font-weight-light">
+        class="fill-height d-flex flex-column align-center justify-between pa-2 pa-md-8 text-white font-weight-light">
         <div class="text-center font-weight-bold">
-          <div class="text-h4 font-weight-bold text-white">{{ title }}</div>
-          <div>24 Properties</div>
+          <div class="text-h6 text-md-h4 font-weight-bold text-white">{{ title }}</div>
+          <div class="text-body-2 font-weight-bold">24 Properties</div>
         </div>
         <div class="text-center mt-auto mb-auto">
-          <v-btn class="ma-2" color="pink darken-1" dark rounded>View Options</v-btn>
+          <v-btn class="ma-2 text-caption" :size="$vuetify.display.mdAndUp ? 'small' : 'x-small'" color="pink darken-1"
+            rounded>View
+            Options</v-btn>
         </div>
       </div>
     </v-responsive>
