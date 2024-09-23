@@ -17,6 +17,9 @@
   }
 }
 @media (max-width: 959px) {
+  .v-toolbar__content {
+    justify-content: space-between !important;
+  }
   .partners_box {
     max-width: 300px;
     margin: 0 auto;
@@ -53,6 +56,7 @@
   }
   .v-toolbar__extension {
     height: 95px !important;
+    margin-top: 24px;
   }
   header.v-sheet.v-app-bar {
     height: 160px !important;

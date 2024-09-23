@@ -191,7 +191,7 @@
       </v-menu> -->
     </div>
 
-    <div class="vspacer" style="width: 50px"></div>
+    <!-- <div class="vspacer" style="width: 50px"></div> -->
 
     <div v-if="isHeader || isProfile" class="ml-6 d-flex flex-row navbar-header"
       :class="{ 'navbar-header-mobile': !isDesktop && isProfile }">
@@ -283,11 +283,11 @@
   <v-icon right dark> mdi-menu-down </v-icon>
   </v-btn> -->
 
-    <v-spacer></v-spacer>
+    <!-- <v-spacer></v-spacer> -->
 
     <div v-if="!isHeader && !isProfile && !userName" class="btn_sign__up-cont">
       <v-btn elevation="0" class="btn_sign__up" to="/sign-in">
-        <span> Sign up / Register</span>
+        <span> Sign Up / Sign In</span>
       </v-btn>
       <div class="btn_sign__up-hover" />
     </div>
@@ -296,7 +296,7 @@
       Logout
     </v-btn>
 
-    <div class="vspacer" style="width: 50px"></div>
+    <!-- <div class="vspacer" style="width: 50px"></div> -->
 
     <div v-if="!isSignin" style="height: 48px; width: 48px; border-radius: 50%; cursor: pointer" icon class="mr-4"
       @click="drawer = !drawer">
@@ -309,9 +309,9 @@
         style="height: 100%; width: 100%" />
     </div>
 
-    <template v-if="!isProfile && !isSmall" #extension>
-      <div class="mobile__app text-center">
-        <div style="margin-top: -50px; margin-bottom: 10px" class="d-flex flex-column">
+    <template v-if="!isProfile" #extension>
+      <div class="mobile__app text-center w-100">
+        <div style="margin-top: -50px; margin-bottom: 10px" class="d-flex flex-column ">
           <v-menu v-if="!isLoading">
             <template #activator="{ props }">
               <v-btn v-if="!isLoading" style="font-size: 15px; color: #494949" v-bind="props" variant="text">
@@ -321,7 +321,7 @@
                 <template v-if="itemSelectedComplete || itemSelectedComplete != null">
                   <span class="text-blue-darken-4">{{
                     itemSelectedComplete?.title
-                  }}</span><span class="text-red">
+                    }}</span><span class="text-red">
                     ({{ itemSelectedComplete?.count }}
                     {{
                       itemSelectedComplete?.count == "1" ||
@@ -351,7 +351,7 @@
           </v-menu>
           <v-menu>
             <template #activator="{ props }">
-              <v-btn style="font-size: 15px; color: #494949" v-bind="props" variant="text">
+              <v-btn v-if="false" style="font-size: 15px; color: #494949" v-bind="props" variant="text">
                 <!-- {{ isLoading ? 'loading...' : itemSelected2 }} -->
                 <span v-if="isLoading">loading...</span>
                 <template v-if="!isLoading && itemSelected2Complete == null">
@@ -387,7 +387,7 @@
             </v-list>
           </v-menu>
         </div>
-        <form class="navbar__search navbar__search__mobile">
+        <form class="navbar__search navbar__search__mobile mx-auto">
           <v-autocomplete id="product_name" v-model="search" class="form-control mr-sm-2 ml-md-n3 mt-n2 search-input"
             item-title="name" item-value="name" :items="activeMalls" style="font-style: italic"
             placeholder="Explore Properties" density="compact" color="blue-grey-lighten-2">
@@ -424,6 +424,8 @@
             <v-icon color="white"> mdi-magnify </v-icon>
           </button>
         </form>
+        <div id="trending-container">
+        </div>
       </div>
     </template>
   </v-app-bar>
@@ -749,7 +751,7 @@
                 <p class="text-grey">
                   <span>{{ `${item?.town}` }}</span> (<span class="text-red">{{
                     `${item?.distanceText}`
-                  }}</span><span class="text-black"> away</span>)
+                    }}</span><span class="text-black"> away</span>)
                 </p>
               </div>
             </div>
@@ -1430,7 +1432,7 @@ header.v-sheet.v-app-bar {
   position: relative;
   overflow: hidden;
   background: #0197d5;
-  width: 250px;
+  width: min-content;
 }
 
 .btn_sign__up span {

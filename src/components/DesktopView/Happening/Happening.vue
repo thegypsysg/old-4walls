@@ -62,15 +62,19 @@
       </v-row>
     </div>
     <div class="d-md-none">
-      <div class="d-flex ga-2 py-3" style="width: 100%; overflow-x: auto;">
+      <div id="trending-item" class="d-flex ga-2 py-3 w-100 px-2">
         <v-btn @click="show('all')" class="bg-white rounded-pill border-thin" elevation="0">View All</v-btn>
-        <v-btn @click="show('rent')" class="bg-white rounded-pill border-thin" elevation="0">Rent</v-btn>
-        <v-btn @click="show('buy')" class="bg-white rounded-pill border-thin" elevation="0">Buy</v-btn>
-        <v-btn @click="show('staycation')" class="bg-white rounded-pill border-thin" elevation="0">Staycation</v-btn>
-        <v-btn @click="show('roomates')" class="bg-white rounded-pill border-thin" elevation="0">Roomates</v-btn>
-        <v-btn @click="show('vacation')" class="bg-white rounded-pill border-thin" elevation="0">Vacation</v-btn>
-        <v-btn @click="show('co-living')" class="bg-white rounded-pill border-thin" elevation="0">Co Living</v-btn>
-        <v-btn @click="show('co-working')" class="bg-white rounded-pill border-thin" elevation="0">Co Working</v-btn>
+        <div class="flex-fill d-flex ga-2" id="scroll-trending">
+          <v-btn @click="show('rent')" class="bg-white rounded-pill border-thin" elevation="0">Rent</v-btn>
+          <v-btn @click="show('buy')" class="bg-white rounded-pill border-thin" elevation="0">Buy</v-btn>
+          <v-btn @click="show('staycation')" class="bg-white rounded-pill border-thin" elevation="0">Staycation</v-btn>
+          <v-btn @click="show('roomates')" class="bg-white rounded-pill border-thin" elevation="0">Roomates</v-btn>
+          <v-btn @click="show('vacation')" class="bg-white rounded-pill border-thin" elevation="0">Vacation</v-btn>
+          <v-btn @click="show('co-living')" class="bg-white rounded-pill border-thin" elevation="0">Co
+            Living</v-btn>
+          <v-btn @click="show('co-working')" class="bg-white rounded-pill border-thin" elevation="0">Co
+            Working</v-btn>
+        </div>
       </div>
 
       <v-row class="mt-4">
@@ -84,7 +88,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import Grid from './partials/grid.vue';
 
 const filter = ref('all');
@@ -152,4 +156,21 @@ const show = async (type: string) => {
     element.classList.add('visible');
   });
 }
+
+onMounted(() => {
+  const tcontainer = document.getElementById('trending-container')
+  const titem = document.getElementById('trending-item')
+
+  tcontainer.appendChild(titem)
+})
 </script>
+
+<style scoped>
+#scroll-trending {
+  overflow-x: auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* For Firefox */
+  -ms-overflow-style: none;
+}
+</style>
