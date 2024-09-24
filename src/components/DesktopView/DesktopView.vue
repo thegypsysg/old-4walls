@@ -4,7 +4,7 @@
       <v-progress-circular :size="50" color="#fa2964" indeterminate />
     </div>
     <div v-if="!isLoading">
-      <Main />
+      <Main :isSmall="isSmall" />
     </div>
   </div>
 </template>
@@ -55,6 +55,9 @@ export default {
     },
     countryDevice() {
       return localStorage.getItem("countryDevice");
+    },
+    isSmall() {
+      return this.screenWidth < 640;
     },
   },
   mounted() {

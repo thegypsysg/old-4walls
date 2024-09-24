@@ -88,6 +88,7 @@ import { eventBus } from "@/util/bus";
 import Grid from './partials/grid.vue';
 const props = defineProps<{
   data: Array<{ title: string; image: string; isSquare: boolean }>;
+  isSmall: boolean;
 }>();
 
 const filter = ref('all');

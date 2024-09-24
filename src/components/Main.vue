@@ -53,12 +53,19 @@
         <h1 style="color: #fff; font-size: 46px; font-weight: bold">
           Explore Homes for Sale & Rent
         </h1>
+        
         <v-btn
-          @click="scrollToSection"
-          class="text-white v-btn v-btn--has-bg theme--light elevation-0 v-size--default mt-2"
-          style="background-color: #fa2964"
+          :height="isSmall ? 40 : 60"
+          class="text-white v-btn v-btn--has-bg theme--light elevation-0 v-size--default text-white elevation-0 mt-6"
+          style="
+            background-color: #fa2964;
+            border-color: #ffa42e;
+            font-size: 20px;
+            font-weight: 700;
+          "
+          @click="scrollToTrending"
         >
-          Learn More
+          <span>Learn More</span>
         </v-btn>
       </v-col>
     </v-row>
@@ -74,7 +81,7 @@
     "
   >
     <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px">
-      <Happening :data="listMainCategories" />
+      <Happening :data="listMainCategories" :isSmall="isSmall" />
       <Residential :data="listData" />
       <Commercial :data="listData" />
       <CardItem />
@@ -199,6 +206,12 @@ onMounted(() => {
   get4WallsPropertyData();
   getListMainCategories();
 });
+const props = defineProps({
+  isSmall: {
+    type: Boolean,
+    default: false
+  }
+})
 </script>
 
 <style>
