@@ -74,7 +74,7 @@
     "
   >
     <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px">
-      <Happening />
+      <Happening :data="listMainCategories" />
       <Residential :data="listData" />
       <Commercial :data="listData" />
       <CardItem />
@@ -92,6 +92,7 @@ import axios from "@/util/axios";
 
 const isZoomed = ref(false);
 const listData = ref([]);
+const listMainCategories = ref([]);
 const isLoading = ref(true);
 function scrollToSection() {
   eventBus.scrollToSection = "happeningTarget"; // Ganti dengan ID section yang diinginkan
@@ -134,6 +135,57 @@ function get4WallsPropertyData() {
     });
 }
 
+const getListMainCategories = async () => {
+  isLoading.value = true;
+  const response = await axios.get("/list-main-categories");
+  const datas = response.data.data;
+  listMainCategories.value = [
+    {
+      type: datas[0].category_name,
+      title: datas[0].category_name,
+      image: datas[0].long_image,
+      isSquare: true
+    },
+    {
+      type: datas[1].category_name,
+      title: datas[1].category_name,
+      image: datas[1].main_image,
+      isSquare: true
+    },
+    {
+      type: datas[2].category_name,
+      title: datas[2].category_name,
+      image: datas[2].main_image,
+      isSquare: true
+    },
+    {
+      type: datas[3].category_name,
+      title: datas[3].category_name,
+      image: datas[3].main_image,
+      isSquare: true
+    },
+    {
+      type: datas[4].category_name,
+      title: datas[4].category_name,
+      image: datas[4].main_image,
+      isSquare: true
+    },
+    {
+      type: datas[5].category_name,
+      title: datas[5].category_name,
+      image: datas[5].main_image,
+      isSquare: true
+    },
+    {
+      type: datas[6].category_name,
+      title: datas[6].category_name,
+      image: datas[6].main_image,
+      isSquare: true
+    },
+  ];
+  isLoading.value = false;
+};
+
 onMounted(() => {
   const observer = new IntersectionObserver(handleIntersection, {
     threshold: 0.1, // Trigger when 10% of the element is visible
@@ -145,6 +197,7 @@ onMounted(() => {
   });
 
   get4WallsPropertyData();
+  getListMainCategories();
 });
 </script>
 

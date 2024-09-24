@@ -25,14 +25,14 @@
     </v-col>
     <v-col cols="12" md="4">
       <GridCard
-        :image="data[4]?.image"
+        :image="`${$fileURL + data[4]?.image}`"
         :properties_name="data[4]?.property_name"
         properties_count="3"
       />
     </v-col>
     <v-col cols="12" md="4">
       <GridCard
-        :image="data[5]?.image"
+        :image="`${$fileURL + data[5]?.image}`"
         :properties_name="data[5]?.property_name"
         properties_count="3"
       />

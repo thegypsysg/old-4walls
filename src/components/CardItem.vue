@@ -74,7 +74,7 @@ function get4WallsLocationData() {
             id: item.city_id,
             title: item.city_name,
             image: item.web_long_image
-              ? fileURL + item.web_long_image + ".jpg"
+              ? fileURL + item.web_long_image
               : "",
             properties_count: 14,
             url: '/batam-properties'
