@@ -69,24 +69,33 @@
       <v-col cols="12" sm="12" md="3">
         <h2 class="footer_title">Our Apps</h2>
         <v-row>
-          <v-col cols="12">
+          <v-col cols="6">
             <ul class="footer_links" style="margin-top: 37px">
               <li class="font-weight-bold">
-                <!-- <img src="@/assets/links-arrow.svg" height="12" /> -->
                 Buy
               </li>
               <li class="font-weight-bold">
-                <!-- <img src="@/assets/links-arrow.svg" height="12" /> -->
                 Rent
               </li>
-              <!-- <li class="text-blue-accent-4">
-                <img src="@/assets/links-arrow.svg" height="12" />
-                Meal Promos
+              <li class="font-weight-bold">
+                Roommates
               </li>
-              <li class="text-blue-accent-4">
-                <img src="@/assets/links-arrow.svg" height="12" />
-                Days of Week
-              </li> -->
+              <li class="font-weight-bold">
+                Staycation
+              </li>
+              <li class="font-weight-bold">
+                Vacation
+              </li>
+            </ul>
+          </v-col>
+          <v-col cols="6">
+            <ul class="footer_links" style="margin-top: 37px">
+              <li class="font-weight-bold">
+                Co-Working
+              </li>
+              <li class="font-weight-bold">
+                Co-Living
+              </li>
             </ul>
           </v-col>
           <!-- <v-col cols="6">

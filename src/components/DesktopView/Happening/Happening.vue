@@ -1,9 +1,13 @@
 <template>
   <div>
-    <div class="d-flex gap-2 justify-center ga-3">
-      <IconsOffice height="17" />
-      <span>TRENDING CATEGORIES</span>
-    </div>
+    
+    <p
+      align="center"
+      class="header-title mt-4"
+      :class="isSmall ? 'cust-title-2' : 'cust-title-1'"
+    >
+      TRENDING CATEGORIES
+    </p>
     <!-- <div class="featured-title text-h4 text-md-h3 text-center mt-6">Our New Homes For Sale and Rent</div>
     <div class="featured-sub-title text-center text-grey-darken-1 mt-6">
       OUR PORTFOLIO INCLUDES
