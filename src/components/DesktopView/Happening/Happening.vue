@@ -1,11 +1,7 @@
 <template>
-  <div>
-    
-    <p
-      align="center"
-      class="header-title mt-4"
-      :class="isSmall ? 'cust-title-2' : 'cust-title-1'"
-    >
+  <div id="trending-grid-container">
+
+    <p align="center" class="header-title mt-4" :class="isSmall ? 'cust-title-2' : 'cust-title-1'">
       TRENDING CATEGORIES
     </p>
     <!-- <div class="featured-title text-h4 text-md-h3 text-center mt-6">Our New Homes For Sale and Rent</div>
@@ -70,7 +66,9 @@
         <v-btn @click="show('all')" class="bg-white rounded-pill border-thin" elevation="0">View All</v-btn>
         <div class="flex-fill d-flex ga-2" id="scroll-trending">
           <template v-for="(item, index) in data" :key="index">
-            <v-btn @click="show(item?.title)" class="bg-white rounded-pill border-thin" elevation="0">{{ item?.title }}</v-btn>
+            <v-btn @click="handleTrendingChange(item?.title)" class="bg-white rounded-pill border-thin" elevation="0">{{
+              item?.title
+              }}</v-btn>
           </template>
         </div>
       </div>
@@ -159,6 +157,15 @@ const show = async (type: string) => {
   Array.from(trending_elements).forEach((element) => {
     element.classList.add('visible');
   });
+}
+
+const handleTrendingChange = (title: string) => {
+  show(title);
+
+  const trendingGridContainer = document.getElementById('trending-grid-container');
+  if (trendingGridContainer) {
+    trendingGridContainer.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 const handleDataChange = () => {

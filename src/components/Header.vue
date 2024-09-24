@@ -311,7 +311,7 @@
 
     <template v-if="!isProfile" #extension>
       <div class="mobile__app text-center w-100">
-        <div style="margin-top: -50px; margin-bottom: 10px" class="d-flex flex-column ">
+        <div v-if="false" style="margin-top: -50px; margin-bottom: 10px" class="d-flex flex-column ">
           <v-menu v-if="!isLoading">
             <template #activator="{ props }">
               <v-btn v-if="!isLoading" style="font-size: 15px; color: #494949" v-bind="props" variant="text">
@@ -388,7 +388,7 @@
           </v-menu>
         </div>
         <form class="navbar__search navbar__search__mobile mx-auto">
-          <v-autocomplete id="product_name" v-model="search" class="form-control mr-sm-2 ml-md-n3 mt-n2 search-input"
+          <v-autocomplete id="product_name" v-model="search" class="form-control mr-sm-2 ml-md-n3 search-input"
             item-title="name" item-value="name" :items="activeMalls" style="font-style: italic"
             placeholder="Explore Properties" density="compact" color="blue-grey-lighten-2">
             <template #item="{ props, item }">
