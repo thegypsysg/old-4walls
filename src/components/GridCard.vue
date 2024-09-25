@@ -14,7 +14,8 @@
 
             <div class="d-flex flex-row justify-space-between">
               <div class="text-caption font-weight-light">MORE DETAILS</div>
-              <IconsPlay height="18" />
+              <!-- FIXME: Add icon -->
+              <!-- <IconsPlay height="18" /> -->
             </div>
           </div>
         </div>

@@ -7,21 +7,13 @@
             <span class="mdi mdi-office-building-outline"></span> EXCLUSIVE
             LOCATIONS
           </p>
-          <p
-            align="center"
-            class="header-title mt-4"
-            :class="isSmall ? 'cust-title-2' : 'cust-title-1'"
-          >
+          <p align="center" class="header-title mt-4" :class="isSmall ? 'cust-title-2' : 'cust-title-1'">
             Become Our Partner
           </p>
-          <p
-            class="text-center text-grey-darken-1 mx-16 mt-n4"
-            :class="isSmall ? 'text-caption' : undefined"
-            :style="{
-              letterSpacing: isSmall ? '2px' : '4px',
-              lineHeight: isSmall ? '20px' : '30px',
-            }"
-          >
+          <p class="text-center text-grey-darken-1 mx-16 mt-n4" :class="isSmall ? 'text-caption' : undefined" :style="{
+            letterSpacing: isSmall ? '2px' : '4px',
+            lineHeight: isSmall ? '20px' : '30px',
+          }">
             EXPLORE DIVERSE NEIGHBORHOODS, EACH OFFERING UNIQUE AMENITIES AND
             LIFESTYLE OPPORTUNITIES.
           </p>
@@ -47,11 +39,7 @@
               clients property through us .
             </v-card-text>
             <v-card-actions align="center">
-              <v-btn
-                elevation="0"
-                class="mx-auto bg-info"
-                style="background: #00cdcd !important"
-              >
+              <v-btn elevation="0" class="mx-auto bg-info" style="background: #00cdcd !important">
                 Partner with us
               </v-btn>
             </v-card-actions>
@@ -76,11 +64,7 @@
               reliable Tenant / Buyer.
             </v-card-text>
             <v-card-actions align="center">
-              <v-btn
-                elevation="0"
-                class="mx-auto bg-info"
-                style="background: #84afdc !important"
-              >
+              <v-btn elevation="0" class="mx-auto bg-info" style="background: #84afdc !important">
                 Enquire Now
               </v-btn>
             </v-card-actions>
@@ -105,11 +89,7 @@
               reliable Tenant / Buyer.
             </v-card-text>
             <v-card-actions align="center">
-              <v-btn
-                elevation="0"
-                class="mx-auto bg-info"
-                style="background: #808080 !important"
-              >
+              <v-btn elevation="0" class="mx-auto bg-info" style="background: #808080 !important">
                 List Now
               </v-btn>
             </v-card-actions>
@@ -154,10 +134,12 @@ export default {
   font-size: 33px;
   line-height: 35px;
 }
+
 .cust-title-1 {
   font-family: "DM Serif Display", system-ui;
   font-weight: 400;
 }
+
 .img-cont {
   position: relative;
   overflow: hidden;
@@ -173,6 +155,7 @@ export default {
 .partners_box:hover .img-item {
   transform: scale(1.2);
 }
+
 .skeleton {
   width: 100%;
   height: 100%;
@@ -187,6 +170,7 @@ export default {
   0% {
     background-position: 100% 0;
   }
+
   100% {
     background-position: -100% 0;
   }

@@ -2,7 +2,7 @@
   <v-hover v-slot:default="{ isHovering, props }">
     <v-responsive v-if="isSquare" aspect-ratio="1"
       :style="`height: 100%; width: 100%; background-image:url('${image}'); background-size: cover;`"
-      class="trending fade-in-up rounded">
+      class="trending rounded">
       <div v-bind="props"
         :style="[isHovering ? 'background-color: rgba(0, 0, 0, 0.0)' : 'background-color: rgba(0, 0, 0, 0.3)', 'transition: background-color 0.3s ease']"
         class="fill-height d-flex flex-column align-center justify-between pa-2 pa-md-8 text-white font-weight-light">
@@ -18,7 +18,7 @@
       </div>
     </v-responsive>
     <v-responsive v-else :style="`height: 100%; width: 100%; background-image:url('${image}'); background-size: cover;`"
-      class="trending fade-in-up rounded">
+      class="trending rounded">
       <div v-bind="props"
         :style="[isHovering ? 'background-color: rgba(0, 0, 0, 0.0)' : 'background-color: rgba(0, 0, 0, 0.3)', 'transition: background-color 0.3s ease']"
         class="fill-height d-flex flex-column align-center justify-between pa-2 pa-md-8 text-white font-weight-light">

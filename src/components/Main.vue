@@ -1,26 +1,18 @@
 <template>
-  <div
-    style="
+  <div style="
       height: 100vh;
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 0;
-    "
-  >
+    ">
     <!-- Gambar background -->
-    <v-img
-      src="https://admin1.the-gypsy.sg/img/app/50e0a0211569743c4e12032a33e87053.jpg"
-      aspect-ratio="16/9"
-      cover
-      :class="['zoom-effect', { zoomed: isZoomed }]"
-      style="height: 100%; z-index: 0; position: relative"
-    ></v-img>
+    <v-img src="https://admin1.the-gypsy.sg/img/app/50e0a0211569743c4e12032a33e87053.jpg" aspect-ratio="16/9" cover
+      :class="['zoom-effect', { zoomed: isZoomed }]" style="height: 100%; z-index: 0; position: relative"></v-img>
 
     <!-- Overlay abu-abu dengan opacity -->
-    <div
-      style="
+    <div style="
         position: absolute;
         top: 0;
         left: 0;
@@ -28,12 +20,10 @@
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 1;
-      "
-    ></div>
+      "></div>
 
     <!-- Teks dan tombol di atas banner -->
-    <v-row
-      style="
+    <v-row style="
         z-index: 2;
         position: absolute;
         top: 0;
@@ -42,46 +32,35 @@
         height: 100vh;
         margin-left: 10px;
         margin-top: 70px;
-      "
-      class="d-flex align-center"
-    >
-      <v-col
-        cols="12"
-        class="d-flex flex-column align-start"
-        style="padding-left: 20px"
-      >
+      " class="d-flex align-center">
+      <v-col cols="12" class="d-flex flex-column align-start" style="padding-left: 20px">
         <h1 style="color: #fff; font-size: 46px; font-weight: bold">
           Explore Homes for Sale & Rent
         </h1>
-        
-        <v-btn
-          :height="isSmall ? 40 : 60"
+
+        <v-btn :height="isSmall ? 40 : 60"
           class="text-white v-btn v-btn--has-bg theme--light elevation-0 v-size--default text-white elevation-0 mt-6"
           style="
             background-color: #fa2964;
             border-color: #ffa42e;
             font-size: 20px;
             font-weight: 700;
-          "
-          @click="scrollToTrending"
-        >
+          " @click="scrollToTrending">
           <span>Learn More</span>
         </v-btn>
       </v-col>
     </v-row>
   </div>
 
-  <div
-    style="
+  <div style="
       min-height: 100vh;
       position: relative;
       z-index: 2;
       background-color: #fff;
       margin-top: 100vh;
-    "
-  >
+    ">
     <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px">
-      <Happening :data="listMainCategories" :isSmall="isSmall" />
+      <Happening :data="listMainCategories" class="mb-10" />
       <Residential :data="listData" />
       <Commercial :data="listData" />
       <CardItem />
@@ -145,51 +124,7 @@ function get4WallsPropertyData() {
 const getListMainCategories = async () => {
   isLoading.value = true;
   const response = await axios.get("/list-main-categories");
-  const datas = response.data.data;
-  listMainCategories.value = [
-    {
-      type: datas[0].category_name,
-      title: datas[0].category_name,
-      image: datas[0].long_image,
-      isSquare: true
-    },
-    {
-      type: datas[1].category_name,
-      title: datas[1].category_name,
-      image: datas[1].main_image,
-      isSquare: true
-    },
-    {
-      type: datas[2].category_name,
-      title: datas[2].category_name,
-      image: datas[2].main_image,
-      isSquare: true
-    },
-    {
-      type: datas[3].category_name,
-      title: datas[3].category_name,
-      image: datas[3].main_image,
-      isSquare: true
-    },
-    {
-      type: datas[4].category_name,
-      title: datas[4].category_name,
-      image: datas[4].main_image,
-      isSquare: true
-    },
-    {
-      type: datas[5].category_name,
-      title: datas[5].category_name,
-      image: datas[5].main_image,
-      isSquare: true
-    },
-    {
-      type: datas[6].category_name,
-      title: datas[6].category_name,
-      image: datas[6].main_image,
-      isSquare: true
-    },
-  ];
+  listMainCategories.value = response.data.data;
   isLoading.value = false;
 };
 

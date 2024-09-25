@@ -321,7 +321,7 @@
                 <template v-if="itemSelectedComplete || itemSelectedComplete != null">
                   <span class="text-blue-darken-4">{{
                     itemSelectedComplete?.title
-                    }}</span><span class="text-red">
+                  }}</span><span class="text-red">
                     ({{ itemSelectedComplete?.count }}
                     {{
                       itemSelectedComplete?.count == "1" ||
@@ -424,12 +424,14 @@
             <v-icon color="white"> mdi-magnify </v-icon>
           </button>
         </form>
-        <div id="trending-container">
+        <div id="trending-container" class="d-sm-none">
         </div>
       </div>
     </template>
   </v-app-bar>
-  <v-navigation-drawer v-if="!isWelcome || (isWelcome && isSmall)" v-model="drawer" temporary location="right">
+
+  <!-- !isWelcome || (isWelcome && isSmall) -->
+  <v-navigation-drawer v-if="isSmall" v-model="drawer" temporary location="right">
     <div class="drawer__top" :class="{ 'py-6': userName == null, 'py-2': userName != null }">
       <router-link v-if="userName == null" class="text-decoration-none" to="/sign-in">
         <span style="font-size: 1.125rem; color: white">Sign up / Sign In</span>
@@ -751,7 +753,7 @@
                 <p class="text-grey">
                   <span>{{ `${item?.town}` }}</span> (<span class="text-red">{{
                     `${item?.distanceText}`
-                    }}</span><span class="text-black"> away</span>)
+                  }}</span><span class="text-black"> away</span>)
                 </p>
               </div>
             </div>
