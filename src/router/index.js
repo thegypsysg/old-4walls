@@ -91,6 +91,7 @@ const routes = [
   },
   {
     path: "/trending/:type",
+    name: "Trending",
     component: Trending,
   },
   // {

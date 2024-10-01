@@ -14,7 +14,8 @@
       </div>
     </router-link>
 
-    <div v-if="!isHeader && !isProfile && !isBatamProperties" class="text-center desktop__app">
+    <div v-if="!isHeader && !isProfile && !isBatamProperties && $route.name != 'Trending'"
+      class="text-center desktop__app">
       <v-btn style="background: #f4f5f7; color: black" variant="text" color="black" icon="mdi-share-outline" width="40"
         height="40" class="mr-2">
         <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
@@ -192,6 +193,37 @@
     </div>
 
     <!-- <div class="vspacer" style="width: 50px"></div> -->
+
+    <data v-if="$route.name == 'Trending'" class="d-flex align-center ga-4">
+      <div class="text-h5 font-weight-black text-no-wrap text-red-darken-4"
+        style="text-transform: capitalize !important;">
+        {{ $route.params.type.replaceAll('-', ' ') }}
+      </div>
+
+      <div class="d-flex gap-2 align-center text-caption">
+        <v-select item-text="title" :items="[
+          { icon: '/svg/singapore.svg', title: 'Singapore' },
+          { icon: '/svg/indonesia.svg', title: 'Indonesia' }
+        ]" class="mb-5">
+          <template v-slot:selection="{ item }">
+            <v-list-item>
+              <div class="d-flex align-center">
+                <v-img :src="item.raw.icon" width="25" height="25" cover aspect-ratio="1" class="mr-2" />
+                <v-list-item-title v-html="item.title" style="min-width: fit-content;"></v-list-item-title>
+              </div>
+            </v-list-item>
+          </template>
+
+          <template v-slot:item="{ item, props }">
+            <v-list-item v-bind="props">
+              <template v-slot:prepend>
+                <v-img :src="item.raw.icon" width="25" height="25" cover aspect-ratio="1" class="mr-2" />
+              </template>
+            </v-list-item>
+          </template>
+        </v-select>
+      </div>
+    </data>
 
     <div v-if="isHeader || isProfile" class="ml-6 d-flex flex-row navbar-header"
       :class="{ 'navbar-header-mobile': !isDesktop && isProfile }">
@@ -786,6 +818,13 @@
 </template>
 
 <script>
+// import { useRoute } from 'vue-router'
+// const route = useRoute()
+
+// console.log("route")
+// console.log(route)
+// console.log(route.params.type)
+// console.log(route.name)
 import { mapState, mapMutations } from "vuex";
 // import app from "@/util/eventBus";
 import axios from "@/util/axios";
