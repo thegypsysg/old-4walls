@@ -11,9 +11,10 @@
           <div class="text-body-2 font-weight-bold">24 Properties</div>
         </div>
         <div class="text-center mt-auto mb-auto">
-          <v-btn class="ma-2 text-caption" :size="$vuetify.display.mdAndUp ? 'large' : 'x-small'" color="pink darken-1"
-            rounded>View
-            Options</v-btn>
+          <v-btn :to="`/trending/${title.replaceAll(' ', '-').toLocaleLowerCase()}`" class="ma-2 text-caption"
+            :size="$vuetify.display.mdAndUp ? 'large' : 'x-small'" color="pink darken-1" rounded>
+            View Options
+          </v-btn>
         </div>
       </div>
     </v-responsive>
@@ -27,9 +28,10 @@
           <div class="text-body-2 font-weight-bold">24 Properties</div>
         </div>
         <div class="text-center mt-auto mb-auto">
-          <v-btn class="ma-2 text-caption" :size="$vuetify.display.mdAndUp ? 'large' : 'x-small'" color="pink darken-1"
-            rounded>View
-            Options</v-btn>
+          <v-btn :to="`/trending/${title.replaceAll(' ', '-').toLocaleLowerCase()}`" class="ma-2 text-caption"
+            :size="$vuetify.display.mdAndUp ? 'large' : 'x-small'" color="pink darken-1" rounded>
+            View Options
+          </v-btn>
         </div>
       </div>
     </v-responsive>

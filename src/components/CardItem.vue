@@ -35,7 +35,7 @@
                             {{ img.title }}
                           </div>
                         </div>
-                        <v-btn color="red-darken-2" :href="img.url">VIEW</v-btn>
+                        <v-btn color="red-darken-2" :to="img.url" router-link>VIEW</v-btn>
                       </div>
                     </div>
                   </div>
