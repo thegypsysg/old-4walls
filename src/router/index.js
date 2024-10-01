@@ -7,6 +7,7 @@ import OTPEmailForm from "@/views/OTPEmailForm.vue";
 import CreatePasswordForm from "@/views/CreatePasswordForm.vue";
 import SocialLogin from "@/views/SocialLoginForm.vue";
 import DiscoverLocation from "@/views/city-properties/indexView.vue";
+import Trending from "@/views/trending/indexView.vue";
 // import MyProfile from "@/views/MyProfileView.vue";
 // import PromotionDiscountDetail from "@/components/PromotionDetail/PromotionDiscountDetail.vue";
 // import PromotionCategoryDetail from "@/components/PromotionDetail/PromotionCategoryDetail.vue";
@@ -87,6 +88,10 @@ const routes = [
   {
     path: "/batam-properties",
     component: DiscoverLocation,
+  },
+  {
+    path: "/trending/:type",
+    component: Trending,
   },
   // {
   //   path: "/discount-types",
