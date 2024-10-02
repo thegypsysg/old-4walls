@@ -90,8 +90,38 @@ const routes = [
     component: DiscoverLocation,
   },
   {
-    path: "/trending/:type",
-    name: "Trending",
+    path: "/buy",
+    name: "Trending-buy",
+    component: Trending,
+  },
+  {
+    path: "/rent",
+    name: "Trending-rent",
+    component: Trending,
+  },
+  {
+    path: "/roommates",
+    name: "Trending-roommates",
+    component: Trending,
+  },
+  {
+    path: "/staycation",
+    name: "Trending-staycation",
+    component: Trending,
+  },
+  {
+    path: "/vacation",
+    name: "Trending-vacation",
+    component: Trending,
+  },
+  {
+    path: "/co-living",
+    name: "Trending-co-living",
+    component: Trending,
+  },
+  {
+    path: "/co-working",
+    name: "Trending-co-working",
     component: Trending,
   },
   // {

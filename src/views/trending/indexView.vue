@@ -1,19 +1,18 @@
 <template>
-  <Banner />
+  <!-- <Banner /> -->
 
-  <div style="
+  <div class="pt-16" style="
       min-height: 100vh;
       position: relative;
       z-index: 2;
       background-color: #fff;
-      margin-top: 100vh;
+      margin-top: 40px;
     ">
 
-    <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px;">
-      <div class="w-100 d-flex justify-center ga-6 my-5">
+    <div class="mx-auto pt-16 pt-md-0 px-4 medium:px-20" style="max-width: 1200px; overflow-x: auto">
+      <div class="d-flex justify-center ga-6 my-5" style="min-width: fit-content">
         <template v-for="n in trendings" :key="n">
-          <v-btn :to="n.title.toLowerCase().replaceAll(' ', '-')" elevation="0" class="pa-2"
-            style="min-width: 100px; min-height: fit-content">
+          <v-btn :to="n.to" elevation="0" class="pa-2" style="min-width: 100px; min-height: fit-content">
             <div class="d-flex flex-column align-center ga-3 text-caption">
               <v-responsive>
                 <v-img :src="n.icon" cover style="height: 25px; width:25px;" aspect-ratio="1"></v-img>
@@ -23,7 +22,10 @@
           </v-btn>
         </template>
       </div>
-    </v-container>
+    </div>
+
+    <div class="text-center mt-6 mb-3 satisfy-regular">Buy Your Dream Home</div>
+    <div class=" text-center text-h4 font-weight-black">In <span class="text-red-darken-4">Batam</span></div>
 
     <v-container class="mx-auto px-4" style="max-width: 1400px">
       <Slider />
@@ -64,31 +66,38 @@ import Guide from './partials/guide'
 const trendings = [
   {
     icon: '/svg/house.svg',
-    title: 'Buy'
+    title: 'Buy',
+    to: '/buy'
   },
   {
     icon: '/svg/house.svg',
-    title: 'Rent'
+    title: 'Rent',
+    to: '/rent'
   },
   {
     icon: '/svg/house.svg',
-    title: 'Roommates'
+    title: 'Roommates',
+    to: '/roommates'
   },
   {
     icon: '/svg/house.svg',
-    title: 'Staycation'
+    title: 'Staycation',
+    to: '/staycation'
   },
   {
     icon: '/svg/house.svg',
-    title: 'Vacation'
+    title: 'Vacation',
+    to: '/vacation'
   },
   {
     icon: '/svg/house.svg',
-    title: 'Co Living'
+    title: 'Co Living',
+    to: '/co-living'
   },
   {
     icon: '/svg/house.svg',
-    title: 'Co Working'
+    title: 'Co Working',
+    to: '/co-working'
   },
 ]
 
@@ -113,5 +122,12 @@ const trendings = [
 
 .carousel__track {
   align-items: start;
+}
+
+.satisfy-regular {
+  font-family: "Satisfy", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 40px;
 }
 </style>

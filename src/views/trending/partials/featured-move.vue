@@ -12,12 +12,12 @@
       CANT WAIT ? EAGER TO BY A PROPERTI IMMEDIATELY
     </div>
 
-    <div class="mx-5 d-flex ga-5">
+    <div class="mx-5 d-flex ga-5 mt-6">
       <v-btn class="text-red-darken-2">Condo</v-btn>
       <v-btn class="text-red-darken-2">Villa</v-btn>
     </div>
 
-    <v-row justify="center" class="my-6">
+    <v-row justify="center" class="my-3">
       <transition-group name="card-transition" mode="out-in">
         <template v-for="(data, i) in listData" :key="i">
           <v-col cols="12" md="4">

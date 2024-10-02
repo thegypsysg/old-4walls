@@ -35,7 +35,7 @@
       " class="d-flex align-center">
       <v-col cols="12" class="d-flex flex-column align-start" style="padding-left: 20px">
         <div class="text-h2 font-weight-bold text-white" style="text-transform: capitalize !important">
-          {{ $route.params.type.replaceAll('-', ' ') }}
+          {{ $route.path.replaceAll('-', ' ').replaceAll('/', '') }}
           <!-- Are you looking to<br />invest in Batam -->
         </div>
         <v-btn @click="scrollToSection"

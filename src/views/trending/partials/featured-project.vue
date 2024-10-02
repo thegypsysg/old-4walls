@@ -12,7 +12,7 @@
       READY TO INVEST IN OUR PORTFOLIO OF NEW PROJECTS FOR INVESTMENT OR RESIDENTIAL
     </div>
 
-    <div class="mx-5 d-flex ga-5">
+    <div class="mx-5 d-flex ga-5 mt-6 mb-3">
       <v-btn class="text-red-darken-2">2025</v-btn>
       <v-btn class="text-red-darken-2">2026</v-btn>
       <v-btn class="text-red-darken-2">2027</v-btn>

@@ -11,7 +11,7 @@
           <div class="text-body-2 font-weight-bold">24 Properties</div>
         </div>
         <div class="text-center mt-auto mb-auto">
-          <v-btn :to="`/trending/${title.replaceAll(' ', '-').toLocaleLowerCase()}`" class="ma-2 text-caption"
+          <v-btn :to="`/${title.replaceAll(' ', '-').toLocaleLowerCase()}`" class="ma-2 text-caption"
             :size="$vuetify.display.mdAndUp ? 'large' : 'x-small'" color="pink darken-1" rounded>
             View Options
           </v-btn>
@@ -28,7 +28,7 @@
           <div class="text-body-2 font-weight-bold">24 Properties</div>
         </div>
         <div class="text-center mt-auto mb-auto">
-          <v-btn :to="`/trending/${title.replaceAll(' ', '-').toLocaleLowerCase()}`" class="ma-2 text-caption"
+          <v-btn :to="`/${title.replaceAll(' ', '-').toLocaleLowerCase()}`" class="ma-2 text-caption"
             :size="$vuetify.display.mdAndUp ? 'large' : 'x-small'" color="pink darken-1" rounded>
             View Options
           </v-btn>

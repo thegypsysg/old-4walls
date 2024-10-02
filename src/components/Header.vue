@@ -14,8 +14,13 @@
       </div>
     </router-link>
 
-    <div v-if="!isHeader && !isProfile && !isBatamProperties && $route.name != 'Trending'"
-      class="text-center desktop__app">
+    <div v-if="!isHeader && !isProfile && !isBatamProperties && !($route.name == 'Trending-buy' ||
+      $route.name == 'Trending-rent' ||
+      $route.name == 'Trending-roommates' ||
+      $route.name == 'Trending-staycation' ||
+      $route.name == 'Trending-vacation' ||
+      $route.name == 'Trending-co-living' ||
+      $route.name == 'Trending-co-working')" class="text-center desktop__app">
       <v-btn style="background: #f4f5f7; color: black" variant="text" color="black" icon="mdi-share-outline" width="40"
         height="40" class="mr-2">
         <v-icon color="rgb(38, 38, 38)" size="22"> mdi-share-outline </v-icon>
@@ -193,15 +198,20 @@
     </div>
 
     <!-- <div class="vspacer" style="width: 50px"></div> -->
-
-    <data v-if="$route.name == 'Trending'" class="d-flex align-center ga-4">
-      <div class="text-h5 font-weight-black text-no-wrap text-red-darken-4"
+    <data v-if="$route.name == 'Trending-buy' ||
+      $route.name == 'Trending-rent' ||
+      $route.name == 'Trending-roommates' ||
+      $route.name == 'Trending-staycation' ||
+      $route.name == 'Trending-vacation' ||
+      $route.name == 'Trending-co-living' ||
+      $route.name == 'Trending-co-working'" class="d-flex align-center ga-4">
+      <div class="d-none d-md-block text-h5 font-weight-black text-no-wrap text-red-darken-4"
         style="text-transform: capitalize !important;">
-        {{ $route.params.type.replaceAll('-', ' ') }}
+        {{ $route.path.replaceAll('-', ' ').replaceAll('/', '') }}
       </div>
 
-      <div class="d-flex gap-2 align-center text-caption">
-        <v-select item-text="title" :items="[
+      <div class="d-flex d-md-none gap-2 align-center text-caption">
+        <v-select v-model="selectedCountry" item-text="title" :items="[
           { icon: '/svg/singapore.svg', title: 'Singapore' },
           { icon: '/svg/indonesia.svg', title: 'Indonesia' }
         ]" class="mb-5">
@@ -419,6 +429,20 @@
             </v-list>
           </v-menu>
         </div>
+
+        <template v-if="$route.name == 'Trending-buy' ||
+          $route.name == 'Trending-rent' ||
+          $route.name == 'Trending-roommates' ||
+          $route.name == 'Trending-staycation' ||
+          $route.name == 'Trending-vacation' ||
+          $route.name == 'Trending-co-living' ||
+          $route.name == 'Trending-co-working'">
+          <div class="d-md-none text-h5 font-weight-black text-no-wrap text-red-darken-4"
+            style="text-transform: capitalize !important;">
+            {{ $route.path.replaceAll('-', ' ').replaceAll('/', '') }}
+          </div>
+        </template>
+
         <form class="navbar__search navbar__search__mobile mx-auto">
           <v-autocomplete id="product_name" v-model="search" class="form-control mr-sm-2 ml-md-n3 search-input"
             item-title="name" item-value="name" :items="activeMalls" style="font-style: italic"
@@ -818,13 +842,6 @@
 </template>
 
 <script>
-// import { useRoute } from 'vue-router'
-// const route = useRoute()
-
-// console.log("route")
-// console.log(route)
-// console.log(route.params.type)
-// console.log(route.name)
 import { mapState, mapMutations } from "vuex";
 // import app from "@/util/eventBus";
 import axios from "@/util/axios";
@@ -857,6 +874,8 @@ export default {
       currentTime: "",
       screenWidth: window.innerWidth,
       selectedPlace: null,
+      selectedCountry: 'Singapore',
+      isTrending: false
     };
   },
   computed: {
@@ -938,6 +957,8 @@ export default {
       "changeHeaderWelcome3",
       this.changeHeaderWelcome3,
     );
+
+    // this.isTrending = this.$route.name.includes("Trending");
   },
   beforeUnmount() {
     app.config.globalProperties.$eventBus.$off(
