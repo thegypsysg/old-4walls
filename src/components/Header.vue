@@ -511,17 +511,15 @@
         </div>
 
         <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title style="font-size: 14px">
-              {{ userName }}
-            </v-list-item-title>
-            <v-list-item-subtitle style="font-size: 10px" class="mt-1">
-              Last Login: {{ userDated }}
-            </v-list-item-subtitle>
-            <div class="text-red mt-1" style="font-size: 12px; cursor: pointer" @click="logout">
-              Logout
-            </div>
-          </v-list-item-content>
+          <v-list-item-title style="font-size: 14px">
+            {{ userName }}
+          </v-list-item-title>
+          <v-list-item-subtitle style="font-size: 10px" class="mt-1">
+            Last Login: {{ userDated }}
+          </v-list-item-subtitle>
+          <div class="text-red mt-1" style="font-size: 12px; cursor: pointer" @click="logout">
+            Logout
+          </div>
         </v-list-item>
       </div>
     </div>

@@ -86,7 +86,7 @@
     </v-row>
 
     <!-- FILTER LIST -->
-    <div class="d-sm-none">
+    <div class="d-sm-none" id="trending-filter-container">
       <div id="trending-item" class="d-flex ga-2 py-3 w-100 px-2">
         <!-- <v-btn @click="show('all')" class="bg-white rounded-pill border-thin" elevation="0">View All</v-btn> -->
         <div class="flex-fill d-flex ga-2" id="scroll-trending">
@@ -101,7 +101,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, onUnmounted, onBeforeUnmount } from 'vue';
 
 import { eventBus } from "@/util/bus";
 import Grid from './partials/grid.vue';
@@ -175,6 +175,15 @@ const handleDataChange = () => {
 
 onMounted(() => {
   handleDataChange();
+});
+
+onBeforeUnmount(() => {
+  const container = document.getElementById('trending-filter-container');
+  const titem = document.getElementById('trending-item');
+
+  if (container && titem) {
+    container.appendChild(titem);
+  }
 });
 
 </script>

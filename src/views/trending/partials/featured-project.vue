@@ -22,22 +22,38 @@
       <Slide v-for="(data, i) in listData" :key="i">
         <v-hover v-slot:default="{ isHovering, props }">
           <v-responsive class="rounded pa-sm-2 align-start">
-            <v-container class="rounded pa-0 pa-sm-2">
-              <v-img :src="data.img" cover style="height: 100%" aspect-ratio="1.5">
-                <div v-bind="props" :style="[
+            <v-container class="rounded">
+              <v-img :src="data.img" cover style="height: 100%" aspect-ratio="1.1">
+                <!-- <div v-bind="props" :style="[
                   isHovering
                     ? 'background-color: rgba(0, 0, 0, 0.0)'
                     : 'background-color: rgba(0, 0, 0, 0.3)',
                   'transition: background-color 0.3s ease',
                 ]" class="fill-height pa-6 text-white font-weight-light">
+                </div> -->
+                <div class="d-flex flex-column justify-space-between align-start fill-height pa-4">
+                  <v-badge content="UNDER CONSTRUCTION" inline color="blue-darken-4" rounded="0"
+                    class="text-body-1 font-weight-bold"></v-badge>
+                  <div class="d-flex flex-column flex-md-row justify-space-between align-center ga-3">
+
+                    <div class="text-center text-md-left text-white">
+                      <div class="text-h4 font-weight-bold">
+                        {{ data.name }}
+                      </div>
+                      <div class="font-weight-bold text-h6">{{ data.company.town }}</div>
+                      <div class="text-body-1">Completion <span class="font-weight-bold">{{ data.company.completion
+                          }}</span></div>
+                    </div>
+                  </div>
                 </div>
               </v-img>
               <div class="d-flex flex-column ga-2 mt-2">
-                <div class="d-flex flex-column ga-2 align-center justify-start">
-                  <div class="font-weight-medium text-h6 d-block text-truncate text-start" style="width:100%">{{
-                    data.title }}</div>
+                <div class="d-flex ga-2 align-center justify-start">
+                  <img :src="data.company.icon" style="height:30px" />
+                  <div class="font-weight-bold text-body-1">{{ data.company.name }}</div>
                 </div>
-                <p class="text-start">{{ data.description }}</p>
+                <div class="font-weight-bold text-body-1 text-left my-2">{{ data.company.caption }}</div>
+                <div class="text-body-2 font-weight-light text-left">{{ data.description }}</div>
               </div>
             </v-container>
           </v-responsive>
@@ -82,29 +98,45 @@ const breakpoints = {
     snapAlign: 'left',
   },
 };
-
 const listData = [
   {
-    img: img18,
-    title: "Modern Apartments for Urban Living",
-    description: 'Discover our selection of contemporary apartments, perfect for those seeking comfort and convenience in the heart of Dubai. With a variety of floor plans and amenities, these homes are designed to suit every lifestyle.',
+    under_construction: true,
+    img: 'https://e-wanderlust.com/wp-content/uploads/elementor/thumbs/WHO-DO-WE-CATER-TO-qj4ugtpw3gef7tcuiexmakc2ptip72k61u8wqu53k0.jpg',
+    name: 'Opus Bay',
+    description: 'Our condos offer the perfect blend of luxury and practially. Located in some of the most sought-after locations in Batam, our condos offer easy access to all the amenities you need for a comfortable and convenient lifestyle.',
+    company: {
+      name: 'TUAN SING HOLDINGS UNITED',
+      caption: 'The Perfect Place to Live Your Dreams',
+      icon: 'https://media.licdn.com/dms/image/C5103AQEgthUJyEnmyw/profile-displayphoto-shrink_200_200/0/1521704086565?e=2147483647&v=beta&t=p0SmV73TJdS8w9RSTEAOdef0WM1JLLwhUb3l20KnEGU',
+      town: 'Sekupang, Batam',
+      completion: 'Dec 2025'
+    }
   },
   {
-    img: img19,
-    title: "Spacious Single-Family Homes",
-    description: 'Perfect for growing families, our single-family homes offer ample space, modern designs, and family-friendly neighborhoods. Experience a lifestyle of comfort and security in these beautiful residences.',
+    under_construction: true,
+    img: 'https://opus-bay.com/wp-content/uploads/2023/02/State-Of-The-Art-Paradise-Image-Mob.png',
+    name: 'MARCS BOULEVARD',
+    description: 'Experience the height of sophistication in our stunning villas. Our villas are designed with the utmost attention to detail, featuring spacious living areas, private pools, and stunning views of the surrounding landscape.',
+    company: {
+      name: 'Trinity Land',
+      caption: 'Begin Your Chapter',
+      icon: 'https://yt3.googleusercontent.com/ytc/AIdro_kGXRWD4N1oes6WwamDmY4CkjbHRbcnbbVPcOG6_tBw7A=s900-c-k-c0x00ffffff-no-rj',
+      town: 'Batam Centre, Batam',
+      completion: 'Jan 2025'
+    }
   },
   {
-    img: img20,
-    title: "Stylish Condos in Prime Locations",
-    description: 'Our condos offer the perfect blend of luxury and practicality. Located in some of Dubai’s most desirable areas, these homes provide the ideal balance of privacy, community, and access to the city’s best attractions.',
-
-  },
-  {
-    img: img21,
-    title: "Elegant Villas with Exclusive Features",
-    description: 'Experience the height of sophistication in our stunning villas. With private gardens, spacious interiors, and luxurious finishes, these homes are perfect for those seeking an elevated lifestyle in Dubai’s most prestigious areas.',
-
+    under_construction: true,
+    img: 'https://orchardparkbatam.com/wp-content/uploads/2015/07/cover_1.jpg',
+    name: 'Orchard Park',
+    description: 'Discover our selection of contemporary apartments located in the heart of the city. Our apartments are designed with the modern lifestyle in mind, featuring spacious living areas, modern kitchens, and stunning views of the cityscape.',
+    company: {
+      name: 'Agung Podomoro Land',
+      caption: 'Keep Climbing Higher as An Integrated Property Developer',
+      icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThyESxS58WU6qr3WtSvet0oZHlE9Q7Y9LA7A&s',
+      town: 'Avemue Road, Batam',
+      completion: 'Dec 2025'
+    }
   },
 ]
 
