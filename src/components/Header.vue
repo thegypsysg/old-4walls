@@ -209,31 +209,37 @@
         style="text-transform: capitalize !important;">
         {{ $route.path.replaceAll('-', ' ').replaceAll('/', '') }}
       </div>
-
-      <div class="d-flex d-md-none gap-2 align-center text-caption">
-        <v-select v-model="selectedCountry" item-text="title" :items="[
-          { icon: '/svg/singapore.svg', title: 'Singapore' },
-          { icon: '/svg/indonesia.svg', title: 'Indonesia' }
-        ]" class="mb-5">
-          <template v-slot:selection="{ item }">
-            <v-list-item>
-              <div class="d-flex align-center">
-                <v-img :src="item.raw.icon" width="25" height="25" cover aspect-ratio="1" class="mr-2" />
-                <v-list-item-title v-html="item.title" style="min-width: fit-content;"></v-list-item-title>
-              </div>
-            </v-list-item>
-          </template>
-
-          <template v-slot:item="{ item, props }">
-            <v-list-item v-bind="props">
-              <template v-slot:prepend>
-                <v-img :src="item.raw.icon" width="25" height="25" cover aspect-ratio="1" class="mr-2" />
-              </template>
-            </v-list-item>
-          </template>
-        </v-select>
-      </div>
     </data>
+
+    <div v-if="$route.name == 'Trending-buy' ||
+      $route.name == 'Trending-rent' ||
+      $route.name == 'Trending-roommates' ||
+      $route.name == 'Trending-staycation' ||
+      $route.name == 'Trending-vacation' ||
+      $route.name == 'Trending-co-living' ||
+      $route.name == 'Trending-co-working'" class="d-flex gap-2 align-center text-caption">
+      <v-select v-model="selectedCountry" item-text="title" :items="[
+        { icon: '/svg/singapore.svg', title: 'Singapore' },
+        { icon: '/svg/indonesia.svg', title: 'Indonesia' }
+      ]" class="mb-5">
+        <template v-slot:selection="{ item }">
+          <v-list-item>
+            <div class="d-flex align-center">
+              <v-img :src="item.raw.icon" width="25" height="25" cover aspect-ratio="1" class="mr-2" />
+              <v-list-item-title v-html="item.title" style="min-width: fit-content;"></v-list-item-title>
+            </div>
+          </v-list-item>
+        </template>
+
+        <template v-slot:item="{ item, props }">
+          <v-list-item v-bind="props">
+            <template v-slot:prepend>
+              <v-img :src="item.raw.icon" width="25" height="25" cover aspect-ratio="1" class="mr-2" />
+            </template>
+          </v-list-item>
+        </template>
+      </v-select>
+    </div>
 
     <div v-if="isHeader || isProfile" class="ml-6 d-flex flex-row navbar-header"
       :class="{ 'navbar-header-mobile': !isDesktop && isProfile }">
