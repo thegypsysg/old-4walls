@@ -6,10 +6,9 @@
       position: relative;
       z-index: 2;
       background-color: #fff;
-      margin-top: 105px;
     ">
 
-    <div class="mx-auto pt-16 pt-md-0 px-4 medium:px-20" style="max-width: 1200px; overflow-x: auto">
+    <div class="d-none d-md-block mx-auto pt-16 pt-md-0 px-4 medium:px-20" style="max-width: 1200px; overflow-x: auto">
       <div class="d-flex justify-center ga-6 my-5" style="min-width: fit-content">
         <template v-for="n in trendings" :key="n">
           <v-btn :to="n.to" elevation="0" class="pa-2" style="min-width: 100px; min-height: 70px">
@@ -24,7 +23,7 @@
       </div>
     </div>
 
-    <div class="text-center mt-6 mb-3 satisfy-regular">Buy Your Dream Home</div>
+    <div class="text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular">Buy Your Dream Home</div>
     <div class=" text-center text-h4 font-weight-black">In <span class="text-red-darken-4">Batam</span></div>
 
     <v-container class="mx-auto px-4" style="max-width: 1400px">
@@ -128,6 +127,15 @@ const trendings = [
   font-family: "Satisfy", cursive;
   font-weight: 400;
   font-style: normal;
-  font-size: 40px;
+}
+
+#trending-container {
+  margin-top: 105px;
+}
+
+@media (max-width: 959px) {
+  #trending-container {
+    margin-top: 240px;
+  }
 }
 </style>

@@ -55,7 +55,7 @@
     padding: 10px 15px !important;
   }
   .v-toolbar__extension {
-    height: 95px !important;
+    height: min-content !important;
   }
   header.v-sheet.v-app-bar {
     height: 160px !important;

@@ -217,7 +217,7 @@
       $route.name == 'Trending-staycation' ||
       $route.name == 'Trending-vacation' ||
       $route.name == 'Trending-co-living' ||
-      $route.name == 'Trending-co-working'" class="d-flex gap-2 align-center text-caption">
+      $route.name == 'Trending-co-working'" class="d-none d-md-flex gap-2 align-center text-caption">
       <v-select v-model="selectedCountry" item-text="title" :items="[
         { icon: '/svg/singapore.svg', title: 'Singapore' },
         { icon: '/svg/indonesia.svg', title: 'Indonesia' }
@@ -369,7 +369,7 @@
                 <template v-if="itemSelectedComplete || itemSelectedComplete != null">
                   <span class="text-blue-darken-4">{{
                     itemSelectedComplete?.title
-                  }}</span><span class="text-red">
+                    }}</span><span class="text-red">
                     ({{ itemSelectedComplete?.count }}
                     {{
                       itemSelectedComplete?.count == "1" ||
@@ -443,9 +443,33 @@
           $route.name == 'Trending-vacation' ||
           $route.name == 'Trending-co-living' ||
           $route.name == 'Trending-co-working'">
-          <div class="d-md-none text-h5 font-weight-black text-no-wrap text-red-darken-4"
+          <div class="d-none d-md-block text-h5 font-weight-black text-no-wrap text-red-darken-4"
             style="text-transform: capitalize !important;">
             {{ $route.path.replaceAll('-', ' ').replaceAll('/', '') }}
+          </div>
+
+          <div class="d-flex justify-center mx-auto" style="width: max-content">
+            <v-select v-model="selectedCountry" item-text="title" :items="[
+              { icon: '/svg/singapore.svg', title: 'Singapore' },
+              { icon: '/svg/indonesia.svg', title: 'Indonesia' }
+            ]" class="mb-5" style="width: max-content">
+              <template v-slot:selection="{ item }">
+                <v-list-item>
+                  <div class="d-flex align-center">
+                    <v-img :src="item.raw.icon" width="25" height="25" cover aspect-ratio="1" class="mr-2" />
+                    <v-list-item-title v-html="item.title" style="min-width: fit-content;"></v-list-item-title>
+                  </div>
+                </v-list-item>
+              </template>
+
+              <template v-slot:item="{ item, props }">
+                <v-list-item v-bind="props">
+                  <template v-slot:prepend>
+                    <v-img :src="item.raw.icon" width="25" height="25" cover aspect-ratio="1" class="mr-2" />
+                  </template>
+                </v-list-item>
+              </template>
+            </v-select>
           </div>
         </template>
 
@@ -488,7 +512,35 @@
         </form>
         <div id="trending-container" class="d-sm-none">
         </div>
+
+
+        <div v-if="$route.name == 'Trending-buy' ||
+          $route.name == 'Trending-rent' ||
+          $route.name == 'Trending-roommates' ||
+          $route.name == 'Trending-staycation' ||
+          $route.name == 'Trending-vacation' ||
+          $route.name == 'Trending-co-living' ||
+          $route.name == 'Trending-co-working'" class="d-md-none mx-auto pt-md-0 px-4 medium:px-20"
+          style="max-width: 1200px; overflow-x: auto">
+          <div class="d-flex justify-center ga-6 my-5" style="min-width: fit-content">
+            <template v-for="n in trendings" :key="n">
+              <v-btn :to="n.to" elevation="0" class="pa-2" style="min-width: 100px; min-height: 70px">
+                <div class="d-flex flex-column align-center ga-3 text-caption">
+                  <v-responsive>
+                    <v-img :src="n.icon" cover style="height: 25px; width:25px;" aspect-ratio="1"></v-img>
+                  </v-responsive>
+                  {{ n.title }}
+                </div>
+              </v-btn>
+            </template>
+          </div>
+        </div>
+        <!-- <div>TEST</div>
+        <div>TEST</div> -->
+
       </div>
+
+
     </template>
   </v-app-bar>
 
@@ -813,7 +865,7 @@
                 <p class="text-grey">
                   <span>{{ `${item?.town}` }}</span> (<span class="text-red">{{
                     `${item?.distanceText}`
-                  }}</span><span class="text-black"> away</span>)
+                    }}</span><span class="text-black"> away</span>)
                 </p>
               </div>
             </div>
@@ -1441,6 +1493,45 @@ export default {
   },
 };
 </script>
+
+<script setup>
+const trendings = [
+  {
+    icon: '/svg/house.svg',
+    title: 'Buy',
+    to: '/buy'
+  },
+  {
+    icon: '/svg/house.svg',
+    title: 'Rent',
+    to: '/rent'
+  },
+  {
+    icon: '/svg/house.svg',
+    title: 'Roommates',
+    to: '/roommates'
+  },
+  {
+    icon: '/svg/house.svg',
+    title: 'Staycation',
+    to: '/staycation'
+  },
+  {
+    icon: '/svg/house.svg',
+    title: 'Vacation',
+    to: '/vacation'
+  },
+  {
+    icon: '/svg/house.svg',
+    title: 'Co Living',
+    to: '/co-living'
+  },
+  {
+    icon: '/svg/house.svg',
+    title: 'Co Working',
+    to: '/co-working'
+  },
+]</script>
 
 <style scoped>
 .app-bar-mobile-start {
