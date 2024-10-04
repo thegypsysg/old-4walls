@@ -135,7 +135,7 @@ const trendings = [
 
 @media (max-width: 959px) {
   #trending-container {
-    margin-top: 240px;
+    margin-top: 320px;
   }
 }
 </style>
