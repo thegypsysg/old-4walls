@@ -33,22 +33,25 @@
         margin-left: 10px;
         margin-top: 70px;
       " class="d-flex align-center">
-      <v-col cols="12" class="d-flex flex-column align-start" style="padding-left: 20px">
-        <h1 style="color: #fff; font-size: 46px; font-weight: bold">
-          Explore Homes for Sale & Rent
-        </h1>
+      <div :data-aos="!isSmall ? 'fade-left' : 'fade-right'" data-aos-offset="200" data-aos-duration="2000"
+        data-aos-easing="ease-in-sine">
+        <v-col cols="12" class="d-flex flex-column align-start" style="padding-left: 20px">
+          <h1 style="color: #fff; font-size: 46px; font-weight: bold">
+            Explore Homes for<br />Sale & Rent
+          </h1>
 
-        <v-btn :height="isSmall ? 40 : 60"
-          class="text-white v-btn v-btn--has-bg theme--light elevation-0 v-size--default text-white elevation-0 mt-6"
-          style="
-            background-color: #fa2964;
-            border-color: #ffa42e;
-            font-size: 20px;
-            font-weight: 700;
-          " @click="scrollToTrending">
-          <span>Learn More</span>
-        </v-btn>
-      </v-col>
+          <v-btn :height="isSmall ? 40 : 60"
+            class="text-white v-btn v-btn--has-bg theme--light elevation-0 v-size--default text-white elevation-0 mt-6"
+            style="
+              background-color: #fa2964;
+              border-color: #ffa42e;
+              font-size: 20px;
+              font-weight: 700;
+            " @click="scrollToTrending">
+            <span>Learn More</span>
+          </v-btn>
+        </v-col>
+      </div>
     </v-row>
   </div>
 
@@ -75,6 +78,7 @@ import { ref, onMounted } from "vue"; // Ensure these are imported
 import Happening from "./DesktopView/Happening/Happening.vue";
 import { eventBus } from "@/util/bus";
 import axios from "@/util/axios";
+import AOS from "aos";
 
 const isZoomed = ref(false);
 const listData = ref([]);
@@ -85,6 +89,7 @@ function scrollToSection() {
 }
 
 onMounted(() => {
+  AOS.init();
   setTimeout(() => {
     isZoomed.value = true;
   }, 100); // Small delay to ensure the transition starts after mount

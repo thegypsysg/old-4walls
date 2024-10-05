@@ -1,9 +1,9 @@
 <template>
-  <div id="trending-grid-container" class="wrapper-box">
+  <div id="trending-grid-container">
 
     <v-row justify="center">
       <v-col cols="12">
-        <p class="text-center mt-4 text-h5 text-sm-h4 text-lg-h3" style="font-family: 'DM Serif Display', system-ui;
+        <p class="text-center my-6 text-h5 text-sm-h4 text-lg-h3" style="font-family: 'DM Serif Display', system-ui;
         font-weight: 400;">
           TRENDING CATEGORIES
         </p>
@@ -21,8 +21,8 @@
     </div> -->
 
     <!-- DESKTOP VIEW -->
-    <div v-if="data" class="d-none d-sm-block">
-      <v-row no-gutters>
+    <div v-if="data" class="d-none d-sm-block w-100">
+      <v-row>
         <v-col cols="6" md="4" class="d-flex flex-column pa-2">
           <Grid v-if="data[0]" :title="data[0].category_name"
             :image="`${$fileURL + (data[0].main_image ?? data[0].long_image)}`" :isSquare="false" />
@@ -59,7 +59,7 @@
 
         <v-col cols="12">
           <v-responsive aspect-ratio="3" style="width: 100%;" class="pa-0">
-            <v-row style="height: 100%;" no-gutters>
+            <v-row style="height: 100%;">
               <v-col cols="6" md="4" style="height: 100%;" class="pa-2">
                 <Grid v-if="data[5]" :title="data[5].category_name"
                   :image="`${$fileURL + (data[5].main_image ?? data[5].long_image)}`" :isSquare="false" />
