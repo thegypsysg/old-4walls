@@ -10,13 +10,13 @@
           <p align="center" class="header-title mt-4" :class="isSmall ? 'cust-title-2' : 'cust-title-1'">
             Become Our Partner
           </p>
-          <p class="text-center text-grey-darken-1 mx-16 mt-n4" :class="isSmall ? 'text-caption' : undefined" :style="{
+          <!-- <p class="text-center text-grey-darken-1 mx-16 mt-n4" :class="isSmall ? 'text-caption' : undefined" :style="{
             letterSpacing: isSmall ? '2px' : '4px',
             lineHeight: isSmall ? '20px' : '30px',
           }">
             EXPLORE DIVERSE NEIGHBORHOODS, EACH OFFERING UNIQUE AMENITIES AND
             LIFESTYLE OPPORTUNITIES.
-          </p>
+          </p> -->
         </div>
       </v-col>
     </v-row>
@@ -60,8 +60,7 @@
               As a Property Developer
             </v-card-title>
             <v-card-text class="text-center">
-              Do your have a property to buy or sell . We will help you find a
-              reliable Tenant / Buyer.
+              Are you developing a new project, we help you find buyers.
             </v-card-text>
             <v-card-actions align="center">
               <v-btn elevation="0" class="mx-auto bg-info" style="background: #84afdc !important">

@@ -5,12 +5,13 @@
       class="trending rounded">
       <div v-bind="props"
         :style="[isHovering ? 'background-color: rgba(0, 0, 0, 0.0)' : 'background-color: rgba(0, 0, 0, 0.3)', 'transition: background-color 0.3s ease']"
-        class="fill-height d-flex flex-column align-center justify-between pa-2 pa-md-8 text-white font-weight-light">
-        <div class="text-center font-weight-bold">
+        class="fill-height d-flex flex-column-reverse flex-md-column align-md-center justify-between pa-2 pa-md-8 text-white font-weight-light">
+        <div class="text-md-center font-weight-bold">
           <div class="text-h6 text-md-h4 font-weight-bold text-white">{{ title }}</div>
           <div class="text-body-2 font-weight-bold">24 Properties</div>
         </div>
-        <div class="text-center mt-auto mb-auto">
+        <div class="text-center mt-auto mb-auto"
+          :style="[isHovering ? 'transform: translateY(30px); opacity:1' : 'transform: translateY(0); opacity:0', 'transition: 0.7s ease-out']">
           <v-btn :to="`/${title.replaceAll(' ', '-').toLocaleLowerCase()}`" class="ma-2 text-caption"
             :size="$vuetify.display.mdAndUp ? 'large' : 'x-small'" color="pink darken-1" rounded>
             View Options
@@ -27,7 +28,8 @@
           <div class="text-h6 text-md-h4 font-weight-bold text-white">{{ title }}</div>
           <div class="text-body-2 font-weight-bold">24 Properties</div>
         </div>
-        <div class="text-center mt-auto mb-auto">
+        <div class="text-center mt-auto mb-auto"
+          :style="[isHovering ? 'transform: translateY(30px); opacity:1' : 'transform: translateY(0); opacity:0', 'transition: 0.7s ease-out']">
           <v-btn :to="`/${title.replaceAll(' ', '-').toLocaleLowerCase()}`" class="ma-2 text-caption"
             :size="$vuetify.display.mdAndUp ? 'large' : 'x-small'" color="pink darken-1" rounded>
             View Options
