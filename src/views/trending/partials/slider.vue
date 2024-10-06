@@ -4,7 +4,12 @@
       <Slide v-for="(city, i) in cities" :key="i">
         <v-responsive class="border pa-4 ma-6">
           <div>
-            <v-img :src="city.img" aspect-ratio="1.3" cover style="height: 100%;"></v-img>
+            <v-img
+              :src="$fileURL + city.img"
+              aspect-ratio="1.3"
+              cover
+              style="height: 100%"
+            ></v-img>
             <div class="d-flex flex-column justify-center align-center">
               <div class="font-weight-bold">
                 {{ city.city }}
@@ -23,84 +28,69 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+<script setup>
+import axios from "@/util/axios";
+import { onMounted, ref } from "vue";
+import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 
-const cities = [
-  {
-    img: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-    city: 'Batam Center',
-    properties: 2
-  },
-  {
-    img: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-    city: 'Batam City',
-    properties: 3
-  },
-  {
-    img: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-    city: 'Baloi',
-    properties: 1
-  },
-  {
-    img: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-    city: 'Nagoya',
-    properties: 4
-  },
-  {
-    img: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-    city: 'Batam Center',
-    properties: 2
-  },
-  {
-    img: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-    city: 'Batam City',
-    properties: 3
-  },
-  {
-    img: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-    city: 'Baloi',
-    properties: 1
-  },
-  {
-    img: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-    city: 'Nagoya',
-    properties: 4
-  },
-];
-
-const settings: breakpoints = {
+const settings = {
   itemsToShow: 1,
-  snapAlign: 'center',
+  snapAlign: "center",
 };
 
 const breakpoints = {
   // 200px and up
   200: {
     itemsToShow: 1.5,
-    snapAlign: 'center',
+    snapAlign: "center",
   },
   // 640px and up
   640: {
     itemsToShow: 2,
-    snapAlign: 'center',
+    snapAlign: "center",
   },
   // 700px and up
   700: {
     itemsToShow: 3.5,
-    snapAlign: 'center',
+    snapAlign: "center",
   },
   // 1024 and up
   1024: {
     itemsToShow: 4.5,
-    snapAlign: 'start',
+    snapAlign: "start",
   },
   // 1280 and up
   1280: {
     itemsToShow: 5,
-    snapAlign: 'start',
+    snapAlign: "start",
   },
 };
+
+const cities = ref([]);
+
+function getCities() {
+  axios
+    // .get(`/towns/city/${itemSelected2}`)
+    .get(`/towns/city/95`)
+    .then((response) => {
+      const data = response.data.data;
+      cities.value = data.map((item) => ({
+        ...item,
+        img: item.town_image,
+        city: item.town_name,
+        properties: 2,
+      }));
+    })
+    .catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+      throw error;
+    });
+}
+
+onMounted(() => {
+  getCities();
+});
 </script>
 
 <style scoped></style>

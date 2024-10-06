@@ -9,7 +9,8 @@
     </div>
 
     <div class="featured-sub-title text-center text-grey-darken-1 mt-6">
-      READY TO INVEST IN OUR PORTFOLIO OF NEW PROJECTS FOR INVESTMENT OR RESIDENTIAL
+      READY TO INVEST IN OUR PORTFOLIO OF NEW PROJECTS FOR INVESTMENT OR
+      RESIDENTIAL
     </div>
 
     <div class="mx-5 d-flex ga-5 mt-6 mb-3">
@@ -23,7 +24,12 @@
         <v-hover v-slot:default="{ isHovering, props }">
           <v-responsive class="rounded pa-sm-2 align-start">
             <v-container class="rounded">
-              <v-img :src="data.img" cover style="height: 100%" aspect-ratio="1.1">
+              <v-img
+                :src="$fileURL + data?.main_image"
+                cover
+                style="height: 100%"
+                aspect-ratio="1.1"
+              >
                 <!-- <div v-bind="props" :style="[
                   isHovering
                     ? 'background-color: rgba(0, 0, 0, 0.0)'
@@ -31,29 +37,50 @@
                   'transition: background-color 0.3s ease',
                 ]" class="fill-height pa-6 text-white font-weight-light">
                 </div> -->
-                <div class="d-flex flex-column justify-space-between align-start fill-height pa-4">
-                  <v-badge content="UNDER CONSTRUCTION" inline color="blue-darken-4" rounded="0"
-                    class="text-body-1 font-weight-bold"></v-badge>
-                  <div class="d-flex flex-column flex-md-row justify-space-between align-center ga-3">
-
+                <div
+                  class="d-flex flex-column justify-space-between align-start fill-height pa-4"
+                >
+                  <v-badge
+                    v-if="data?.under_construction == 'Y'"
+                    content="UNDER CONSTRUCTION"
+                    inline
+                    color="blue-darken-4"
+                    rounded="0"
+                    class="text-body-1 font-weight-bold"
+                  ></v-badge>
+                  <div
+                    class="d-flex flex-column flex-md-row justify-space-between align-center ga-3"
+                  >
                     <div class="text-center text-md-left text-white">
                       <div class="text-h4 font-weight-bold">
-                        {{ data.name }}
+                        {{ data?.project_name }}
                       </div>
-                      <div class="font-weight-bold text-h6">{{ data.company.town }}</div>
-                      <div class="text-body-1">Completion <span class="font-weight-bold">{{ data.company.completion
-                          }}</span></div>
+                      <div class="font-weight-bold text-h6">
+                        {{ `${data?.town_name}, ${data?.city_name}` }}
+                      </div>
+                      <div class="text-body-1">
+                        Completion
+                        <span class="font-weight-bold">{{
+                          `${data?.completion_month} ${data?.completion_year}`
+                        }}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </v-img>
               <div class="d-flex flex-column ga-2 mt-2">
                 <div class="d-flex ga-2 align-center justify-start">
-                  <img :src="data.company.icon" style="height:30px" />
-                  <div class="font-weight-bold text-body-1">{{ data.company.name }}</div>
+                  <img :src="$fileURL + data?.logo" style="height: 30px" />
+                  <div class="font-weight-bold text-body-1">
+                    {{ data?.partner_name }}
+                  </div>
                 </div>
-                <div class="font-weight-bold text-body-1 text-left my-2">{{ data.company.caption }}</div>
-                <div class="text-body-2 font-weight-light text-left">{{ data.description }}</div>
+                <div class="font-weight-bold text-body-1 text-left my-2">
+                  {{ data?.project_header }}
+                </div>
+                <div class="text-body-2 font-weight-light text-left">
+                  {{ data?.project_description }}
+                </div>
               </div>
             </v-container>
           </v-responsive>
@@ -68,78 +95,77 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
-import img18 from '@/assets/images/18.jpg'
-import img19 from '@/assets/images/19.jpg'
-import img20 from '@/assets/images/20.jpg'
-import img21 from '@/assets/images/21.jpg'
+<script setup>
+import axios from "@/util/axios";
+import { onMounted, ref } from "vue";
+import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 
-const settings: breakpoints = {
+const settings = {
   itemsToShow: 1,
-  snapAlign: 'center',
-  wrapAround: true
+  snapAlign: "center",
+  wrapAround: true,
 };
 
 const breakpoints = {
   // 200px and up
   200: {
     itemsToShow: 1,
-    snapAlign: 'left',
+    snapAlign: "left",
   },
   // 640px and up
   768: {
     itemsToShow: 2,
-    snapAlign: 'left',
+    snapAlign: "left",
   },
   // 700px and up
   1024: {
     itemsToShow: 3,
-    snapAlign: 'left',
+    snapAlign: "left",
   },
 };
-const listData = [
-  {
-    under_construction: true,
-    img: 'https://e-wanderlust.com/wp-content/uploads/elementor/thumbs/WHO-DO-WE-CATER-TO-qj4ugtpw3gef7tcuiexmakc2ptip72k61u8wqu53k0.jpg',
-    name: 'Opus Bay',
-    description: 'Our condos offer the perfect blend of luxury and practially. Located in some of the most sought-after locations in Batam, our condos offer easy access to all the amenities you need for a comfortable and convenient lifestyle.',
-    company: {
-      name: 'TUAN SING HOLDINGS UNITED',
-      caption: 'The Perfect Place to Live Your Dreams',
-      icon: 'https://media.licdn.com/dms/image/C5103AQEgthUJyEnmyw/profile-displayphoto-shrink_200_200/0/1521704086565?e=2147483647&v=beta&t=p0SmV73TJdS8w9RSTEAOdef0WM1JLLwhUb3l20KnEGU',
-      town: 'Sekupang, Batam',
-      completion: 'Dec 2025'
-    }
-  },
-  {
-    under_construction: true,
-    img: 'https://opus-bay.com/wp-content/uploads/2023/02/State-Of-The-Art-Paradise-Image-Mob.png',
-    name: 'MARCS BOULEVARD',
-    description: 'Experience the height of sophistication in our stunning villas. Our villas are designed with the utmost attention to detail, featuring spacious living areas, private pools, and stunning views of the surrounding landscape.',
-    company: {
-      name: 'Trinity Land',
-      caption: 'Begin Your Chapter',
-      icon: 'https://yt3.googleusercontent.com/ytc/AIdro_kGXRWD4N1oes6WwamDmY4CkjbHRbcnbbVPcOG6_tBw7A=s900-c-k-c0x00ffffff-no-rj',
-      town: 'Batam Centre, Batam',
-      completion: 'Jan 2025'
-    }
-  },
-  {
-    under_construction: true,
-    img: 'https://orchardparkbatam.com/wp-content/uploads/2015/07/cover_1.jpg',
-    name: 'Orchard Park',
-    description: 'Discover our selection of contemporary apartments located in the heart of the city. Our apartments are designed with the modern lifestyle in mind, featuring spacious living areas, modern kitchens, and stunning views of the cityscape.',
-    company: {
-      name: 'Agung Podomoro Land',
-      caption: 'Keep Climbing Higher as An Integrated Property Developer',
-      icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThyESxS58WU6qr3WtSvet0oZHlE9Q7Y9LA7A&s',
-      town: 'Avemue Road, Batam',
-      completion: 'Dec 2025'
-    }
-  },
-]
 
+// const listData = [
+//   {
+//     under_construction: true,
+//     img: 'https://e-wanderlust.com/wp-content/uploads/elementor/thumbs/WHO-DO-WE-CATER-TO-qj4ugtpw3gef7tcuiexmakc2ptip72k61u8wqu53k0.jpg',
+//     name: 'Opus Bay',
+//     description: 'Our condos offer the perfect blend of luxury and practially. Located in some of the most sought-after locations in Batam, our condos offer easy access to all the amenities you need for a comfortable and convenient lifestyle.',
+//     company: {
+//       name: 'TUAN SING HOLDINGS UNITED',
+//       caption: 'The Perfect Place to Live Your Dreams',
+//       icon: 'https://media.licdn.com/dms/image/C5103AQEgthUJyEnmyw/profile-displayphoto-shrink_200_200/0/1521704086565?e=2147483647&v=beta&t=p0SmV73TJdS8w9RSTEAOdef0WM1JLLwhUb3l20KnEGU',
+//       town: 'Sekupang, Batam',
+//       completion: 'Dec 2025'
+//     }
+//   },
+// ]
+
+const listData = ref([]);
+
+function getList() {
+  axios
+    // .get(`/towns/city/${itemSelected2}`)
+    .get(`/list-4walls-property-developments/4/95`)
+    .then((response) => {
+      const data = response.data.data;
+      console.log(data);
+      listData.value = data.map((item) => ({
+        ...item,
+        // img: item.town_image,
+        // city: item.town_name,
+        // properties: 2,
+      }));
+    })
+    .catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+      throw error;
+    });
+}
+
+onMounted(() => {
+  getList();
+});
 </script>
 
 <style scoped></style>

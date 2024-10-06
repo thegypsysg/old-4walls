@@ -1,20 +1,38 @@
 <template>
   <!-- <Banner /> -->
 
-  <div id="trending-container" style="
+  <div
+    id="trending-container"
+    style="
       min-height: 100vh;
       position: relative;
       z-index: 2;
       background-color: #fff;
-    ">
-
-    <div class="d-none d-md-block mx-auto pt-16 pt-md-0 px-4 medium:px-20" style="max-width: 1200px; overflow-x: auto">
-      <div class="d-flex justify-center ga-6 my-5" style="min-width: fit-content">
+    "
+  >
+    <div
+      class="d-none d-md-block mx-auto pt-16 pt-md-0 px-4 medium:px-20"
+      style="max-width: 1200px; overflow-x: auto"
+    >
+      <div
+        class="d-flex justify-center ga-6 my-5"
+        style="min-width: fit-content"
+      >
         <template v-for="n in trendings" :key="n">
-          <v-btn :to="n.to" elevation="0" class="pa-2" style="min-width: 100px; min-height: 70px">
+          <v-btn
+            @click="goToPath(n)"
+            elevation="0"
+            class="pa-2"
+            style="min-width: 100px; min-height: 70px"
+          >
             <div class="d-flex flex-column align-center ga-3 text-caption">
               <v-responsive>
-                <v-img :src="n.icon" cover style="height: 25px; width:25px;" aspect-ratio="1"></v-img>
+                <v-img
+                  :src="$fileURL + n.icon"
+                  cover
+                  style="height: 25px; width: 25px"
+                  aspect-ratio="1"
+                ></v-img>
               </v-responsive>
               {{ n.title }}
             </div>
@@ -23,8 +41,14 @@
       </div>
     </div>
 
-    <div class="text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular">Buy Your Dream Home</div>
-    <div class=" text-center text-h4 font-weight-black">In <span class="text-red-darken-4">Batam</span></div>
+    <div class="text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular">
+      {{
+        selectedItem?.tag_line ? selectedItem.tag_line : trendings[0]?.tag_line
+      }}
+    </div>
+    <div class="text-center text-h4 font-weight-black">
+      In <span class="text-red-darken-4">Batam</span>
+    </div>
 
     <v-container class="mx-auto px-4" style="max-width: 1400px">
       <Slider />
@@ -50,56 +74,56 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import 'vue3-carousel/dist/carousel.css'
+<script setup>
+import "vue3-carousel/dist/carousel.css";
 
-import Banner from './partials/banner'
-import Slider from './partials/slider'
-import FeaturedProject from './partials/featured-project'
-import FeaturedMove from './partials/featured-move'
-import Interested from './partials/interested'
-import Portfolio from './partials/portfolio'
-import ForSale from './partials/for-sale'
-import Guide from './partials/guide'
+import Slider from "./partials/slider";
+import FeaturedProject from "./partials/featured-project";
+import FeaturedMove from "./partials/featured-move";
+import Interested from "./partials/interested";
+import Portfolio from "./partials/portfolio";
+import ForSale from "./partials/for-sale";
+import Guide from "./partials/guide";
+import { onMounted, ref } from "vue";
+import axios from "@/util/axios";
+import { useRouter } from "vue-router";
 
-const trendings = [
-  {
-    icon: '/svg/house.svg',
-    title: 'Buy',
-    to: '/buy'
-  },
-  {
-    icon: '/svg/house.svg',
-    title: 'Rent',
-    to: '/rent'
-  },
-  {
-    icon: '/svg/house.svg',
-    title: 'Roommates',
-    to: '/roommates'
-  },
-  {
-    icon: '/svg/house.svg',
-    title: 'Staycation',
-    to: '/staycation'
-  },
-  {
-    icon: '/svg/house.svg',
-    title: 'Vacation',
-    to: '/vacation'
-  },
-  {
-    icon: '/svg/house.svg',
-    title: 'Co Living',
-    to: '/co-living'
-  },
-  {
-    icon: '/svg/house.svg',
-    title: 'Co Working',
-    to: '/co-working'
-  },
-]
+const router = useRouter();
 
+const selectedItem = ref();
+const trendings = ref([]);
+
+const goToPath = (data) => {
+  selectedItem.value = data;
+  router.push(data.to);
+};
+
+const getTrendings = () => {
+  axios
+    .get(`/list-main-categories`)
+    .then((response) => {
+      const data = response.data.data;
+      trendings.value = data
+        .sort((a, b) => a.category_id < b.category_id)
+        .map((item) => ({
+          ...item,
+          icon: item.icon_image,
+          title: item.category_name,
+          to: item.link_name.includes("asdf")
+            ? "/buy"
+            : item.link_name.split("https://4walls.sg")[1],
+        }));
+    })
+    .catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+      throw error;
+    });
+};
+
+onMounted(() => {
+  getTrendings();
+});
 </script>
 
 <style scoped>
