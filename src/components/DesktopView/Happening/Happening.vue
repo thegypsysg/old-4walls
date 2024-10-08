@@ -25,20 +25,23 @@
       <v-row>
         <v-col cols="6" md="4" class="d-flex flex-column pa-2">
           <Grid v-if="data[0]" :title="data[0].category_name"
-            :image="`${$fileURL + (data[0].main_image ?? data[0].long_image)}`" :isSquare="false" />
+            :image="`${$fileURL + (data[0].main_image ?? data[0].long_image)}`" :isSquare="false" :show_text="true"
+            :show_option="true" />
         </v-col>
 
         <v-col cols="6" md="4" class="pa-2">
           <v-row>
             <v-col>
               <Grid v-if="data[1]" :title="data[1].category_name"
-                :image="`${$fileURL + (data[1].main_image ?? data[1].long_image)}`" :isSquare="true" />
+                :image="`${$fileURL + (data[1].main_image ?? data[1].long_image)}`" :isSquare="true" :show_text="true"
+                :show_option="true" />
             </v-col>
           </v-row>
           <v-row>
             <v-col>
               <Grid v-if="data[2]" :title="data[2].category_name"
-                :image="`${$fileURL + (data[2].main_image ?? data[2].long_image)}`" :isSquare="true" />
+                :image="`${$fileURL + (data[2].main_image ?? data[2].long_image)}`" :isSquare="true" :show_text="true"
+                :show_option="true" />
             </v-col>
           </v-row>
         </v-col>
@@ -46,13 +49,15 @@
           <v-row>
             <v-col>
               <Grid v-if="data[3]" :title="data[3].category_name"
-                :image="`${$fileURL + (data[3].main_image ?? data[3].long_image)}`" :isSquare="true" />
+                :image="`${$fileURL + (data[3].main_image ?? data[3].long_image)}`" :isSquare="true" :show_text="true"
+                :show_option="true" />
             </v-col>
           </v-row>
           <v-row>
             <v-col>
               <Grid v-if="data[4]" :title="data[4].category_name"
-                :image="`${$fileURL + (data[4].main_image ?? data[4].long_image)}`" :isSquare="true" />
+                :image="`${$fileURL + (data[4].main_image ?? data[4].long_image)}`" :isSquare="true" :show_text="true"
+                :show_option="true" />
             </v-col>
           </v-row>
         </v-col>
@@ -62,11 +67,13 @@
             <v-row style="height: 100%;">
               <v-col cols="6" md="4" style="height: 100%;" class="pa-2">
                 <Grid v-if="data[5]" :title="data[5].category_name"
-                  :image="`${$fileURL + (data[5].main_image ?? data[5].long_image)}`" :isSquare="false" />
+                  :image="`${$fileURL + (data[5].main_image ?? data[5].long_image)}`" :isSquare="false"
+                  :show_text="true" :show_option="true" />
               </v-col>
               <v-col cols="6" md="8" style="height: 100%;" class="pa-2">
                 <Grid v-if="data[6]" :title="data[6].category_name"
-                  :image="`${$fileURL + (data[6].main_image ?? data[6].long_image)}`" :isSquare="false" />
+                  :image="`${$fileURL + (data[6].main_image ?? data[6].long_image)}`" :isSquare="false"
+                  :show_text="true" :show_option="true" />
               </v-col>
             </v-row>
           </v-responsive>
@@ -80,7 +87,7 @@
       <template v-for="(item, i) in filterTrendings" :key="i">
         <v-col cols="6">
           <Grid :title="item?.category_name" :image="`${$fileURL + (item.main_image ?? item.long_image)}`"
-            :isSquare="true" />
+            :isSquare="true" :show_text="true" :show_option="true" />
         </v-col>
       </template>
     </v-row>
