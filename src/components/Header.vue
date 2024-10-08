@@ -1,5 +1,4 @@
 <template>
-  <!-- 'app-bar-mobile-start': isSmall, -->
   <v-app-bar
     v-if="(isDesktop && !isHeader) || (isSmall && !isHeader)"
     :class="{
@@ -9,7 +8,6 @@
     elevation="1"
     fixed
   >
-    <!-- <div class="d-flex justify-start"> -->
     <router-link to="/">
       <div class="logo-img-container ml-4">
         <v-img
@@ -85,151 +83,8 @@
           </v-list>
         </v-menu>
       </v-btn>
-
-      <!-- <v-menu location="bottom">
-        <template #activator="{ props }">
-          <v-btn
-            style="
-              margin-left: 30px;
-              margin-right: 30px;
-              font-size: 16px;
-              color: #494949;
-            "
-            v-bind="props"
-            variant="text"
-          >
-            {{ itemSelected }}
-            <v-icon
-              right
-              dark
-            >
-              mdi-menu-down
-            </v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in country"
-            :key="index"
-            :value="index"
-            @click="changeItemSelected(item.title)"
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu> -->
-
-      <!-- <v-menu>
-        <template #activator="{ props }">
-          <v-btn
-            v-if="!isLoading"
-            style="font-size: 15px; color: #494949"
-            v-bind="props"
-            variant="text"
-          >
-            <template
-              v-if="!itemSelectedComplete || itemSelectedComplete == null"
-            >
-              <span>{{ itemSelected }}</span>
-            </template>
-            <template
-              v-if="itemSelectedComplete || itemSelectedComplete != null"
-            >
-              <span class="text-blue-darken-4">{{
-                itemSelectedComplete?.title
-              }}</span
-              ><span class="text-red">
-                ({{ itemSelectedComplete?.count }}
-                {{
-                  itemSelectedComplete?.count == "1" ||
-                  itemSelectedComplete?.count == "0"
-                    ? "Mall"
-                    : "Malls"
-                }})</span
-              >
-            </template>
-            <v-icon right dark> mdi-menu-down </v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in country"
-            :key="index"
-            :value="index"
-            @click="changeItemSelected(item)"
-          >
-            <v-list-item-title v-if="isSpecific">
-              <span class="text-blue-darken-4">{{ item.title }}</span
-              ><span class="text-red">
-                ({{ item.count }}
-                {{
-                  item.count == "1" || item.count == "0" ? "Mall" : "Malls"
-                }})</span
-              >
-            </v-list-item-title>
-            <v-list-item-title v-else>
-              {{ item.title }}
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <v-menu v-if="itemSelectedComplete?.oneCity != true">
-        <template #activator="{ props }">
-          <v-btn
-            style="
-              margin-left: 10px;
-              margin-right: 20px;
-              font-size: 15px;
-              color: #494949;
-            "
-            v-bind="props"
-            variant="text"
-          >
-            <span v-if="isLoading">loading...</span>
-            <template v-if="!isLoading && itemSelected2Complete == null">
-              <span>{{ itemSelected2 }}</span>
-            </template>
-            <template v-if="!isLoading && itemSelected2Complete != null">
-              <span class="text-blue-darken-4">
-                {{ itemSelected2Complete?.title }}</span
-              ><span class="text-black">
-                ({{ itemSelected2Complete?.count }}
-                {{
-                  itemSelected2Complete?.count == "1" ||
-                  itemSelected2Complete?.count == "0"
-                    ? "Mall"
-                    : "Malls"
-                }})</span
-              >
-            </template>
-            <v-icon right dark> mdi-menu-down </v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in city"
-            :key="index"
-            :value="index"
-            @click="changeItemSelected2(item)"
-          >
-            <v-list-item-title v-if="isSpecific">
-              <span class="text-blue-darken-4">{{ item.title }}</span
-              ><span class="text-black">
-                ({{ item.count }}
-                {{
-                  item.count == "1" || item.count == "0" ? "Mall" : "Malls"
-                }})</span
-              >
-            </v-list-item-title>
-            <v-list-item-title v-else>
-              {{ item.title }}
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu> -->
     </div>
 
-    <!-- <div class="vspacer" style="width: 50px"></div> -->
     <data
       v-if="
         $route.name == 'Trending-buy' ||
@@ -250,72 +105,16 @@
       </div>
     </data>
 
-    <!-- <div
-      v-if="
-        $route.name == 'Trending-buy' ||
-        $route.name == 'Trending-rent' ||
-        $route.name == 'Trending-roommates' ||
-        $route.name == 'Trending-staycation' ||
-        $route.name == 'Trending-vacation' ||
-        $route.name == 'Trending-co-living' ||
-        $route.name == 'Trending-co-working'
-      "
-      class="d-none d-md-flex gap-2 align-center text-caption"
-    >
-      <v-select
-        v-model="selectedCountry"
-        item-text="title"
-        :items="[
-          { icon: '/svg/singapore.svg', title: 'Singapore' },
-          { icon: '/svg/indonesia.svg', title: 'Indonesia' },
-        ]"
-        class="mb-5"
-      >
-        <template v-slot:selection="{ item }">
-          <v-list-item>
-            <div class="d-flex align-center">
-              <v-img
-                :src="item.raw.icon"
-                width="25"
-                height="25"
-                cover
-                aspect-ratio="1"
-                class="mr-2"
-              />
-              <v-list-item-title
-                v-html="item.title"
-                style="min-width: fit-content"
-              ></v-list-item-title>
-            </div>
-          </v-list-item>
-        </template>
-
-        <template v-slot:item="{ item, props }">
-          <v-list-item v-bind="props">
-            <template v-slot:prepend>
-              <v-img
-                :src="item.raw.icon"
-                width="25"
-                height="25"
-                cover
-                aspect-ratio="1"
-                class="mr-2"
-              />
-            </template>
-          </v-list-item>
-        </template>
-      </v-select>
-    </div> -->
-
     <v-btn
       v-if="
-        $route.name == 'Trending-buy' ||
-        $route.name == 'Trending-rent' ||
-        $route.name == 'Trending-roommates' ||
-        $route.name == 'Trending-staycation' ||
-        $route.name == 'Trending-vacation' ||
-        $route.name == 'Trending-co-living' ||
-        $route.name == 'Trending-co-working'
+        !isSmall &&
+        ($route.name == 'Trending-buy' ||
+          $route.name == 'Trending-rent' ||
+          $route.name == 'Trending-roommates' ||
+          $route.name == 'Trending-staycation' ||
+          $route.name == 'Trending-vacation' ||
+          $route.name == 'Trending-co-living' ||
+          $route.name == 'Trending-co-working')
       "
       style="font-size: 15px; color: #494949"
       variant="text"
@@ -483,118 +282,6 @@
 
     <template v-if="!isProfile" #extension>
       <div class="mobile__app text-center w-100">
-        <div
-          v-if="false"
-          style="margin-top: -50px; margin-bottom: 10px"
-          class="d-flex flex-column"
-        >
-          <v-menu v-if="!isLoading">
-            <template #activator="{ props }">
-              <v-btn
-                v-if="!isLoading"
-                style="font-size: 15px; color: #494949"
-                v-bind="props"
-                variant="text"
-              >
-                <template
-                  v-if="!itemSelectedComplete || itemSelectedComplete == null"
-                >
-                  <span>{{ itemSelected }}</span>
-                </template>
-                <template
-                  v-if="itemSelectedComplete || itemSelectedComplete != null"
-                >
-                  <span class="text-blue-darken-4">{{
-                    itemSelectedComplete?.title
-                  }}</span
-                  ><span class="text-red">
-                    ({{ itemSelectedComplete?.count }}
-                    {{
-                      itemSelectedComplete?.count == "1" ||
-                      itemSelectedComplete?.count == "0"
-                        ? "Mall"
-                        : "Malls"
-                    }})</span
-                  >
-                </template>
-                <v-icon right dark> mdi-menu-down </v-icon>
-              </v-btn>
-            </template>
-            <v-list style="max-height: 50vh">
-              <v-list-item
-                v-for="(item, index) in country"
-                :key="index"
-                :value="index"
-                @click="changeItemSelected(item)"
-              >
-                <v-list-item-title v-if="isSpecific">
-                  <span class="text-blue-darken-4">{{ item.title }}</span
-                  ><span class="text-red">
-                    ({{ item.count }}
-                    {{
-                      item.count == "1" || item.count == "0" ? "Mall" : "Malls"
-                    }})</span
-                  >
-                </v-list-item-title>
-                <v-list-item-title v-else>
-                  {{ item.title }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-          <v-menu>
-            <template #activator="{ props }">
-              <v-btn
-                v-if="false"
-                style="font-size: 15px; color: #494949"
-                v-bind="props"
-                variant="text"
-              >
-                <!-- {{ isLoading ? 'loading...' : itemSelected2 }} -->
-                <span v-if="isLoading">loading...</span>
-                <template v-if="!isLoading && itemSelected2Complete == null">
-                  <span>{{ itemSelected2 }}</span>
-                </template>
-                <template v-if="!isLoading && itemSelected2Complete != null">
-                  <span class="text-blue-darken-4">
-                    {{ itemSelected2Complete?.title }}</span
-                  ><span class="text-black">
-                    ({{ itemSelected2Complete?.count }}
-                    {{
-                      itemSelected2Complete?.count == "1" ||
-                      itemSelected2Complete?.count == "0"
-                        ? "Mall"
-                        : "Malls"
-                    }})</span
-                  >
-                </template>
-                <v-icon right dark> mdi-menu-down </v-icon>
-              </v-btn>
-            </template>
-            <v-list style="max-height: 50vh">
-              <v-list-item
-                v-for="(item, index) in city"
-                :key="index"
-                :value="index"
-                @click="changeItemSelected2(item)"
-              >
-                <v-list-item-title v-if="isSpecific">
-                  <span class="text-blue-darken-4">{{ item.title }}</span
-                  ><span class="text-black">
-                    ({{ item.count }}
-                    {{
-                      item.count == "1" || item.count == "0" ? "Mall" : "Malls"
-                    }})</span
-                  >
-                </v-list-item-title>
-                <v-list-item-title v-else>
-                  {{ item.title }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </div>
-
         <template
           v-if="
             $route.name == 'Trending-buy' ||
@@ -606,58 +293,48 @@
             $route.name == 'Trending-co-working'
           "
         >
-          <div
-            class="d-none d-md-block text-h5 font-weight-black text-no-wrap text-red-darken-4"
-            style="text-transform: capitalize !important"
-          >
-            {{ $route.path.replaceAll("-", " ").replaceAll("/", "") }}
-          </div>
-
           <div class="d-flex justify-center mx-auto" style="width: max-content">
-            <v-select
-              v-model="selectedCountry"
-              item-text="title"
-              :items="[
-                { icon: '/svg/singapore.svg', title: 'Singapore' },
-                { icon: '/svg/indonesia.svg', title: 'Indonesia' },
-              ]"
-              class="mb-5"
-              style="width: max-content"
+            <v-btn
+              v-if="
+                isSmall &&
+                ($route.name == 'Trending-buy' ||
+                  $route.name == 'Trending-rent' ||
+                  $route.name == 'Trending-roommates' ||
+                  $route.name == 'Trending-staycation' ||
+                  $route.name == 'Trending-vacation' ||
+                  $route.name == 'Trending-co-living' ||
+                  $route.name == 'Trending-co-working')
+              "
+              style="font-size: 15px; color: #494949"
+              variant="text"
+              :disabled="isLoading"
+              @click="dialog = true"
             >
-              <template v-slot:selection="{ item }">
-                <v-list-item>
-                  <div class="d-flex align-center">
-                    <v-img
-                      :src="item.raw.icon"
-                      width="25"
-                      height="25"
-                      cover
-                      aspect-ratio="1"
-                      class="mr-2"
-                    />
-                    <v-list-item-title
-                      v-html="item.title"
-                      style="min-width: fit-content"
-                    ></v-list-item-title>
-                  </div>
-                </v-list-item>
+              <template
+                v-if="!itemSelectedComplete || itemSelectedComplete == null"
+              >
+                <span>{{ selectedPlace || itemSelected }}</span>
               </template>
-
-              <template v-slot:item="{ item, props }">
-                <v-list-item v-bind="props">
-                  <template v-slot:prepend>
-                    <v-img
-                      :src="item.raw.icon"
-                      width="25"
-                      height="25"
-                      cover
-                      aspect-ratio="1"
-                      class="mr-2"
-                    />
-                  </template>
-                </v-list-item>
+              <template
+                v-if="itemSelectedComplete || itemSelectedComplete != null"
+              >
+                <div style="border-radius: 50%; height: 20px; width: 20px">
+                  <v-img
+                    style="
+                      width: 100% !important;
+                      height: 20px !important;
+                      object-fit: cover !important;
+                      object-position: center !important;
+                    "
+                    :src="$fileURL + itemSelectedComplete?.flag"
+                  />
+                </div>
+                <span class="ml-2">{{
+                  selectedPlace || itemSelectedComplete?.title
+                }}</span>
               </template>
-            </v-select>
+              <v-icon right dark> mdi-menu-down </v-icon>
+            </v-btn>
           </div>
         </template>
 
@@ -1053,7 +730,7 @@
     v-model="dialog"
     fullscreen
     persistent
-    height="90vh"
+    height="100vh"
     class="mt-16"
     z-index="1000000"
   >
@@ -1084,7 +761,7 @@
             @click="changeItemSelected(item)"
           >
             <div class="w15">
-              <!-- <v-img height="20" width="30" :src="$fileURL + item?.flag" /> -->
+              <v-img height="20" width="30" :src="$fileURL + item?.flag" />
             </div>
             <div class="d-flex justify-space-between w85">
               <p style="font-size: 14px !important">
@@ -1098,7 +775,9 @@
                 <span class="text-blue-darken-4"
                   >{{ item.count }}
                   {{
-                    item?.count == "1" || item?.count == "0" ? "Mall" : "Malls"
+                    item?.count == "1" || item?.count == "0"
+                      ? "Property"
+                      : "Properties"
                   }}</span
                 >
                 )
@@ -1115,7 +794,7 @@
             :key="data.id"
             @click="changeItemSelected2(data)"
           >
-            <div class="d-flex mb-6 align-content-center">
+            <div v-if="data.count > 0" class="d-flex mb-6 align-content-center">
               <div class="w15" />
               <div class="w85 d-flex justify-space-between">
                 <p style="font-size: 14px !important">
@@ -1125,16 +804,16 @@
                     }"
                     >{{ data.title }}</span
                   >
-                  <!-- (
+                  (
                   <span class="text-blue-darken-4"
                     >{{ data.count }}
                     {{
                       data?.count == "1" || data?.count == "0"
-                        ? "Mall"
-                        : "Malls"
+                        ? "Property"
+                        : "Properties"
                     }}</span
                   >
-                  ) -->
+                  )
                 </p>
                 <v-icon v-if="data.title == selectedPlace" color="green">
                   mdi-check-circle
@@ -1703,72 +1382,35 @@ export default {
           console.log(error);
         });
     },
-    getCountry() {
-      axios
-        .get(`/country`)
-        .then((response) => {
-          const data = response.data.data;
-          // console.log(data);
-          this.country = data.map((country) => {
-            return {
-              id: country.country_id,
-              title: country.country_name,
-              path: "#",
-            };
-          });
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error);
-        });
-    },
     getCountryMall() {
       this.isLoading = true;
       axios
-        .get(`/app-cities/country-cities/${this.$appId}`)
+        .get(`/app-country-list/${this.$appId}`)
         .then((response) => {
           const data = response.data.data;
           this.country = data.map((country) => {
             return {
               id: country.country_id,
               title: country.country_name,
-              count: country?.mall_count || 0,
-              // oneCity: country.one_city == "Y" ? true : false,
+              count: country.property_count,
+              oneCity: country.one_city == "Y" ? true : false,
               path: "#",
-              // flag: country.flag,
-              cities: country.cities.map((c) => {
-                return {
-                  id: c.city_id,
-                  title: c.city_name,
-                  countryId: country.country_id,
-                  // count: city.mall_count,
-                  // image: city?.city_image || "",
-                  path: "#",
-                };
-              }),
+              flag: country.flag,
+              cities: [],
             };
           });
-          console.log("header country", this.country);
+          // console.log(this.country);
           const defaultCountry = data
             .filter((c) => c.country_name == this.countryDevice)
             .map((country) => {
               return {
                 id: country.country_id,
                 title: country.country_name,
-                count: country?.mall_count || 0,
-                // oneCity: country.one_city == "Y" ? true : false,
+                count: country.property_count,
+                oneCity: country.one_city == "Y" ? true : false,
                 path: "#",
-                // flag: country.flag,
-                cities: country.cities.map((c) => {
-                  return {
-                    id: c.city_id,
-                    title: c.city_name,
-                    countryId: country.country_id,
-                    // count: city.mall_count,
-                    // image: city?.city_image || "",
-                    path: "#",
-                  };
-                }),
+                flag: country.flag,
+                cities: [],
               };
             });
           // console.log("map country head", defaultCountry);
@@ -1792,9 +1434,9 @@ export default {
                 ? defaultCountry[0].title
                 : this.country[0].title;
           }
-          // this.getCityMall();
-          this.getActiveMallData();
-          this.getMallMerchantItemsByCountry();
+          this.getCityMall();
+          // this.getActiveMallData();
+          // this.getMallMerchantItemsByCountry();
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -1806,14 +1448,19 @@ export default {
     },
     getCityMall() {
       this.isLoading = true;
+
+      // Reset cities for all countries before making the API request
+      this.country.forEach((item, index) => {
+        this.country[index].cities = [];
+      });
+
       axios
         .get(
-          `/mall-city-list/mall-country/${this.itemSelectedComplete?.id || 1}`,
-          // `/mall-city-list/mall-country/2`
+          `/app-city-list/${this.$appId}/${this.itemSelectedComplete?.id || 1}`,
         )
         .then((response) => {
           const data = response.data.data;
-          //console.log(data);
+
           let selectedIndex = this.country.findIndex(
             (item) => item.id === this.itemSelectedComplete?.id,
           );
@@ -1829,21 +1476,23 @@ export default {
             return {
               id: city.city_id,
               title: city.city_name,
-              count: city.mall_count,
+              count: city.property_count,
               image: city?.city_image || "",
               countryId: city.country_id,
               path: "#",
             };
           });
-          let index = this.country.findIndex((item) => item.id === 2);
 
-          if (index !== -1) {
+          let index = this.country.findIndex(
+            (item) => item.id === this.itemSelectedComplete?.id,
+          );
+
+          if (index !== -1 && this.country[index].oneCity === false) {
             this.country[index].cities = this.city;
           }
-          // console.log(this.city);
+          console.log(this.country);
         })
         .catch((error) => {
-          // eslint-disable-next-line
           console.log(error);
         })
         .finally(() => {
@@ -1857,8 +1506,8 @@ export default {
       localStorage.setItem("mallCount", this.itemSelectedComplete?.count);
       this.setItemSelected2("---Select City---");
       this.setItemSelected2Complete(null);
-      // this.getCityMall();
-      this.getActiveMallData();
+      this.getCityMall();
+      // this.getActiveMallData();
       app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
       this.dialog = false;
     },

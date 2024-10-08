@@ -47,7 +47,12 @@
       }}
     </div>
     <div class="text-center text-h4 font-weight-black">
-      In <span class="text-red-darken-4">Batam</span>
+      In
+      <span class="text-red-darken-4">{{
+        itemSelected2Complete
+          ? itemSelected2Complete?.title
+          : itemSelectedComplete?.title
+      }}</span>
     </div>
 
     <v-container class="mx-auto px-4" style="max-width: 1400px">
@@ -84,14 +89,20 @@ import Interested from "./partials/interested";
 import Portfolio from "./partials/portfolio";
 import ForSale from "./partials/for-sale";
 import Guide from "./partials/guide";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import axios from "@/util/axios";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
+const store = useStore();
 
 const router = useRouter();
 
 const selectedItem = ref();
 const trendings = ref([]);
+
+const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
+const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
 
 const goToPath = (data) => {
   selectedItem.value = data;
@@ -111,7 +122,9 @@ const getTrendings = () => {
           title: item.category_name,
           to: item.link_name.includes("asdf")
             ? "/buy"
-            : item.link_name.split("https://4walls.sg")[1],
+            : item.link_name.includes("roomates")
+              ? "/roommates"
+              : item.link_name.split("https://4walls.sg")[1],
         }));
     })
     .catch((error) => {

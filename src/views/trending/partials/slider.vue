@@ -30,7 +30,8 @@
 
 <script setup>
 import axios from "@/util/axios";
-import { onMounted, ref } from "vue";
+import { useStore } from "vuex";
+import { computed, onMounted, ref, watchEffect } from "vue";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 
 const settings = {
@@ -66,12 +67,23 @@ const breakpoints = {
   },
 };
 
+const store = useStore();
+
 const cities = ref([]);
+
+const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
+const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
+
+watchEffect(() => {
+  getCities();
+});
 
 function getCities() {
   axios
     // .get(`/towns/city/${itemSelected2}`)
-    .get(`/towns/city/95`)
+    .get(
+      `/towns/city/${itemSelected2Complete.value ? itemSelected2Complete.value.id : null}`,
+    )
     .then((response) => {
       const data = response.data.data;
       cities.value = data.map((item) => ({

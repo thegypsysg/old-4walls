@@ -5,7 +5,12 @@
       <span>FEATURED PROJECT</span>
     </div>
     <div class="featured-title text-h4 text-md-h3 text-center mt-6">
-      EXPLORE NEW & UPCOMING PROJECTS IN BATAM
+      EXPLORE NEW & UPCOMING PROJECTS IN
+      {{
+        itemSelected2Complete
+          ? itemSelected2Complete?.title
+          : itemSelectedComplete?.title
+      }}
     </div>
 
     <div class="featured-sub-title text-center text-grey-darken-1 mt-6">
@@ -14,13 +19,19 @@
     </div>
 
     <div class="mx-5 d-flex ga-5 mt-6 mb-3">
-      <v-btn class="text-red-darken-2">2025</v-btn>
-      <v-btn class="text-red-darken-2">2026</v-btn>
-      <v-btn class="text-red-darken-2">2027</v-btn>
+      <v-btn @click="() => filterList('2025')" class="text-red-darken-2"
+        >2025</v-btn
+      >
+      <v-btn @click="() => filterList('2026')" class="text-red-darken-2"
+        >2026</v-btn
+      >
+      <v-btn @click="() => filterList('2027')" class="text-red-darken-2"
+        >2027</v-btn
+      >
     </div>
 
     <Carousel v-bind="settings" :breakpoints>
-      <Slide v-for="(data, i) in listData" :key="i">
+      <Slide v-for="(data, i) in filteredData" :key="data.development_id">
         <v-hover v-slot:default="{ isHovering, props }">
           <v-responsive class="rounded pa-sm-2 align-start">
             <v-container class="rounded">
@@ -70,7 +81,10 @@
               </v-img>
               <div class="d-flex flex-column ga-2 mt-2">
                 <div class="d-flex ga-2 align-center justify-start">
-                  <img :src="$fileURL + data?.logo" style="height: 30px" />
+                  <img
+                    :src="$fileURL + data?.partner_logo"
+                    style="height: 30px"
+                  />
                   <div class="font-weight-bold text-body-1">
                     {{ data?.partner_name }}
                   </div>
@@ -97,8 +111,9 @@
 
 <script setup>
 import axios from "@/util/axios";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watchEffect } from "vue";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
+import { useStore } from "vuex";
 
 const settings = {
   itemsToShow: 1,
@@ -124,28 +139,28 @@ const breakpoints = {
   },
 };
 
-// const listData = [
-//   {
-//     under_construction: true,
-//     img: 'https://e-wanderlust.com/wp-content/uploads/elementor/thumbs/WHO-DO-WE-CATER-TO-qj4ugtpw3gef7tcuiexmakc2ptip72k61u8wqu53k0.jpg',
-//     name: 'Opus Bay',
-//     description: 'Our condos offer the perfect blend of luxury and practially. Located in some of the most sought-after locations in Batam, our condos offer easy access to all the amenities you need for a comfortable and convenient lifestyle.',
-//     company: {
-//       name: 'TUAN SING HOLDINGS UNITED',
-//       caption: 'The Perfect Place to Live Your Dreams',
-//       icon: 'https://media.licdn.com/dms/image/C5103AQEgthUJyEnmyw/profile-displayphoto-shrink_200_200/0/1521704086565?e=2147483647&v=beta&t=p0SmV73TJdS8w9RSTEAOdef0WM1JLLwhUb3l20KnEGU',
-//       town: 'Sekupang, Batam',
-//       completion: 'Dec 2025'
-//     }
-//   },
-// ]
+const store = useStore();
 
 const listData = ref([]);
+const filteredData = ref([]);
+
+const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
+const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
+
+watchEffect(() => {
+  getList();
+});
 
 function getList() {
+  listData.value = [];
+  filteredData.value = [];
   axios
     // .get(`/towns/city/${itemSelected2}`)
-    .get(`/list-4walls-property-developments/4/95`)
+    .get(
+      itemSelected2Complete.value
+        ? `/list-4walls-property-developments/${itemSelectedComplete.value ? itemSelectedComplete.value.id : null}/${itemSelected2Complete.value ? itemSelected2Complete.value.id : null}`
+        : `/list-4walls-property-developments/${itemSelectedComplete.value ? itemSelectedComplete.value.id : null}`,
+    )
     .then((response) => {
       const data = response.data.data;
       console.log(data);
@@ -155,12 +170,19 @@ function getList() {
         // city: item.town_name,
         // properties: 2,
       }));
+      filteredData.value = listData.value;
     })
     .catch((error) => {
       // eslint-disable-next-line
       console.log(error);
       throw error;
     });
+}
+
+function filterList(year) {
+  filteredData.value = listData.value.filter(
+    (item) => item.completion_year === year,
+  );
 }
 
 onMounted(() => {
