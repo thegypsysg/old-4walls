@@ -8,80 +8,140 @@
       background-color: #f7f8f9;
   margin-top: 115px;
   ">
-    <v-container>
-      <v-row>
-        <v-col class="d-flex flex-column flex-md-row justify-space-between">
-          <div class="text-h4 font-weight-black">
-            IDR: 10,000,000
-          </div>
-          <div>
-            <v-badge color="black" content="FOR RENT" inline rounded="0" class="opacity-80" align="left" />
-            <v-badge color="green" content="FOR RENT" inline rounded="0" class="opacity-80" align="left" />
-          </div>
-        </v-col>
-        <v-col class="d-flex justify-end ga-3">
-          <v-btn color="#f7f8f9" prepend-icon="mdi-tray-arrow-up" elevation="0">
-            <template v-slot:prepend>
-              <v-icon></v-icon>
-            </template>
-            Saved
-          </v-btn>
-          <v-btn color="#f7f8f9" prepend-icon="mdi-heart" elevation="0">
-            <template v-slot:prepend>
-              <v-icon color="red"></v-icon>
-            </template>
-            Saved
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container class="d-none d-sm-block w-100">
-      <v-row>
-        <v-col cols="6" class="d-flex flex-column pa-2">
-          <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
-            :isSquare="false" />
-        </v-col>
-
-        <v-col cols="6" md="3" class="pa-2">
-          <v-row>
-            <v-col>
-              <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
-                :isSquare="true" />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
-                :isSquare="true" />
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="6" md="3" class="pa-2">
-          <v-row>
-            <v-col>
-              <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
-                :isSquare="true" />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
-                :isSquare="true" />
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
-    <!-- MOBILE VIEW -->
-    <v-container class="d-sm-none">
-      <v-row>
-        <template v-for="(item, i) in images" :key="i">
-          <v-col cols="6">
-            <Grid :title="item.title" :image="item.image" :isSquare="true" />
+    <div class="d-none d-md-block">
+      <v-container>
+        <v-row>
+          <v-col class="d-flex flex-column flex-md-row justify-space-between">
+            <div class="text-h4 font-weight-black">
+              IDR: 10,000,000
+            </div>
+            <div>
+              <v-badge color="black" content="FOR RENT" inline rounded="0" class="opacity-80" align="left" />
+              <v-badge color="green" content="FOR RENT" inline rounded="0" class="opacity-80" align="left" />
+            </div>
           </v-col>
+          <v-col class="d-flex justify-end ga-3">
+            <v-btn color="#f7f8f9" prepend-icon="mdi-tray-arrow-up" elevation="0">
+              <template v-slot:prepend>
+                <v-icon></v-icon>
+              </template>
+              Share
+            </v-btn>
+            <v-btn color="#f7f8f9" prepend-icon="mdi-heart" elevation="0">
+              <template v-slot:prepend>
+                <v-icon color="red"></v-icon>
+              </template>
+              Saved
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-container class="w-100">
+        <v-row>
+          <v-col cols="6" class="d-flex flex-column pa-2">
+            <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
+              :isSquare="false" />
+          </v-col>
+
+          <v-col cols="6" md="3" class="pa-2">
+            <v-row>
+              <v-col>
+                <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
+                  :isSquare="true" />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
+                  :isSquare="true" />
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="6" md="3" class="pa-2">
+            <v-row>
+              <v-col>
+                <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
+                  :isSquare="true" />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <Grid title="Image" image="https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg"
+                  :isSquare="true" />
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+
+    <!-- MOBILE -->
+    <v-container class="d-md-none " style="position: relative;">
+      <div class="d-flex ga-3" style="position: absolute; right: 40px; top: 40px; z-index: 10;">
+        <v-btn density="default" size="small" icon="mdi-tray-arrow-up"></v-btn>
+        <v-btn density="default" size="small" icon="mdi-heart"></v-btn>
+      </div>
+      <Carousel v-bind="settings" :breakpoints>
+        <Slide v-for="(item, i) in images" :key="i">
+          <!-- <v-hover v-slot:default="{ isHovering, props }"> -->
+          <v-responsive class="rounded pa-2" aspect-ratio="1.5">
+            <v-img :src="item.image" cover style="height: 100%;">
+            </v-img>
+          </v-responsive>
+        </Slide>
+
+        <template #addons>
+          <Navigation />
+          <Pagination />
         </template>
-      </v-row>
+      </Carousel>
+      <div class="text-h5 font-weight-bold">Pollux Habibie Seaview Apartment</div>
+      <div class="d-flex justify-space-between mt-4">
+        <div class="d-flex ga-2">
+          <v-btn rounded="0" size="small" icon="mdi-newspaper-variant-outline"></v-btn>
+          <v-btn rounded="0" size="small" icon="mdi-map-legend"></v-btn>
+          <v-btn rounded="0" size="small" icon="mdi-map-marker-radius-outline"></v-btn>
+        </div>
+        <div class="d-flex ga-2">
+          <v-btn rounded="0" size="small" icon="mdi-heart-outline"></v-btn>
+          <v-btn rounded="0" size="small" icon="mdi-share-variant-outline"></v-btn>
+        </div>
+      </div>
+      <div class="mt-4">
+        <v-badge color="black" content="FOR RENT" inline rounded="0" class="opacity-80" align="left" />
+        <v-badge color="green" content="FOR RENT" inline rounded="0" class="opacity-80" align="left" />
+      </div>
+
+      <div class="mt-4">
+        <div class="font-weight-bold">Design Apartment</div>
+        <div class="text-caption font-weight-light"><v-icon icon="mdi-map-marker-outline" size="18"></v-icon> Quency St,
+          Brooklyn,
+          NY,
+          USA
+        </div>
+      </div>
+      <div class="mt-4">
+        <div class="font-weight-bold">$876.000</div>
+        <div class="text-caption font-weight-light">$7,6090/sq ft</div>
+      </div>
+
+      <hr class="mt-4 mb-4">
+
+      <div class="d-flex ga-2 align-center justify-space-between">
+        <v-avatar color="grey" size="50" style="border-radius: 5px;">
+          <v-img src="https://demo03.houzez.co/wp-content/uploads/2016/02/agent-3-150x150.jpg" cover></v-img>
+        </v-avatar>
+        <div class="d-flex ga-2">
+          <v-btn color="orange" rounded="0" size="small" icon="mdi-chat-outline"></v-btn>
+          <v-btn rounded="0" size="small" icon="mdi-whatsapp"></v-btn>
+          <v-btn rounded="0" size="small" icon="mdi-phone-outline"></v-btn>
+        </div>
+      </div>
+      <hr class="my-4">
+
+
     </v-container>
+
 
     <Overview class="mt-6" />
     <Description class="mt-6" />
@@ -93,8 +153,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+
+
 import Grid from '@/components/DesktopView/Happening/partials/grid.vue';
 import Overview from './partials/overview.vue';
 import Description from './partials/description.vue';
@@ -128,6 +191,29 @@ const images = [
     image: "https://demo03.houzez.co/wp-content/uploads/2016/02/038-1170x877.jpg",
   },
 ]
+
+const settings: breakpoints = {
+  itemsToShow: 1,
+  snapAlign: 'center',
+};
+
+const breakpoints = {
+  // 200px and up
+  200: {
+    itemsToShow: 1,
+    snapAlign: 'center',
+  },
+  // // 640px and up
+  // 640: {
+  //   itemsToShow: 2.5,
+  //   snapAlign: 'center',
+  // },
+  // // 700px and up
+  // 700: {
+  //   itemsToShow: 3.5,
+  //   snapAlign: 'center',
+  // },
+};
 
 </script>
 
