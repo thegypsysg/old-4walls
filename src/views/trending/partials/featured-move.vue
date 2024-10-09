@@ -5,7 +5,12 @@
       <span>FEATURED MOVE-In PROJECTS</span>
     </div>
     <div class="featured-title text-h4 text-md-h3 text-center mt-6">
-      READY TO MOVE IN PROJECTS IN BATAM
+      READY TO MOVE IN PROJECTS IN 
+      {{ 
+      itemSelected2Complete
+          ? itemSelected2Complete?.title.toUpperCase()
+          : itemSelectedComplete?.title.toUpperCase()
+      }}
     </div>
 
     <div class="featured-sub-title text-center text-grey-darken-1 mt-6">
@@ -13,17 +18,18 @@
     </div>
 
     <div class="mx-5 d-flex ga-5 mt-6">
-      <v-btn class="text-red-darken-2">Condo</v-btn>
-      <v-btn class="text-red-darken-2">Villa</v-btn>
+      <template v-for="(data, i) in buildingTypes" :key="i">
+        <v-btn class="text-red-darken-2" @click="filterList(data.bt_id)">{{ data.building_type }}</v-btn>
+      </template>
     </div>
 
     <v-row justify="center" class="my-3">
       <transition-group name="card-transition" mode="out-in">
-        <template v-for="(data, i) in listData" :key="i">
+        <template v-for="(data, i) in filteredData" :key="i">
           <v-col cols="12" md="4">
             <v-hover v-slot:default="{ isHovering, props }">
               <v-container class="pa-0">
-                <v-img :src="data.img" cover style="height: 100%" aspect-ratio="1.5" class="rounded elevation-5">
+                <v-img :src="$fileURL + data.img" cover style="height: 100%" aspect-ratio="1.5" class="rounded elevation-5">
                   <div v-bind="props" :style="[
                     isHovering
                       ? 'background-color: rgba(0, 0, 0, 0.0)'
@@ -72,46 +78,109 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
+import axios from "@/util/axios";
+import { useStore } from "vuex";
+import { computed, onMounted, ref, watchEffect } from "vue";
 
-const listData = [
-  {
-    img: 'https://pollux.co.id/wp-content/uploads/2020/09/pollux-skysuites-005-Podium-B_HIGHRES-1200x700-1.jpg',
-    name: 'Pollux',
-    price: '$3,600/mo',
-    bed: 4,
-    shower: 2,
-    area: 1200,
-    apartment: {
-      sale: 3,
-      rent: 4
-    },
-  },
-  {
-    img: 'https://royalproperty.co.id/wp-content/uploads/2021/06/baloi-apartment-image-2.jpg',
-    name: 'Baloi Apartments',
-    price: '$540,000',
-    bed: 4,
-    shower: 2,
-    area: 1200,
-    apartment: {
-      sale: 3,
-      rent: 4
-    },
-  },
-  {
-    img: 'https://nagoyahillcondominium.com/wp-content/uploads/2023/02/untuk-web-home2-scaled.jpg',
-    name: 'Nagoya Hill Condo',
-    price: '2,800/mo',
-    bed: 4,
-    shower: 2,
-    area: 1200,
-    apartment: {
-      sale: 3,
-      rent: 4
-    },
-  },
-]
+const store = useStore();
+const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
+const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
+const listData = ref([]);
+const filteredData = ref([]);
+const buildingTypes = ref([]);
+
+watchEffect(() => {
+  getConstructionByCity()
+});
+
+onMounted(() => {
+  getConstructionByCity()
+  getBuildingType()
+})
+
+function getConstructionByCity(){
+  filteredData.value = [];
+  listData.value = [];
+  // if(itemSelectedComplete.value || itemSelected2Complete.value){
+    axios
+      .get(`/list-4-walls-construction-masters/${itemSelectedComplete.value?.id}/${itemSelected2Complete.value?.id}?move_in=Y`)
+      .then((response) => {
+        const data = response.data.data;
+        console.log(data)
+        listData.value = data.map((item) => { 
+          return {
+            img: item?.main_image,
+            name: item?.construction_name,
+            price: item?.price,
+            bed: item?.bedroom,
+            shower: item?.bathroom,
+            area: item?.area,
+            bt_id: item?.bt_id,
+          }
+        })
+        filteredData.value = listData.value;
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  // }
+}
+
+function getBuildingType(){
+  axios
+    .get(`/list-four-walls-building-types`)
+    .then((response) => {
+      buildingTypes.value = response.data.data;
+    })
+}
+
+function filterList(bt_id) {
+  console.log(bt_id)
+  filteredData.value = listData.value.filter(
+    (item) => item.bt_id === bt_id,
+  );
+  console.log(filteredData.value)
+}
+
+// var listData = [
+//   {
+//     img: 'https://pollux.co.id/wp-content/uploads/2020/09/pollux-skysuites-005-Podium-B_HIGHRES-1200x700-1.jpg',
+//     name: 'Pollux',
+//     price: '$3,600/mo',
+//     bed: 4,
+//     shower: 2,
+//     area: 1200,
+//     apartment: {
+//       sale: 3,
+//       rent: 4
+//     },
+//   },
+//   {
+//     img: 'https://royalproperty.co.id/wp-content/uploads/2021/06/baloi-apartment-image-2.jpg',
+//     name: 'Baloi Apartments',
+//     price: '$540,000',
+//     bed: 4,
+//     shower: 2,
+//     area: 1200,
+//     apartment: {
+//       sale: 3,
+//       rent: 4
+//     },
+//   },
+//   {
+//     img: 'https://nagoyahillcondominium.com/wp-content/uploads/2023/02/untuk-web-home2-scaled.jpg',
+//     name: 'Nagoya Hill Condo',
+//     price: '2,800/mo',
+//     bed: 4,
+//     shower: 2,
+//     area: 1200,
+//     apartment: {
+//       sale: 3,
+//       rent: 4
+//     },
+//   },
+// ]
 
 </script>
 
