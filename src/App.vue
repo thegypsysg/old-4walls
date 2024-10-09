@@ -6,7 +6,7 @@
           <Component :is="Component" />
         </transition>
       </router-view> -->
-      <Header :is-header="currentRoute === '/discount-types' ||
+      <Header v-if="$route.name != 'Buy Studio'" :is-header="currentRoute === '/discount-types' ||
         currentRoute === '/category' ||
         currentRoute === '/meal-promo' ||
         currentRoute === '/people-promo' ||

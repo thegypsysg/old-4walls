@@ -1,12 +1,32 @@
 <template>
   <!-- <Banner /> -->
+  <div class="d-none d-md-flex justify-space-between align-center py-4 px-10 border-b" style="min-height: 90px;">
+    <!-- <div class="drawer-logo" v-if="logo">
+      <v-img height="35" width="80" :src="$fileURL + logo" />
+    </div> -->
+    <div class="d-flex align-center ga-4">
+      <Logo />
+      <div class="text-h5 font-weight-bold">Pollux SeaView Apartment Habibi</div>
+    </div>
+
+
+    <div v-if="!isSignin" style="height: 48px; width: 48px; border-radius: 50%; cursor: pointer" icon class="mr-4"
+      @click="drawer = !drawer">
+      <v-img v-if="userImage != null" :src="userImage" cover style="height: 100%; width: 100%; border-radius: 50%">
+        <template #placeholder>
+          <div class="skeleton" />
+        </template>
+      </v-img>
+      <img v-else-if="userImage == null && !isLoading" src="@/assets/images/icons/user_icon.png" cover height="48"
+        style="height: 100%; width: 100%" />
+    </div>
+  </div>
 
   <div id="studio-container" style="
       min-height: 100vh;
       position: relative;
       z-index: 2;
       background-color: #f7f8f9;
-  margin-top: 115px;
   ">
     <!-- FIXED on mobile -->
     <v-container class="d-md-none d-block position-fixed bottom-0 bg-white border-t">
@@ -173,6 +193,7 @@ import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 
 
+import Logo from '@/components/mainLogo.vue';
 import Grid from '@/components/DesktopView/Happening/partials/grid.vue';
 import Overview from './partials/overview.vue';
 import Description from './partials/description.vue';
@@ -229,6 +250,7 @@ const breakpoints = {
   //   snapAlign: 'center',
   // },
 };
+
 
 </script>
 
