@@ -1,38 +1,19 @@
 <template>
   <!-- <Banner /> -->
 
-  <div
-    id="trending-container"
-    style="
+  <div id="trending-container" style="
       min-height: 100vh;
       position: relative;
       z-index: 2;
       background-color: #fff;
-    "
-  >
-    <div
-      class="d-none d-md-block mx-auto pt-16 pt-md-0 px-4 medium:px-20"
-      style="max-width: 1200px; overflow-x: auto"
-    >
-      <div
-        class="d-flex justify-center ga-6 my-5"
-        style="min-width: fit-content"
-      >
+    ">
+    <div class="d-none d-md-block mx-auto pt-16 pt-md-0 px-4 medium:px-20" style="max-width: 1200px; overflow-x: auto">
+      <div class="d-flex justify-center ga-6 my-5" style="min-width: fit-content">
         <template v-for="n in trendings" :key="n">
-          <v-btn
-            @click="goToPath(n)"
-            elevation="0"
-            class="pa-2"
-            style="min-width: 100px; min-height: 70px"
-          >
+          <v-btn @click="goToPath(n)" elevation="0" class="pa-2" style="min-width: 100px; min-height: 70px">
             <div class="d-flex flex-column align-center ga-3 text-caption">
               <v-responsive>
-                <v-img
-                  :src="$fileURL + n.icon"
-                  cover
-                  style="height: 25px; width: 25px"
-                  aspect-ratio="1"
-                ></v-img>
+                <v-img :src="$fileURL + n.icon" cover style="height: 25px; width: 25px" aspect-ratio="1"></v-img>
               </v-responsive>
               {{ n.title }}
             </div>
@@ -134,9 +115,7 @@ const getTrendings = () => {
     });
 };
 
-onMounted(() => {
-  getTrendings();
-});
+getTrendings();
 </script>
 
 <style scoped>
