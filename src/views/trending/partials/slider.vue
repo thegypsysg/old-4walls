@@ -71,7 +71,6 @@ const store = useStore();
 
 const cities = ref([]);
 
-const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
 const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
 
 watchEffect(() => {

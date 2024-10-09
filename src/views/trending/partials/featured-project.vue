@@ -8,8 +8,8 @@
       EXPLORE NEW & UPCOMING PROJECTS IN
       {{
         itemSelected2Complete
-          ? itemSelected2Complete?.title
-          : itemSelectedComplete?.title
+          ? itemSelected2Complete?.title.toUpperCase()
+          : itemSelectedComplete?.title.toUpperCase()
       }}
     </div>
 
@@ -19,13 +19,22 @@
     </div>
 
     <div class="mx-5 d-flex ga-5 mt-6 mb-3">
-      <v-btn @click="() => filterList('2025')" class="text-red-darken-2"
+      <v-btn
+        @click="() => filterList('2025')"
+        class="text-red-darken-2"
+        :class="selectedYear === '2025' ? 'bg-grey-lighten-2' : undefined"
         >2025</v-btn
       >
-      <v-btn @click="() => filterList('2026')" class="text-red-darken-2"
+      <v-btn
+        @click="() => filterList('2026')"
+        class="text-red-darken-2"
+        :class="selectedYear === '2026' ? 'bg-grey-lighten-2' : undefined"
         >2026</v-btn
       >
-      <v-btn @click="() => filterList('2027')" class="text-red-darken-2"
+      <v-btn
+        @click="() => filterList('2027')"
+        class="text-red-darken-2"
+        :class="selectedYear === '2027' ? 'bg-grey-lighten-2' : undefined"
         >2027</v-btn
       >
     </div>
@@ -118,7 +127,6 @@ import { useStore } from "vuex";
 const settings = {
   itemsToShow: 1,
   snapAlign: "center",
-  wrapAround: true,
 };
 
 const breakpoints = {
@@ -126,6 +134,7 @@ const breakpoints = {
   200: {
     itemsToShow: 1,
     snapAlign: "left",
+    wrapAround: true,
   },
   // 640px and up
   768: {
@@ -141,6 +150,7 @@ const breakpoints = {
 
 const store = useStore();
 
+const selectedYear = ref(null);
 const listData = ref([]);
 const filteredData = ref([]);
 
@@ -180,6 +190,7 @@ function getList() {
 }
 
 function filterList(year) {
+  selectedYear.value = year;
   filteredData.value = listData.value.filter(
     (item) => item.completion_year === year,
   );
