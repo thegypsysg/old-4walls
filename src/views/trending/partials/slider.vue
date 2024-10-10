@@ -34,12 +34,12 @@ import { useStore } from "vuex";
 import { computed, onMounted, ref, watchEffect } from "vue";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 
-const settings = {
+const settings = ref({
   itemsToShow: 1,
   snapAlign: "center",
-};
+});
 
-const breakpoints = {
+const breakpoints = ref({
   // 200px and up
   200: {
     itemsToShow: 1.5,
@@ -65,7 +65,7 @@ const breakpoints = {
     itemsToShow: 5,
     snapAlign: "start",
   },
-};
+});
 
 const store = useStore();
 

@@ -5,9 +5,9 @@
       <span>FEATURED MOVE-In PROJECTS</span>
     </div>
     <div class="featured-title text-h4 text-md-h3 text-center mt-6">
-      READY TO MOVE IN PROJECTS IN 
-      {{ 
-      itemSelected2Complete
+      READY TO MOVE IN PROJECTS IN
+      {{
+        itemSelected2Complete
           ? itemSelected2Complete?.title.toUpperCase()
           : itemSelectedComplete?.title.toUpperCase()
       }}
@@ -17,9 +17,11 @@
       CANT WAIT ? EAGER TO BY A PROPERTI IMMEDIATELY
     </div>
 
-    <div class="mx-5 d-flex ga-5 mt-6">
+    <div class="mx-5 d-flex flex-wrap ga-5 mt-6">
       <template v-for="(data, i) in buildingTypes" :key="i">
-        <v-btn class="text-red-darken-2" @click="filterList(data.bt_id)">{{ data.building_type }}</v-btn>
+        <v-btn class="text-red-darken-2" @click="filterList(data.bt_id)">{{
+          data.building_type
+        }}</v-btn>
       </template>
     </div>
 
@@ -29,35 +31,48 @@
           <v-col cols="12" md="4">
             <v-hover v-slot:default="{ isHovering, props }">
               <v-container class="pa-0">
-                <v-img :src="$fileURL + data.img" cover style="height: 100%" aspect-ratio="1.5" class="rounded elevation-5">
-                  <div v-bind="props" :style="[
-                    isHovering
-                      ? 'background-color: rgba(0, 0, 0, 0.0)'
-                      : 'background-color: rgba(0, 0, 0, 0.3)',
-                    'transition: background-color 0.3s ease',
-                  ]" class="fill-height pa-6 text-white font-weight-light">
-                  </div>
+                <v-img
+                  :src="$fileURL + data.img"
+                  cover
+                  style="height: 100%"
+                  aspect-ratio="1.5"
+                  class="rounded elevation-5"
+                >
+                  <div
+                    v-bind="props"
+                    :style="[
+                      isHovering
+                        ? 'background-color: rgba(0, 0, 0, 0.0)'
+                        : 'background-color: rgba(0, 0, 0, 0.3)',
+                      'transition: background-color 0.3s ease',
+                    ]"
+                    class="fill-height pa-6 text-white font-weight-light"
+                  ></div>
                 </v-img>
                 <div class="d-flex flex-column ga-2 mt-2">
-                  <div class="font-weight-bold text-body-1">{{ data.name }}</div>
+                  <div class="font-weight-bold text-body-1">
+                    {{ data.name }}
+                  </div>
                   <div class="d-flex ga-2 justify-space-between">
                     <div class="text-orange">{{ data.price }}</div>
-                    <div class="d-flex ga-2" style="color:#636363">
+                    <div class="d-flex ga-2" style="color: #636363">
                       <div class="d-flex ga-3">
                         <div class="d-flex ga-1 align-center">
                           <v-icon icon="mdi-bed-king-outline" color="#636363" />
                           <div class="text-md-body-2">
-                            {{ data.bedrooms }}</div>
+                            {{ data.bedrooms }}
+                          </div>
                         </div>
                         <div class="d-flex ga-1 align-center">
                           <v-icon icon="mdi-shower-head" color="#636363" />
-                          <div class="text-md-body-2"> {{ data.bathrooms }}</div>
+                          <div class="text-md-body-2">{{ data.bathrooms }}</div>
                         </div>
                       </div>
                       <div class="d-flex ga-1 align-center">
                         <v-icon icon="mdi-ruler-square" color="#636363" />
                         <div class="text-md-body-2">
-                          {{ data.area }}</div>
+                          {{ data.area }}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -90,56 +105,60 @@ const filteredData = ref([]);
 const buildingTypes = ref([]);
 
 watchEffect(() => {
-  getConstructionByCity()
+  getConstructionByCity();
 });
 
 onMounted(() => {
-  getConstructionByCity()
-  getBuildingType()
-})
+  getConstructionByCity();
+  getBuildingType();
+});
 
-function getConstructionByCity(){
+function getConstructionByCity() {
   filteredData.value = [];
   listData.value = [];
   // if(itemSelectedComplete.value || itemSelected2Complete.value){
-    axios
-      .get(`/list-4-walls-construction-masters/${itemSelectedComplete.value?.id}/${itemSelected2Complete.value?.id}?move_in=Y`)
-      .then((response) => {
-        const data = response.data.data;
-        console.log(data)
-        listData.value = data.map((item) => { 
-          return {
-            img: item?.main_image,
-            name: item?.construction_name,
-            price: item?.price,
-            bt_id: item?.bt_id,
-            bedrooms: item?.construction_apartments[0] ? item?.construction_apartments[0]?.bedrooms : "-",
-            bathrooms: item?.construction_apartments[0] ? item?.construction_apartments[0]?.bathrooms : "-",
-            area: item?.construction_apartments[0] ? item?.construction_apartments[0]?.area : "-",
-          }
-        })
-        filteredData.value = listData.value;
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+  axios
+    .get(
+      `/list-4-walls-construction-masters/${itemSelectedComplete.value?.id}/${itemSelected2Complete.value?.id}?move_in=Y`,
+    )
+    .then((response) => {
+      const data = response.data.data;
+      console.log(data);
+      listData.value = data.map((item) => {
+        return {
+          img: item?.main_image,
+          name: item?.construction_name,
+          price: item?.price,
+          bt_id: item?.bt_id,
+          bedrooms: item?.construction_apartments[0]
+            ? item?.construction_apartments[0]?.bedrooms
+            : "-",
+          bathrooms: item?.construction_apartments[0]
+            ? item?.construction_apartments[0]?.bathrooms
+            : "-",
+          area: item?.construction_apartments[0]
+            ? item?.construction_apartments[0]?.area
+            : "-",
+        };
+      });
+      filteredData.value = listData.value;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   // }
 }
 
-function getBuildingType(){
-  axios
-    .get(`/list-four-walls-building-types`)
-    .then((response) => {
-      buildingTypes.value = response.data.data;
-    })
+function getBuildingType() {
+  axios.get(`/list-four-walls-building-types`).then((response) => {
+    buildingTypes.value = response.data.data;
+  });
 }
 
 function filterList(bt_id) {
-  console.log(bt_id)
-  filteredData.value = listData.value.filter(
-    (item) => item.bt_id === bt_id,
-  );
-  console.log(filteredData.value)
+  console.log(bt_id);
+  filteredData.value = listData.value.filter((item) => item.bt_id === bt_id);
+  console.log(filteredData.value);
 }
 
 // var listData = [
@@ -180,7 +199,6 @@ function filterList(bt_id) {
 //     },
 //   },
 // ]
-
 </script>
 
 <style scoped></style>
