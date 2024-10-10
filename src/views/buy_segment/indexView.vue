@@ -29,7 +29,7 @@
       background-color: #f7f8f9;
   ">
     <!-- FIXED on mobile -->
-    <v-container class="d-md-none d-block position-fixed bottom-0 bg-white border-t">
+    <v-container class="d-md-none d-block position-fixed bottom-0 bg-white border-t" style="z-index: 10;">
       <div class="d-flex ga-2 align-center justify-space-between">
         <div class="d-flex ga-2 align-center">
           <v-avatar color="grey" size="50" style="border-radius: 5px;">
