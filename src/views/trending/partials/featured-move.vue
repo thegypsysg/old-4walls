@@ -47,12 +47,11 @@
                         <div class="d-flex ga-1 align-center">
                           <v-icon icon="mdi-bed-king-outline" color="#636363" />
                           <div class="text-md-body-2">
-                            {{ data.bed }}</div>
+                            {{ data.bedrooms }}</div>
                         </div>
                         <div class="d-flex ga-1 align-center">
                           <v-icon icon="mdi-shower-head" color="#636363" />
-                          <div class="text-md-body-2"> {{
-                            data.shower }}</div>
+                          <div class="text-md-body-2"> {{ data.bathrooms }}</div>
                         </div>
                       </div>
                       <div class="d-flex ga-1 align-center">
@@ -113,10 +112,10 @@ function getConstructionByCity(){
             img: item?.main_image,
             name: item?.construction_name,
             price: item?.price,
-            bed: item?.bedroom,
-            shower: item?.bathroom,
-            area: item?.area,
             bt_id: item?.bt_id,
+            bedrooms: item?.construction_apartments[0] ? item?.construction_apartments[0]?.bedrooms : "-",
+            bathrooms: item?.construction_apartments[0] ? item?.construction_apartments[0]?.bathrooms : "-",
+            area: item?.construction_apartments[0] ? item?.construction_apartments[0]?.area : "-",
           }
         })
         filteredData.value = listData.value;
