@@ -65,7 +65,7 @@
     <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px">
       <Happening :data="listMainCategories" class="mb-10" />
       <Residential :data="listData" />
-      <Commercial :data="listData" />
+      <Commercial :data="listDataCommercial" :isSmall="isSmall" />
       <CardItem />
       <Partners />
     </v-container>
@@ -82,6 +82,7 @@ import AOS from "aos";
 
 const isZoomed = ref(false);
 const listData = ref([]);
+const listDataCommercial = ref([]);
 const listMainCategories = ref([]);
 const isLoading = ref(true);
 function scrollToSection() {
@@ -126,6 +127,23 @@ function get4WallsPropertyData() {
     });
 }
 
+function get4WallsPropertyDataCommercial() {
+  isLoading.value = true;
+  axios
+    .get(`/list-4walls-property-types?property_category=C`)
+    .then((response) => {
+      listDataCommercial.value = response.data.data;
+    })
+    .catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+      throw error;
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
+}
+
 const getListMainCategories = async () => {
   isLoading.value = true;
   const response = await axios.get("/list-main-categories");
@@ -145,6 +163,7 @@ onMounted(() => {
 
   get4WallsPropertyData();
   getListMainCategories();
+  get4WallsPropertyDataCommercial();
 });
 const props = defineProps({
   isSmall: {
