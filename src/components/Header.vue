@@ -411,7 +411,7 @@
           >
             <template v-for="n in trendings" :key="n">
               <v-btn
-                :to="n.to"
+                @click="goToPath(n)"
                 elevation="0"
                 class="pa-2"
                 style="min-width: 100px; min-height: 70px"
@@ -1103,6 +1103,7 @@ export default {
       "setItemSelectedComplete",
       "setItemSelected2",
       "setItemSelected2Complete",
+      "setSelectedTrending",
     ]),
     changeHeaderImage(image) {
       console.log(image);
@@ -1519,6 +1520,10 @@ export default {
       this.setItemSelected2Complete(item);
       app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
       this.dialog = false;
+    },
+    goToPath(data) {
+      this.setSelectedTrending(data);
+      this.$router.push(data.to);
     },
     getTrendings() {
       axios

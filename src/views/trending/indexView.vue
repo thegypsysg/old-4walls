@@ -41,10 +41,23 @@
       </div>
     </div>
 
-    <div class="text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular">
+    <div
+      class="d-md-block d-none text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular"
+    >
       {{
         selectedItem?.tag_line ? selectedItem.tag_line : trendings[0]?.tag_line
       }}
+      Desktop
+    </div>
+    <div
+      class="d-block d-md-none text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular"
+    >
+      {{
+        selectedTrending?.tag_line
+          ? selectedTrending.tag_line
+          : trendings[0]?.tag_line
+      }}
+      Mobile
     </div>
     <div class="text-center text-h4 font-weight-black">
       In
@@ -89,7 +102,7 @@ import Interested from "./partials/interested";
 // import Portfolio from "./partials/portfolio";
 import ForSale from "./partials/for-sale";
 import Guide from "./partials/guide";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watchEffect } from "vue";
 import axios from "@/util/axios";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -103,11 +116,16 @@ const trendings = ref([]);
 
 const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
 const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
+const selectedTrending = computed(() => store.state.selectedTrending);
 
 const goToPath = (data) => {
   selectedItem.value = data;
   router.push(data.to);
 };
+
+// watchEffect(() => {
+//   console.log(store.state.selectedTrending);
+// });
 
 const getTrendings = () => {
   axios

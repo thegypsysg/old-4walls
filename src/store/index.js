@@ -9,6 +9,7 @@ export default createStore({
     itemSelectedComplete: null,
     itemSelected2: "---Select City---",
     itemSelected2Complete: null,
+    selectedTrending: "",
   },
   mutations: {
     setActiveTag(state, tag) {
@@ -25,6 +26,9 @@ export default createStore({
     },
     setItemSelected2Complete(state, item) {
       state.itemSelected2Complete = item; // Memperbarui tag yang aktif
+    },
+    setSelectedTrending(state, item) {
+      state.selectedTrending = item;
     },
   },
 });
