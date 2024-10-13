@@ -49,6 +49,7 @@
                 cover
                 style="height: 100%"
                 aspect-ratio="1.1"
+                @click="goToDetail(data)"
               >
                 <!-- <div v-bind="props" :style="[
                   isHovering
@@ -121,6 +122,7 @@
 <script setup>
 import axios from "@/util/axios";
 import { computed, onMounted, ref, watchEffect } from "vue";
+import { useRouter } from "vue-router";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import { useStore } from "vuex";
 
@@ -149,6 +151,8 @@ const breakpoints = ref({
 });
 
 const store = useStore();
+
+const router = useRouter();
 
 const selectedYear = ref(null);
 const listData = ref([]);
@@ -194,6 +198,10 @@ function filterList(year) {
   filteredData.value = listData.value.filter(
     (item) => item.completion_year === year,
   );
+}
+
+function goToDetail(data) {
+  router.push(`/buy/${data.development_id}`)
 }
 
 onMounted(() => {

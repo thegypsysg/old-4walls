@@ -6,31 +6,39 @@
           <Component :is="Component" />
         </transition>
       </router-view> -->
-      <Header v-if="$route.name != 'Buy Studio'" :is-header="currentRoute === '/discount-types' ||
-        currentRoute === '/category' ||
-        currentRoute === '/meal-promo' ||
-        currentRoute === '/people-promo' ||
-        currentRoute === '/preference-promo' ||
-        currentRoute === '/others-promo' ||
-        currentRoute === '/day-promo' ||
-        currentRoute.includes('redeem') ||
-        currentRoute.includes('event') ||
-        currentRoute.includes('parking-info') ||
-        currentRoute.includes('mall-offers') ||
-        currentRoute.includes('promo-detail') ||
-        currentRoute.includes('mall-id') ||
-        currentRoute.includes('level-id') ||
-        currentRoute.includes('merchant-id') ||
-        (currentRoute === '/all-merchants' && !isDesktop) ||
-        (currentRoute === '/all-promotions' && !isDesktop) ||
-        (currentRoute === '/all-events' && !isDesktop) ||
-        (currentRoute === '/all-parking-info' && !isDesktop) ||
-        (currentRoute === '/all-mall-offers' && !isDesktop) ||
-        (currentRoute === '/all-malls' && !isDesktop)
-        ? true
-        : false
-        " :title-header="titleHeader" :is-desktop="isDesktop" :is-profile="isProfile"
-        :isBatamProperties="isBatamProperties" :is-signin="isSignIn" />
+      <Header
+        v-if="$route.name != 'Buy Studio' && $route.name != 'Buy Detail'"
+        :is-header="
+          currentRoute === '/discount-types' ||
+          currentRoute === '/category' ||
+          currentRoute === '/meal-promo' ||
+          currentRoute === '/people-promo' ||
+          currentRoute === '/preference-promo' ||
+          currentRoute === '/others-promo' ||
+          currentRoute === '/day-promo' ||
+          currentRoute.includes('redeem') ||
+          currentRoute.includes('event') ||
+          currentRoute.includes('parking-info') ||
+          currentRoute.includes('mall-offers') ||
+          currentRoute.includes('promo-detail') ||
+          currentRoute.includes('mall-id') ||
+          currentRoute.includes('level-id') ||
+          currentRoute.includes('merchant-id') ||
+          (currentRoute === '/all-merchants' && !isDesktop) ||
+          (currentRoute === '/all-promotions' && !isDesktop) ||
+          (currentRoute === '/all-events' && !isDesktop) ||
+          (currentRoute === '/all-parking-info' && !isDesktop) ||
+          (currentRoute === '/all-mall-offers' && !isDesktop) ||
+          (currentRoute === '/all-malls' && !isDesktop)
+            ? true
+            : false
+        "
+        :title-header="titleHeader"
+        :is-desktop="isDesktop"
+        :is-profile="isProfile"
+        :isBatamProperties="isBatamProperties"
+        :is-signin="isSignIn"
+      />
       <RouterView v-slot="{ Component }">
         <Transition name="page-opacity" mode="out-in">
           <component :is="Component" />
@@ -91,7 +99,7 @@ export default {
       );
     },
     isBatamProperties() {
-      return this.currentRoute === "/batam-properties"
+      return this.currentRoute === "/batam-properties";
     },
     isSignIn() {
       return (
