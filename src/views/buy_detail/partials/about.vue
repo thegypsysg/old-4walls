@@ -22,11 +22,7 @@
               >About Us</v-card-title
             >
             <v-card-text class="font-weight-light px-0">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem
-              cupiditate laboriosam sit corporis. Aliquam at similique quos?
-              Quibusdam nobis expedita omnis repudiandae, excepturi nemo
-              impedit, aliquam blanditiis odit iste sequi dolores cum beatae
-              aliquid quis atque eaque molestiae? Rerum, consectetur!
+              {{ desc }}
             </v-card-text>
             <v-card-actions>
               <v-btn variant="tonal" color="red">About Us</v-btn>
@@ -40,11 +36,19 @@
     <div>About Us</div>
     <hr class="my-6" />
     <p class="font-weight-light text-caption mt-6">
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Mollitia eius
-      dolor consequuntur delectus voluptatibus itaque error inventore dolore
-      dolorum deserunt dignissimos, ipsam rerum natus dolorem doloribus
-      perferendis laborum qui libero minima obcaecati architecto impedit quasi
+      {{ desc }}
     </p>
     <p class="mt-6 text-body-2 text-blue-darken-3 font-weight-bold">More</p>
   </v-container>
 </template>
+
+<script setup lang="ts">
+const props = defineProps<{
+  desc: string;
+}>();
+
+// const showOption = ref(false);
+// watchEffect(() => {
+//   showOption.value = props.show_option;
+// })
+</script>

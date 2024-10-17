@@ -50,6 +50,27 @@
       class="trending rounded"
     >
       <div
+        v-if="show_title == true"
+        v-bind="props"
+        :style="[
+          isHovering
+            ? 'background-color: rgba(0, 0, 0, 0.0)'
+            : 'background-color: rgba(0, 0, 0, 0.3)',
+          'transition: background-color 0.3s ease',
+        ]"
+        class="text-h6 fill-height w-100 text-md-h4 font-weight-bold text-white"
+      >
+        <!-- <div v-if="show_title ?? false" class="text-left font-weight-bold"> -->
+        <div
+          class="text-h6 text-md-h4 w-33 font-weight-bold text-white position-absolute"
+          style="left: 50px; bottom: 20px"
+        >
+          {{ title }}
+        </div>
+        <!-- </div> -->
+      </div>
+      <div
+        v-else
         v-bind="props"
         :style="[
           isHovering
@@ -65,6 +86,7 @@
           </div>
           <div class="text-body-2 font-weight-bold">24 Properties</div>
         </div>
+
         <div
           v-if="show_option ?? false"
           class="text-center mt-auto mb-auto"
@@ -97,6 +119,7 @@ const props = defineProps<{
   isSquare: boolean;
   show_text?: boolean;
   show_option?: boolean;
+  show_title?: boolean;
 }>();
 
 // const showOption = ref(false);

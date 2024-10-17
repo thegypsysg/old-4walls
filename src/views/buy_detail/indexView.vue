@@ -51,13 +51,12 @@
   >
     <!-- Desktop -->
     <v-container style="height: 70vh" class="pa-0 d-none d-md-block">
-      <v-img
-        src="https://demo03.houzez.co/wp-content/uploads/2016/03/200-1170x877.jpg"
-        cover
-        style="height: 100%"
-        aspect-ratio="1.1"
-      >
-      </v-img>
+      <Grid
+        :show_title="true"
+        :title="detailData?.project_header"
+        :image="$fileURL + detailData?.main_image"
+        :isSquare="false"
+      />
     </v-container>
 
     <!-- MOBILE -->
@@ -65,11 +64,12 @@
       <v-row style="height: 34vh">
         <v-col cols="12" class="d-flex flex-column">
           <Grid
-            title="Image"
-            image="https://demo03.houzez.co/wp-content/uploads/2016/03/200-1170x877.jpg"
+            :title="detailData?.project_header"
+            :image="$fileURL + detailData?.main_image"
             :isSquare="false"
           />
           <v-badge
+            v-if="detailData?.under_construction == 'Y'"
             content="UNDER CONSTRUCTION"
             inline
             color="blue-darken-4"
@@ -82,19 +82,18 @@
 
       <v-container>
         <div class="text-body-1 font-weight-black">
-          The Perfect Place To Live Your Dreams
+          {{ detailData?.project_header }}
         </div>
-        <div class="text-h4 font-weight-bold mt-8">Marcs Boulevard</div>
+        <div class="text-h4 font-weight-bold mt-8">
+          {{ detailData?.project_name }}
+        </div>
         <div class="text-body-2 font-weight-black text-red-darken-4 my-4">
           By
         </div>
         <div class="d-flex ga-2 align-center justify-start">
-          <img
-            src="https://admin1.the-gypsy.sg/img/app/0cdb3194563203e1a3c29f845ca96c8d.jpg"
-            style="height: 30px"
-          />
+          <img :src="$fileURL + detailData?.logo" style="height: 30px" />
           <div class="font-weight-bold text-body-1">
-            PT Perintis Triniti Properti (Triniti Land)
+            {{ detailData?.partner_name }}
           </div>
         </div>
 
@@ -124,25 +123,104 @@
       </v-container>
     </v-container>
 
-    <About />
+    <About :desc="detailData?.project_description" />
     <!-- <Description class="mt-6 d-md-none d-block" /> -->
-    <Overview class="mt-6 d-md-none d-block" />
-    <Detail class="mt-6" />
+    <!-- <Overview class="mt-6 d-md-none d-block" /> -->
+    <Detail
+      :under_construction="detailCons?.under_construction"
+      :main_image="detailCons?.main_image"
+      :tag_line="detailCons?.tag_line"
+      :completion_month="detailCons?.completion_month"
+      :completion_year="detailCons?.completion_year"
+      :construction_name="detailCons?.construction_name"
+      :brief_details="detailCons?.brief_details"
+      class="mt-6"
+    />
     <Item class="mt-6" />
     <Video class="mt-6" />
-    <Contact class="mt-6 d-none d-md-block" />
+    <Contact
+      :agent_main_image="detailDev?.agent_main_image"
+      :agent_name="detailDev?.agent_name"
+      :email="detailDev?.email"
+      :mobile="detailDev?.mobile"
+      :whats_app="detailDev?.whats_app"
+      class="mt-6 d-none d-md-block"
+    />
 
     <Footer />
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import Logo from "@/components/mainLogo.vue";
 import Grid from "@/components/DesktopView/Happening/partials/grid.vue";
-import Overview from "./partials/overview.vue";
 import Video from "./partials/video.vue";
 import Contact from "./partials/contact.vue";
 import Detail from "./partials/detail.vue";
 import Item from "./partials/item.vue";
 import About from "./partials/about.vue";
+
+import { onMounted, ref } from "vue";
+import axios from "@/util/axios";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const detailData = ref();
+const detailCons = ref();
+const detailDev = ref();
+
+const getBuyDetail = () => {
+  const buyId = route.params.id;
+  axios
+    .get(`/get-4walls-property-development-details/${buyId}`)
+    .then((response) => {
+      const data = response.data.data;
+      // console.log(data);
+      detailData.value = data;
+    })
+    .catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+      throw error;
+    });
+};
+
+const getBuyDetailConstruction = () => {
+  const buyId = route.params.id;
+  axios
+    .get(`/get-first-4-walls-construction-by-development-id/${buyId}`)
+    .then((response) => {
+      const data = response.data.data;
+      // console.log(data);
+      detailCons.value = data;
+    })
+    .catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+      throw error;
+    });
+};
+
+const getBuyDetailDev = () => {
+  const buyId = route.params.id;
+  axios
+    .get(`/get-4walls-property-development-details/${buyId}`)
+    .then((response) => {
+      const data = response.data.data;
+      console.log(data);
+      detailDev.value = data;
+    })
+    .catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+      throw error;
+    });
+};
+
+onMounted(() => {
+  getBuyDetail();
+  getBuyDetailConstruction();
+  getBuyDetailDev();
+});
 </script>
