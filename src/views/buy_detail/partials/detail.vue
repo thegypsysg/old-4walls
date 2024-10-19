@@ -27,10 +27,10 @@
                 inline
                 color="blue-darken-4"
                 rounded="0"
-                class="text-body-1 font-weight-bold position-absolute"
+                class="text-body-1 font-weight-bold position-absolute ml-md-16 pl-md-16"
                 style="top: 30px; left: 20px"
               ></v-badge>
-              <div class="font-weight-light text-h3 text-white">
+              <div class="font-weight-light text-h3 mt-10 mt-md-0 text-white">
                 {{ tag_line }}
               </div>
               <div class="text-body-2 text-white">

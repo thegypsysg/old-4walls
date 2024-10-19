@@ -136,7 +136,7 @@
       :brief_details="detailCons?.brief_details"
       class="mt-6"
     />
-    <Item class="mt-6" />
+    <Item :items="detailApart" class="mt-6" />
     <Video class="mt-6" />
     <Contact
       :agent_main_image="detailDev?.agent_main_image"
@@ -144,7 +144,9 @@
       :email="detailDev?.email"
       :mobile="detailDev?.mobile"
       :whats_app="detailDev?.whats_app"
-      class="mt-6 d-none d-md-block"
+      :project="detailData?.project_name"
+      :partner="detailData?.partner_name"
+      class="mt-6"
     />
 
     <Footer />
@@ -168,6 +170,7 @@ const route = useRoute();
 
 const detailData = ref();
 const detailCons = ref();
+const detailApart = ref();
 const detailDev = ref();
 
 const getBuyDetail = () => {
@@ -194,6 +197,22 @@ const getBuyDetailConstruction = () => {
       const data = response.data.data;
       // console.log(data);
       detailCons.value = data;
+      getBuyDetailApartment(data?.construction_id);
+    })
+    .catch((error) => {
+      // eslint-disable-next-line
+      console.log(error);
+      throw error;
+    });
+};
+
+const getBuyDetailApartment = (consId) => {
+  axios
+    .get(`/get-4-walls-construction-apartment-by-construction-id/${consId}`)
+    .then((response) => {
+      const data = response.data.data;
+      console.log(data);
+      detailApart.value = data;
     })
     .catch((error) => {
       // eslint-disable-next-line
@@ -208,7 +227,7 @@ const getBuyDetailDev = () => {
     .get(`/get-4walls-property-development-details/${buyId}`)
     .then((response) => {
       const data = response.data.data;
-      console.log(data);
+      // console.log(data);
       detailDev.value = data;
     })
     .catch((error) => {
