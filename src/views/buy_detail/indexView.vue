@@ -123,6 +123,58 @@
       </v-container>
     </v-container>
 
+    <v-container
+      class="d-md-none d-block position-fixed bottom-0 bg-white border-t"
+      style="z-index: 10"
+    >
+      <div class="d-flex ga-2 align-center justify-space-between">
+        <div class="d-flex ga-2 align-center">
+          <v-avatar color="grey" size="50" style="border-radius: 5px">
+            <v-img :src="$fileURL + detailDev?.agent_main_image" cover></v-img>
+          </v-avatar>
+          <div class="text-subtitle-1 font-weight-light">
+            {{ detailDev?.agent_name }}
+          </div>
+        </div>
+        <div class="d-flex ga-2">
+          <v-btn
+            color="#29a743"
+            rounded="0"
+            elevation="0"
+            size="large"
+            icon="mdi-chat-outline"
+            class="rounded"
+          >
+            <a
+              :href="`https://api.whatsapp.com/send?phone=${detailDev?.whats_app}&text=Hi there , I am interested in ${detailData?.project_name} by ${detailData?.partner_name}`"
+            >
+              <v-icon
+                class="text-white"
+                icon="mdi-chat-outline"
+                size="24"
+              ></v-icon>
+            </a>
+          </v-btn>
+          <v-btn
+            rounded="0"
+            elevation="0"
+            size="large"
+            icon="mdi-phone-outline"
+            class="rounded border"
+            style="border-color: #29a743 !important"
+          >
+            <a :href="`tel://${detailDev?.mobile}`">
+              <v-icon
+                icon="mdi-phone-outline"
+                size="24"
+                style="color: #29a743 !important"
+              ></v-icon>
+            </a>
+          </v-btn>
+        </div>
+      </div>
+    </v-container>
+
     <About :desc="detailData?.project_description" />
     <!-- <Description class="mt-6 d-md-none d-block" /> -->
     <!-- <Overview class="mt-6 d-md-none d-block" /> -->
@@ -146,7 +198,7 @@
       :whats_app="detailDev?.whats_app"
       :project="detailData?.project_name"
       :partner="detailData?.partner_name"
-      class="mt-6"
+      class="mt-6 d-none d-md-block"
     />
 
     <Footer />

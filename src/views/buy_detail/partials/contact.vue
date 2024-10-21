@@ -13,14 +13,14 @@
       >
         <v-img :src="$fileURL + agent_main_image" cover></v-img>
       </v-avatar>
-      <v-avatar
+      <!-- <v-avatar
         color="grey"
         size="80"
         style="border-radius: 5px"
         class="d-block d-md-none"
       >
         <v-img :src="$fileURL + agent_main_image" cover></v-img>
-      </v-avatar>
+      </v-avatar> -->
       <div class="d-none d-md-block">
         <div class="text-h6 font-weight-normal">
           <v-icon icon="mdi-account-outline" size="20"></v-icon>
@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-      <div class="w-100 d-block d-md-none">
+      <!-- <div class="w-100 d-block d-md-none">
         <div class="d-flex justify-space-between align-center">
           <div class="text-h6 font-weight-light">
             {{ agent_name }}
@@ -88,7 +88,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </v-container>
 </template>

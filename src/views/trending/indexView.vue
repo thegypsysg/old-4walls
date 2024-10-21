@@ -47,7 +47,6 @@
       {{
         selectedItem?.tag_line ? selectedItem.tag_line : trendings[0]?.tag_line
       }}
-      Desktop
     </div>
     <div
       class="d-block d-md-none text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular"
@@ -57,7 +56,6 @@
           ? selectedTrending.tag_line
           : trendings[0]?.tag_line
       }}
-      Mobile
     </div>
     <div class="text-center text-h4 font-weight-black">
       In
