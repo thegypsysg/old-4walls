@@ -95,36 +95,57 @@ const routes = [
     path: "/buy",
     name: "Trending-buy",
     component: Trending,
+    meta: {
+      locationSelection: true
+    }
   },
   {
     path: "/rent",
     name: "Trending-rent",
     component: Trending,
+    meta: {
+      locationSelection: true
+    }
   },
   {
     path: "/roommates",
     name: "Trending-roommates",
     component: Trending,
+    meta: {
+      locationSelection: true
+    }
   },
   {
     path: "/staycation",
     name: "Trending-staycation",
     component: Trending,
+    meta: {
+      locationSelection: true
+    }
   },
   {
     path: "/vacation",
     name: "Trending-vacation",
     component: Trending,
+    meta: {
+      locationSelection: true
+    }
   },
   {
     path: "/co-living",
     name: "Trending-co-living",
     component: Trending,
+    meta: {
+      locationSelection: true
+    }
   },
   {
     path: "/co-working",
     name: "Trending-co-working",
     component: Trending,
+    meta: {
+      locationSelection: true
+    }
   },
   {
     path: "/buy/studio",

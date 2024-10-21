@@ -453,7 +453,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+          throw error
         })
         .finally(() => {
           this.isLoading = false;

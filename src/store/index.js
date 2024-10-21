@@ -15,7 +15,7 @@ export default createStore({
     setActiveTag(state, tag) {
       state.activeTag = tag; // Memperbarui tag yang aktif
     },
-    setItemSelected(state, item) {
+    setItemSelected ( state, item ) {
       state.itemSelected = item; // Memperbarui tag yang aktif
     },
     setItemSelectedComplete(state, item) {

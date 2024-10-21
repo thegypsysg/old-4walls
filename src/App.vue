@@ -1,14 +1,9 @@
 <template>
   <v-app>
     <div>
-      <!-- <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
-          <Component :is="Component" />
-        </transition>
-      </router-view> -->
       <Header
         v-if="$route.name != 'Buy Studio' && $route.name != 'Buy Detail'"
-        :is-header="
+        :isHeader="
           currentRoute === '/discount-types' ||
           currentRoute === '/category' ||
           currentRoute === '/meal-promo' ||
@@ -122,7 +117,7 @@ export default {
 
     this.getApplicant(tokenParam);
   },
-  mounted() {
+  mounted () {
     this.isDesktop = window.innerWidth >= 768;
   },
   methods: {
@@ -137,7 +132,7 @@ export default {
         })
         .then((response) => {
           const data = response.data.data;
-          console.log(data);
+
           if (data && data.basic_steps == null) {
             this.token = tokenParam ? tokenParam : token;
             app.config.globalProperties.$eventBus.$emit(
@@ -178,7 +173,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+          throw error
 
           // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
         })
