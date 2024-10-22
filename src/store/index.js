@@ -14,6 +14,7 @@ export default (app) =>
       selectedTrending: "",
       latitude: "",
       longitude: "",
+      country: [],
     },
     mutations: {
       setActiveTag(state, tag) {
@@ -34,17 +35,27 @@ export default (app) =>
       setSelectedTrending(state, item) {
         state.selectedTrending = item;
       },
+      setCountry(state, item) {
+        state.country = item;
+      },
+      setLongLat(state, item) {
+        state.latitude = item.latitude;
+        state.longitude = item.longitude;
+
+        localStorage.setItem("latitude", item.latitude);
+        localStorage.setItem("longitude", item.longitude);
+      },
     },
     actions: {
-      async getLongLat({ commit, state }) {
+      async getLongLat({ commit }) {
         if (navigator.geolocation) {
           try {
             navigator.geolocation.getCurrentPosition((position) => {
               if (position) {
-                state.latitude = position.coords.latitude;
-                state.longitude = position.coords.longitude;
-                localStorage.setItem("latitude", position.coords.latitude);
-                localStorage.setItem("longitude", position.coords.longitude);
+                commit("setLongLat", {
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                });
               }
             });
           } catch (error) {
@@ -53,13 +64,24 @@ export default (app) =>
         }
       },
 
+      async setDefaultCountry({ commit, state }) {
+        let link = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${state.latitude}&lon=${state.longitude}`;
+
+        try {
+          const dataCountry = await axios.get(link);
+
+          console.log(dataCountry);
+        } catch (error) {
+          throw error;
+        }
+      },
       async getCountryMall({ commit, dispatch }) {
         let link = `/app-country-list/${app.config.globalProperties.$appId}`;
 
         try {
           await dispatch("getLongLat");
 
-          const data = await axios.get(link);
+          const { data } = await axios.get(link);
 
           let allCountry = data.data.map((country) => {
             let obj = {
@@ -76,7 +98,9 @@ export default (app) =>
             return obj;
           });
 
-          console.log(data);
+          commit("setCountry", allCountry);
+
+          await dispatch("setDefaultCountry");
         } catch (error) {
           throw error;
         }
