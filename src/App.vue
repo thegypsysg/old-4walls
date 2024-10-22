@@ -117,69 +117,73 @@ export default {
 
     this.getApplicant(tokenParam);
   },
-  mounted () {
+  mounted() {
     this.isDesktop = window.innerWidth >= 768;
   },
   methods: {
     getApplicant(tokenParam) {
       this.isLoading = true;
       const token = localStorage.getItem("token");
-      axios
-        .get(`/gypsy-applicant`, {
-          headers: {
-            Authorization: `Bearer ${tokenParam ? tokenParam : token}`,
-          },
-        })
-        .then((response) => {
-          const data = response.data.data;
 
-          if (data && data.basic_steps == null) {
-            this.token = tokenParam ? tokenParam : token;
-            app.config.globalProperties.$eventBus.$emit(
-              "getTokenStart",
-              tokenParam ? tokenParam : token,
-            );
-            localStorage.setItem("applicant_data", JSON.stringify(data));
-          } else if (
-            data &&
-            data.basic_steps == "C" &&
-            this.currentRoute == "/"
-          ) {
-            this.$router.push(`/${data.slug}`);
-            app.config.globalProperties.$eventBus.$emit("getTrendingCardData2");
-          } else if (data == null) {
-            app.config.globalProperties.$eventBus.$emit(
-              "changeHeaderPath",
-              "/",
-            );
-          }
+      if (token || tokenParam)
+        axios
+          .get(`/gypsy-applicant`, {
+            headers: {
+              Authorization: `Bearer ${tokenParam ? tokenParam : token}`,
+            },
+          })
+          .then((response) => {
+            const data = response.data.data;
 
-          if (data.slug) {
-            this.path = `/${data.slug}`;
-            app.config.globalProperties.$eventBus.$emit(
-              "changeHeaderPath",
-              `/${data.slug}`,
-            );
-          } else {
-            this.path = "/";
-            app.config.globalProperties.$eventBus.$emit(
-              "changeHeaderPath",
-              "/",
-            );
-          }
-          // else {
-          //   app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
-          // }
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          throw error
+            if (data && data.basic_steps == null) {
+              this.token = tokenParam ? tokenParam : token;
+              app.config.globalProperties.$eventBus.$emit(
+                "getTokenStart",
+                tokenParam ? tokenParam : token,
+              );
+              localStorage.setItem("applicant_data", JSON.stringify(data));
+            } else if (
+              data &&
+              data.basic_steps == "C" &&
+              this.currentRoute == "/"
+            ) {
+              this.$router.push(`/${data.slug}`);
+              app.config.globalProperties.$eventBus.$emit(
+                "getTrendingCardData2",
+              );
+            } else if (data == null) {
+              app.config.globalProperties.$eventBus.$emit(
+                "changeHeaderPath",
+                "/",
+              );
+            }
 
-          // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
+            if (data.slug) {
+              this.path = `/${data.slug}`;
+              app.config.globalProperties.$eventBus.$emit(
+                "changeHeaderPath",
+                `/${data.slug}`,
+              );
+            } else {
+              this.path = "/";
+              app.config.globalProperties.$eventBus.$emit(
+                "changeHeaderPath",
+                "/",
+              );
+            }
+            // else {
+            //   app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+            // }
+          })
+          .catch((error) => {
+            // eslint-disable-next-line
+            throw error;
+
+            // app.config.globalProperties.$eventBus.$emit('getTrendingCardData2');
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
     },
   },
 };
