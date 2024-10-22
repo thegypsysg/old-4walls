@@ -19,7 +19,6 @@ export default createStore({
       state.itemSelected = item; // Memperbarui tag yang aktif
     },
     setItemSelectedComplete(state, item) {
-      console.log(item);
       state.itemSelectedComplete = item; // Memperbarui tag yang aktif
     },
     setItemSelected2(state, item) {
@@ -33,6 +32,6 @@ export default createStore({
     },
   },
   actions: {
-    
+
   }
 });

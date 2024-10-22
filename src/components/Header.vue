@@ -199,7 +199,6 @@ export default {
           // this.userImage = null;
         })
         .catch((error) => {
-
           if (error.response.status == 401) {
             localStorage.setItem("name", null);
             localStorage.setItem("userName", null);
@@ -477,7 +476,6 @@ export default {
 
           obj.cities = data.data.filter((city) => city.country_id === item.id);
 
-
           return obj;
         });
 
@@ -492,25 +490,14 @@ export default {
         throw error;
       }
     },
-    changeItemSelected(item) {
-      // this.setItemSelected(item.title);
-      // this.selectedPlace = item.title;
-      // this.setItemSelectedComplete(item);
-      // localStorage.setItem("mallCount", this.itemSelectedComplete?.count);
-      // this.setItemSelected2("---Select City---");
-      // this.setItemSelected2Complete(null);
-      // this.getCityMall();
-      // // this.getActiveMallData();
-      // app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
-      // this.dialog = false;
+    changeItemSelected(city, country) {
+      this.activeCity = city;
+
+      this.setItemSelectedComplete(country);
+
+      this.selectedPlace = city.country_name;
     },
-    // changeItemSelected2(item) {
-    //   this.setItemSelected2(item.title);
-    //   this.selectedPlace = item.title;
-    //   this.setItemSelected2Complete(item);
-    //   app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
-    //   this.dialog = false;
-    // },
+
     goToPath(data) {
       this.setSelectedTrending(data);
       this.$router.push(data.to);
@@ -667,6 +654,15 @@ export default {
       </v-btn>
     </div>
 
+    <data v-if="activeLocationButton" class="d-flex align-center ga-4">
+      <div
+        class="d-none d-md-block text-h5 font-weight-black text-no-wrap text-red-darken-4"
+        style="text-transform: capitalize !important"
+      >
+        {{ $route.path.replaceAll("-", " ").replaceAll("/", "") }}
+      </div>
+    </data>
+
     <template v-if="activeLocationButton">
       <v-menu
         v-if="selectedPlace"
@@ -712,11 +708,14 @@ export default {
               </div>
             </v-list-subheader>
 
-            <v-list-item :active="activeCity.city_id === dataCity.city_id"
+            <v-list-item
+              :active="activeCity.city_id === dataCity.city_id"
               v-for="(dataCity, indexCities) in data.cities"
               :key="indexCities"
               :value="dataCity.city_id"
-              variant="text" active-color="primary"
+              variant="text"
+              active-color="primary"
+              @click="changeItemSelected(dataCity, data)"
             >
               <v-list-item-title>
                 <div class="d-flex ml-7 align-center ga-2">
