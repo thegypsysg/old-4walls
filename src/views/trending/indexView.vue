@@ -18,8 +18,19 @@
         class="d-flex justify-center ga-6 my-5"
         style="min-width: fit-content"
       >
-        <template v-for="n in trendings" :key="n">
+        <template v-if="loader">
+          <v-skeleton-loader
+            v-for="data in 7"
+            :key="data"
+            type="button"
+            style="min-width: 100px; min-height: 90px"
+          ></v-skeleton-loader>
+        </template>
+
+        <template v-else>
           <v-btn
+            v-for="(n, index) in trendings"
+            :key="index"
             @click="goToPath(n)"
             elevation="0"
             class="pa-2"
@@ -41,32 +52,42 @@
       </div>
     </div>
 
-    <div
-      class="d-md-block d-none text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular"
-    >
-      {{
-        selectedItem?.tag_line ? selectedItem.tag_line : trendings[0]?.tag_line
-      }}
-      Desktop
+    <div v-if="loader" class="d-flex flex-column justify-center align-center">
+      <v-skeleton-loader
+        type="list-item"
+        style="width: 550px"
+      ></v-skeleton-loader>
+      <v-skeleton-loader
+        type="list-item"
+        style="width: 450px"
+      ></v-skeleton-loader>
     </div>
-    <div
-      class="d-block d-md-none text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular"
-    >
-      {{
-        selectedTrending?.tag_line
-          ? selectedTrending.tag_line
-          : trendings[0]?.tag_line
-      }}
-      Mobile
-    </div>
-    <div class="text-center text-h4 font-weight-black">
-      In
-      <span class="text-red-darken-4">{{
-        itemSelected2Complete
-          ? itemSelected2Complete?.title
-          : itemSelectedComplete?.title
-      }}</span>
-    </div>
+    <template v-else>
+      <div
+        class="d-md-block d-none text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular"
+      >
+        {{ selectedItem?.tag_line }}
+      </div>
+
+      <div
+        class="d-block d-md-none text-center mt-6 mb-3 text-h4 text-md-h3 satisfy-regular"
+      >
+        {{
+          selectedTrending?.tag_line
+            ? selectedTrending.tag_line
+            : trendings[0]?.tag_line
+        }}
+      </div>
+
+      <div class="text-center text-h4 font-weight-black">
+        In
+        <span class="text-red-darken-4">{{
+          itemSelected2Complete
+            ? itemSelected2Complete?.title
+            : itemSelectedComplete?.title
+        }}</span>
+      </div>
+    </template>
 
     <v-container class="mx-auto px-4" style="max-width: 1400px">
       <Slider />
@@ -102,7 +123,7 @@ import Interested from "./partials/interested";
 // import Portfolio from "./partials/portfolio";
 import ForSale from "./partials/for-sale";
 import Guide from "./partials/guide";
-import { computed, onMounted, ref, watchEffect } from "vue";
+import { computed, onMounted, ref } from "vue";
 import axios from "@/util/axios";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -113,6 +134,7 @@ const router = useRouter();
 
 const selectedItem = ref();
 const trendings = ref([]);
+const loader = ref(true);
 
 const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
 const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
@@ -123,11 +145,8 @@ const goToPath = (data) => {
   router.push(data.to);
 };
 
-// watchEffect(() => {
-//   console.log(store.state.selectedTrending);
-// });
-
 const getTrendings = () => {
+  loader.value = true;
   axios
     .get(`/list-main-categories`)
     .then((response) => {
@@ -144,14 +163,27 @@ const getTrendings = () => {
               ? "/roommates"
               : item.link_name.split("https://4walls.sg")[1],
         }));
+
+      if (trendings.value.length > 0) {
+        let getTagline = trendings.value.find(
+          (item) => item.to === router.currentRoute.value.path,
+        );
+
+        if (getTagline) selectedItem.value = getTagline;
+      }
     })
     .catch((error) => {
       // eslint-disable-next-line
       throw error;
+    })
+    .finally(() => {
+      loader.value = false;
     });
 };
 
-getTrendings();
+onMounted(() => {
+  getTrendings();
+});
 </script>
 
 <style scoped>

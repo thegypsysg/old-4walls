@@ -535,7 +535,7 @@ export default {
     const token = localStorage.getItem("token");
     this.getCountryMall();
 
-    this.$store.dispatch("getCountryMall");
+    // this.$store.dispatch("getCountryMall");
     if (this.tokenProvider != null) {
       this.getHeaderUserData();
     } else if (token) {

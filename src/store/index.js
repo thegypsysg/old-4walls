@@ -70,7 +70,7 @@ export default (app) =>
         try {
           const dataCountry = await axios.get(link);
 
-          console.log(dataCountry);
+          // console.log(dataCountry);
         } catch (error) {
           throw error;
         }

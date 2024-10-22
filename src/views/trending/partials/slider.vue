@@ -10,6 +10,8 @@ const settings = ref({
   wrapAround: true,
 });
 
+const loader = ref(true);
+
 const breakpoints = computed(() => {
   return {
     // 200px and up
@@ -47,6 +49,7 @@ const cities = ref([]);
 const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
 
 function getCities() {
+  loader.value = true;
   axios
     // .get(`/towns/city/${itemSelected2}`) city_id
     .get(`/towns/city/95`)
@@ -61,8 +64,10 @@ function getCities() {
     })
     .catch((error) => {
       // eslint-disable-next-line
-      console.log(error);
       throw error;
+    })
+    .finally(() => {
+      loader.value = false;
     });
 }
 
@@ -73,7 +78,16 @@ onMounted(() => {
 
 <template>
   <div>
-    <Carousel v-bind="settings" :breakpoints>
+    <div v-if="loader" class="d-flex ga-5 justify-center">
+      <v-skeleton-loader
+        v-for="data in 5"
+        :key="data"
+        :elevation="2"
+        type="card"
+        style="width: 200px; min-height: 90px"
+      ></v-skeleton-loader>
+    </div>
+    <Carousel v-else v-bind="settings" :breakpoints>
       <Slide v-for="(city, i) in cities" :key="i">
         <v-responsive class="border pa-4 ma-6">
           <div>
