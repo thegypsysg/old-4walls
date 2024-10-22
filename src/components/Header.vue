@@ -486,8 +486,7 @@ export default {
         let getCountry = this.country.find(
           (country) => country.title === this.selectedPlace,
         );
-
-        if (!this.activeCity && getCountry.cities.length > 0) {
+        if (!this.activeCity && getCountry?.cities.length > 0) {
           this.activeCity = getCountry.cities[0];
         }
       } catch (error) {
