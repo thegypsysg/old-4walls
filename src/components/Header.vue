@@ -468,7 +468,7 @@ export default {
       try {
         const { data } = await axios.get(link);
 
-        this.country = this.country.map((item) => {
+        let filtering = this.country.map((item) => {
           let obj = {
             ...item,
             cities: [],
@@ -478,6 +478,10 @@ export default {
 
           return obj;
         });
+
+        this.country = filtering.filter(
+          (dataCountry) => dataCountry.cities.length > 0,
+        );
 
         let getCountry = this.country.find(
           (country) => country.title === this.selectedPlace,
@@ -594,18 +598,7 @@ export default {
 
     <div
       v-if="
-        !isHeader &&
-        !isProfile &&
-        !isBatamProperties &&
-        !(
-          $route.name == 'Trending-buy' ||
-          $route.name == 'Trending-rent' ||
-          $route.name == 'Trending-roommates' ||
-          $route.name == 'Trending-staycation' ||
-          $route.name == 'Trending-vacation' ||
-          $route.name == 'Trending-co-living' ||
-          $route.name == 'Trending-co-working'
-        )
+        !isHeader && !isProfile && !isBatamProperties && !activeLocationButton
       "
       class="text-center desktop__app"
     >
