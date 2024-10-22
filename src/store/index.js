@@ -15,10 +15,11 @@ export default createStore({
     setActiveTag(state, tag) {
       state.activeTag = tag; // Memperbarui tag yang aktif
     },
-    setItemSelected ( state, item ) {
+    setItemSelected(state, item) {
       state.itemSelected = item; // Memperbarui tag yang aktif
     },
     setItemSelectedComplete(state, item) {
+      console.log(item);
       state.itemSelectedComplete = item; // Memperbarui tag yang aktif
     },
     setItemSelected2(state, item) {
@@ -31,4 +32,7 @@ export default createStore({
       state.selectedTrending = item;
     },
   },
+  actions: {
+    
+  }
 });

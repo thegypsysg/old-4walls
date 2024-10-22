@@ -2,7 +2,7 @@
 import axios from "@/util/axios";
 import { useStore } from "vuex";
 import { computed, onMounted, ref } from "vue";
-import { Carousel, Slide,  Navigation } from "vue3-carousel";
+import { Carousel, Slide, Navigation } from "vue3-carousel";
 
 const settings = ref({
   itemsToShow: 1,
@@ -48,7 +48,7 @@ const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
 
 function getCities() {
   axios
-    // .get(`/towns/city/${itemSelected2}`)
+    // .get(`/towns/city/${itemSelected2}`) city_id
     .get(`/towns/city/95`)
     .then((response) => {
       const data = response.data.data;
@@ -95,7 +95,6 @@ onMounted(() => {
 
       <template #addons>
         <Navigation />
-
       </template>
     </Carousel>
   </div>

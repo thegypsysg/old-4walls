@@ -30,15 +30,11 @@ export default {
       logo: "",
       search: null,
       activeMalls: [],
-      countryId: null,
       country: [],
-      city: [],
-      arr1: [],
-      arr2: [],
       currentTime: "",
       screenWidth: window.innerWidth,
       selectedPlace: null,
-      selectedCountry: "Singapore",
+      activeCity: null,
       isTrending: false,
       trendings: [],
       userLocation: false,
@@ -89,6 +85,11 @@ export default {
         ? true
         : false;
     },
+    locationPlaceholder() {
+      return this.activeCity
+        ? `${this.selectedPlace} - ${this.activeCity?.city_name}`
+        : this.selectedPlace;
+    },
   },
   created() {
     window.addEventListener("resize", this.handleResize);
@@ -136,7 +137,6 @@ export default {
       this.userImage = this.$fileURL + localStorage.getItem("user_image");
 
       this.getHeaderUserData();
-      // this.titleWelcome = title;
     },
     changeHeaderWelcome3() {
       this.getHeaderUserData2();
@@ -199,8 +199,7 @@ export default {
           // this.userImage = null;
         })
         .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error.response.status == 401);
+
           if (error.response.status == 401) {
             localStorage.setItem("name", null);
             localStorage.setItem("userName", null);
@@ -421,10 +420,6 @@ export default {
             currentLocation ? currentLocation.title : this.country[0].title,
           );
 
-          this.setItemSelectedComplete(
-            currentLocation ? currentLocation : this.country[0],
-          );
-
           this.selectedPlace = currentLocation
             ? currentLocation.title
             : this.country[0].title;
@@ -467,6 +462,7 @@ export default {
         this.isLoading = false;
       }
     },
+
     async getCityMall() {
       let link = `/app-city-list/${this.$appId}`;
 
@@ -481,31 +477,40 @@ export default {
 
           obj.cities = data.data.filter((city) => city.country_id === item.id);
 
+
           return obj;
         });
+
+        let getCountry = this.country.find(
+          (country) => country.title === this.selectedPlace,
+        );
+
+        if (!this.activeCity && getCountry.cities.length > 0) {
+          this.activeCity = getCountry.cities[0];
+        }
       } catch (error) {
         throw error;
       }
     },
     changeItemSelected(item) {
-      this.setItemSelected(item.title);
-      this.selectedPlace = item.title;
-      this.setItemSelectedComplete(item);
-      localStorage.setItem("mallCount", this.itemSelectedComplete?.count);
-      this.setItemSelected2("---Select City---");
-      this.setItemSelected2Complete(null);
-      this.getCityMall();
-      // this.getActiveMallData();
-      app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
-      this.dialog = false;
+      // this.setItemSelected(item.title);
+      // this.selectedPlace = item.title;
+      // this.setItemSelectedComplete(item);
+      // localStorage.setItem("mallCount", this.itemSelectedComplete?.count);
+      // this.setItemSelected2("---Select City---");
+      // this.setItemSelected2Complete(null);
+      // this.getCityMall();
+      // // this.getActiveMallData();
+      // app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
+      // this.dialog = false;
     },
-    changeItemSelected2(item) {
-      this.setItemSelected2(item.title);
-      this.selectedPlace = item.title;
-      this.setItemSelected2Complete(item);
-      app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
-      this.dialog = false;
-    },
+    // changeItemSelected2(item) {
+    //   this.setItemSelected2(item.title);
+    //   this.selectedPlace = item.title;
+    //   this.setItemSelected2Complete(item);
+    //   app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
+    //   this.dialog = false;
+    // },
     goToPath(data) {
       this.setSelectedTrending(data);
       this.$router.push(data.to);
@@ -681,7 +686,8 @@ export default {
                 size="x-small"
               ></v-avatar>
             </template>
-            {{ selectedPlace }}
+
+            {{ locationPlaceholder }}
           </v-btn>
         </template>
 
@@ -706,11 +712,11 @@ export default {
               </div>
             </v-list-subheader>
 
-            <v-list-item
+            <v-list-item :active="activeCity.city_id === dataCity.city_id"
               v-for="(dataCity, indexCities) in data.cities"
               :key="indexCities"
-              :value="dataCity.app_city_id"
-              variant="plain"
+              :value="dataCity.city_id"
+              variant="text" active-color="primary"
             >
               <v-list-item-title>
                 <div class="d-flex ml-7 align-center ga-2">
