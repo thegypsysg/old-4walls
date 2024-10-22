@@ -8,7 +8,7 @@ axios.interceptors.response.use(
     return response;
   },
   function (error) {
-    console.log(error.response);
+    
     // if (error.response && error.response.status == 401) {
     //   axios.defaults.headers.common['Authorization'] = '';
     //   localStorage.clear();

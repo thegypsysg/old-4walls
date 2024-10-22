@@ -71,31 +71,17 @@
         <v-row>
           <v-col cols="6">
             <ul class="footer_links" style="margin-top: 37px">
-              <li class="font-weight-bold">
-                Buy
-              </li>
-              <li class="font-weight-bold">
-                Rent
-              </li>
-              <li class="font-weight-bold">
-                Roommates
-              </li>
-              <li class="font-weight-bold">
-                Staycation
-              </li>
-              <li class="font-weight-bold">
-                Vacation
-              </li>
+              <li class="font-weight-bold">Buy</li>
+              <li class="font-weight-bold">Rent</li>
+              <li class="font-weight-bold">Roommates</li>
+              <li class="font-weight-bold">Staycation</li>
+              <li class="font-weight-bold">Vacation</li>
             </ul>
           </v-col>
           <v-col cols="6">
             <ul class="footer_links" style="margin-top: 37px">
-              <li class="font-weight-bold">
-                Co-Working
-              </li>
-              <li class="font-weight-bold">
-                Co-Living
-              </li>
+              <li class="font-weight-bold">Co-Working</li>
+              <li class="font-weight-bold">Co-Living</li>
             </ul>
           </v-col>
           <!-- <v-col cols="6">
@@ -453,7 +439,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+          throw error;
         })
         .finally(() => {
           this.isLoading = false;
@@ -481,7 +467,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+          throw error;
         });
     },
     openSearch() {

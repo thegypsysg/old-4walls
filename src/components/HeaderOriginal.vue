@@ -30,16 +30,30 @@ export default {
       logo: "",
       search: null,
       activeMalls: [],
+      countryId: null,
       country: [],
+      city: [],
+      arr1: [],
+      arr2: [],
       currentTime: "",
       screenWidth: window.innerWidth,
       selectedPlace: null,
-      activeCity: null,
+      selectedCountry: "Singapore",
       isTrending: false,
       trendings: [],
       userLocation: false,
-      latitude: null,
-      longitude: null,
+      //Sample
+      admins: [
+        ['Management', 'mdi-account-multiple-outline'],
+        ['Settings', 'mdi-cog-outline'],
+      ],
+      cruds: [
+        ['Create', 'mdi-plus-outline'],
+        ['Read', 'mdi-file-outline'],
+        ['Update', 'mdi-update'],
+        ['Delete', 'mdi-delete'],
+      ],
+      open: ['Users'],
     };
   },
   computed: {
@@ -48,6 +62,12 @@ export default {
     ...mapState(["itemSelectedComplete"]),
     ...mapState(["itemSelected2Complete"]),
     ...mapState(["itemSelected", "ativeTag"]),
+    latitude() {
+      return localStorage.getItem("latitude");
+    },
+    longitude() {
+      return localStorage.getItem("longitude");
+    },
     countryDevice() {
       return localStorage.getItem("countryDevice");
     },
@@ -78,17 +98,6 @@ export default {
     },
     token() {
       return localStorage.getItem("token");
-    },
-    activeLocationButton() {
-      return this.$route.hasOwnProperty("meta") &&
-        this.$route.meta.locationSelection === true
-        ? true
-        : false;
-    },
-    locationPlaceholder() {
-      return this.activeCity
-        ? `${this.selectedPlace} - ${this.activeCity?.city_name}`
-        : this.selectedPlace;
     },
   },
   created() {
@@ -137,6 +146,7 @@ export default {
       this.userImage = this.$fileURL + localStorage.getItem("user_image");
 
       this.getHeaderUserData();
+      // this.titleWelcome = title;
     },
     changeHeaderWelcome3() {
       this.getHeaderUserData2();
@@ -144,6 +154,24 @@ export default {
     loginGypsy() {
       const externalURL = `https://www.the-gypsy.sg/sign-in?app_id=${this.$appId}`;
       window.location.href = externalURL;
+
+      //axios
+      //  .post(`/gypsy-login/google`, {
+      //    app_id: 5,
+      //  })
+      //  .then((response) => {
+      //    console.log(response);
+      //    //if (response) {
+      //    //  window.location.assign(response.data.target_url);
+      //    //} else {
+      //    //  window.location.href = "/sign-in";
+      //    //}
+      //    //console.log(response.data.target_url);
+      //  })
+      //  .catch((error) => {
+      //    throw error;
+      //    //window.location.href = "/sign-in";
+      //  });
     },
 
     getTokenStart(tokenParam) {
@@ -164,14 +192,14 @@ export default {
           localStorage.setItem("userName", null);
           localStorage.setItem("g_id", null);
           localStorage.setItem("user_image", null);
-          localStorage.setItem("token", null);
+        localStorage.setItem("token", null);
           app.config.globalProperties.$eventBus.$emit("getUserName");
           this.path = "/";
           window.location.href = "/";
         })
         .catch((error) => {
           // eslint-disable-next-line
-          throw error;
+          throw error
         });
     },
     getHeaderUserData() {
@@ -199,6 +227,8 @@ export default {
           // this.userImage = null;
         })
         .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error.response.status == 401);
           if (error.response.status == 401) {
             localStorage.setItem("name", null);
             localStorage.setItem("userName", null);
@@ -268,7 +298,7 @@ export default {
         )
         .then((response) => {
           const data = response.data.data;
-
+          // console.log(data);
           const result = data
             .sort((a, b) => a.partner_name.localeCompare(b.partner_name))
             .map((item) => {
@@ -358,6 +388,7 @@ export default {
       if (distance === 0 || distance === null) {
         return "0";
       } else {
+
         return distance.toFixed(1);
       }
     },
@@ -374,69 +405,20 @@ export default {
           throw error;
         });
     },
-    async getLongLat() {
-      if (navigator.geolocation) {
-        try {
-          navigator.geolocation.getCurrentPosition((position) => {
-            if (position) {
-              this.latitude = position.coords.latitude;
-              this.longitude = position.coords.longitude;
-              localStorage.setItem("latitude", this.latitude);
-              localStorage.setItem("longitude", this.longitude);
-            }
-          });
-        } catch (error) {
-          throw error;
-        }
-      }
-    },
-    async setDefaultCountry() {
-      let link = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${this.latitude}&lon=${this.longitude}`;
 
-      try {
-        const dataCountry = await axios.get(link);
+    setDefaultCountry() {
 
-        if (dataCountry.data.address) {
-          let country = dataCountry.data.address.country;
-          localStorage.setItem("countryDevice", country);
-
-          const currentLocation = this.country.find(
-            (data) => data.country_name === country,
-          );
-
-          this.setItemSelectedComplete(
-            currentLocation ? currentLocation : this.country[0],
-          );
-
-          localStorage.setItem(
-            "mallCount",
-            currentLocation.count
-              ? currentLocation.count
-              : this.country[0].count,
-          );
-
-          this.setItemSelected(
-            currentLocation ? currentLocation.title : this.country[0].title,
-          );
-
-          this.selectedPlace = currentLocation
-            ? currentLocation.title
-            : this.country[0].title;
-        }
-      } catch (error) {}
     },
     async getCountryMall() {
-      this.isLoading = true;
+      this.isLoading=true;
 
-      let link = `/app-country-list/${this.$appId}`;
+      let link = `/app-country-list/${this.$appId}`
 
       try {
-        await this.getLongLat();
+        const {data:data} = await axios.get(link)
 
-        const { data: data } = await axios.get(link);
-
-        let allCountry = data.data.map((country) => {
-          let obj = {
+        let allCountry=data.data.map((country) => {
+          return {
             ...country,
             id: country.country_id,
             title: country.country_name,
@@ -445,62 +427,166 @@ export default {
             path: "#",
             flag: country.flag,
             cities: [],
-          };
+          }
+        } )
 
-          return obj;
-        });
+        const defaultCountry = data
+            .filter((c) => c.country_name == this.countryDevice)
+            .map((country) => {
+              return {
+                id: country.country_id,
+                title: country.country_name,
+                count: country.property_count,
+                oneCity: country.one_city == "Y" ? true : false,
+                path: "#",
+                flag: country.flag,
+                cities: [],
+              };
+            });
 
-        this.country = allCountry;
 
-        await this.setDefaultCountry();
-
-        this.getCityMall();
+        this.country = allCountry
       } catch (error) {
-        throw error;
+        throw error
       } finally {
         this.isLoading = false;
       }
-    },
 
-    async getCityMall() {
-      let link = `/app-city-list/${this.$appId}`;
+      axios
+        .get(`/app-country-list/${this.$appId}`)
+        .then((response) => {
+          const data = response.data.data;
+          this.country = data.map((country) => {
+            return {
+              id: country.country_id,
+              title: country.country_name,
+              count: country.property_count,
+              oneCity: country.one_city == "Y" ? true : false,
+              path: "#",
+              flag: country.flag,
+              cities: [],
+            };
+          });
 
-      try {
-        const { data } = await axios.get(link);
-
-        let filtering = this.country.map((item) => {
-          let obj = {
-            ...item,
-            cities: [],
-          };
-
-          obj.cities = data.data.filter((city) => city.country_id === item.id);
-
-          return obj;
+          // console.log(this.country);
+          const defaultCountry = data
+            .filter((c) => c.country_name == this.countryDevice)
+            .map((country) => {
+              return {
+                id: country.country_id,
+                title: country.country_name,
+                count: country.property_count,
+                oneCity: country.one_city == "Y" ? true : false,
+                path: "#",
+                flag: country.flag,
+                cities: [],
+              };
+            });
+          // console.log("map country head", defaultCountry);
+          this.setItemSelectedComplete(
+            defaultCountry.length > 0 ? defaultCountry[0] : this.country[0],
+          );
+          localStorage.setItem(
+            "mallCount",
+            defaultCountry.length > 0
+              ? defaultCountry[0].count
+              : this.country[0].count,
+          );
+          this.setItemSelected(
+            defaultCountry.length > 0
+              ? defaultCountry[0].title
+              : this.country[0].title,
+          );
+          if (this.selectedPlace == null) {
+            this.selectedPlace =
+              defaultCountry.length > 0
+                ? defaultCountry[0].title
+                : this.country[0].title;
+          }
+          this.getCityMall();
+          // this.getActiveMallData();
+          // this.getMallMerchantItemsByCountry();
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+         throw error
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
-
-        this.country = filtering.filter(
-          (dataCountry) => dataCountry.cities.length > 0,
-        );
-
-        let getCountry = this.country.find(
-          (country) => country.title === this.selectedPlace,
-        );
-        if (!this.activeCity && getCountry?.cities.length > 0) {
-          this.activeCity = getCountry.cities[0];
-        }
-      } catch (error) {
-        throw error;
-      }
     },
-    changeItemSelected(city, country) {
-      this.activeCity = city;
+    getCityMall() {
+      this.isLoading = true;
 
-      this.setItemSelectedComplete(country);
+      // Reset cities for all countries before making the API request
+      this.country.forEach((item, index) => {
+        this.country[index].cities = [];
+      });
 
-      this.selectedPlace = city.country_name;
+      axios
+        .get(
+          `/app-city-list/${this.$appId}/${this.itemSelectedComplete?.id || 1}`,
+        )
+        .then((response) => {
+          const data = response.data.data;
+
+          let selectedIndex = this.country.findIndex(
+            (item) => item.id === this.itemSelectedComplete?.id,
+          );
+
+          if (selectedIndex !== -1 && selectedIndex !== 0) {
+            // Hapus item dari posisi saat ini
+            let selectedItem = this.country.splice(selectedIndex, 1)[0];
+            // Sisipkan item ke indeks pertama
+            this.country.unshift(selectedItem);
+          }
+
+          this.city = data.map((city) => {
+            return {
+              id: city.city_id,
+              title: city.city_name,
+              count: city.property_count,
+              image: city?.city_image || "",
+              countryId: city.country_id,
+              path: "#",
+            };
+          });
+
+          let index = this.country.findIndex(
+            (item) => item.id === this.itemSelectedComplete?.id,
+          );
+
+          if (index !== -1 && this.country[index].oneCity === false) {
+            this.country[index].cities = this.city;
+          }
+          console.log(this.country);
+        })
+        .catch((error) => {
+          throw error;
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
-
+    changeItemSelected(item) {
+      this.setItemSelected(item.title);
+      this.selectedPlace = item.title;
+      this.setItemSelectedComplete(item);
+      localStorage.setItem("mallCount", this.itemSelectedComplete?.count);
+      this.setItemSelected2("---Select City---");
+      this.setItemSelected2Complete(null);
+      this.getCityMall();
+      // this.getActiveMallData();
+      app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
+      this.dialog = false;
+    },
+    changeItemSelected2(item) {
+      this.setItemSelected2(item.title);
+      this.selectedPlace = item.title;
+      this.setItemSelected2Complete(item);
+      app.config.globalProperties.$eventBus.$emit("getActiveDataByCountryCity");
+      this.dialog = false;
+    },
     goToPath(data) {
       this.setSelectedTrending(data);
       this.$router.push(data.to);
@@ -533,8 +619,6 @@ export default {
   mounted() {
     const token = localStorage.getItem("token");
     this.getCountryMall();
-
-    // this.$store.dispatch("getCountryMall");
     if (this.tokenProvider != null) {
       this.getHeaderUserData();
     } else if (token) {
@@ -599,7 +683,18 @@ export default {
 
     <div
       v-if="
-        !isHeader && !isProfile && !isBatamProperties && !activeLocationButton
+        !isHeader &&
+        !isProfile &&
+        !isBatamProperties &&
+        !(
+          $route.name == 'Trending-buy' ||
+          $route.name == 'Trending-rent' ||
+          $route.name == 'Trending-roommates' ||
+          $route.name == 'Trending-staycation' ||
+          $route.name == 'Trending-vacation' ||
+          $route.name == 'Trending-co-living' ||
+          $route.name == 'Trending-co-working'
+        )
       "
       class="text-center desktop__app"
     >
@@ -648,7 +743,18 @@ export default {
       </v-btn>
     </div>
 
-    <data v-if="activeLocationButton" class="d-flex align-center ga-4">
+    <data
+      v-if="
+        $route.name == 'Trending-buy' ||
+        $route.name == 'Trending-rent' ||
+        $route.name == 'Trending-roommates' ||
+        $route.name == 'Trending-staycation' ||
+        $route.name == 'Trending-vacation' ||
+        $route.name == 'Trending-co-living' ||
+        $route.name == 'Trending-co-working'
+      "
+      class="d-flex align-center ga-4"
+    >
       <div
         class="d-none d-md-block text-h5 font-weight-black text-no-wrap text-red-darken-4"
         style="text-transform: capitalize !important"
@@ -657,80 +763,129 @@ export default {
       </div>
     </data>
 
-    <template v-if="activeLocationButton">
-      <v-menu
-        v-if="selectedPlace"
-        v-model="userLocation"
-        :close-on-content-click="false"
-      >
-        <template v-slot:activator="{ props }">
-          <v-btn
-            variant="text"
-            v-bind="props"
-            color="#494949"
-            append-icon="mdi-chevron-down"
-          >
-            <template v-slot:prepend>
-              <v-avatar
-                :image="$fileURL + itemSelectedComplete?.flag"
-                size="x-small"
-              ></v-avatar>
-            </template>
+    <!-- <v-btn
+      v-if="
+        !isSmall &&
+        ($route.name == 'Trending-buy' ||
+          $route.name == 'Trending-rent' ||
+          $route.name == 'Trending-roommates' ||
+          $route.name == 'Trending-staycation' ||
+          $route.name == 'Trending-vacation' ||
+          $route.name == 'Trending-co-living' ||
+          $route.name == 'Trending-co-working')
+      "
+      style="font-size: 15px; color: #494949"
+      variant="text"
+      :disabled="isLoading"
+      @click="dialog = true"
+    >
+      <template v-if="!itemSelectedComplete || itemSelectedComplete == null">
+        <span>{{ selectedPlace || itemSelected }}</span>
+      </template>
+      <template v-if="itemSelectedComplete || itemSelectedComplete != null">
+        <div style="border-radius: 50%; height: 20px; width: 20px">
+          <v-img :src="$fileURL + itemSelectedComplete?.flag"></v-img>
+          <v-img
+            style="
+              width: 100% !important;
+              height: 20px !important;
+              object-fit: cover !important;
+              object-position: center !important;
+            "
+            :src="$fileURL + itemSelectedComplete?.flag"
+          />
+        </div>
+        <span class="ml-2">{{
+          selectedPlace || itemSelectedComplete?.title
+        }}</span>
+      </template>
+      <v-icon right dark> mdi-menu-down </v-icon>
+    </v-btn> -->
 
-            {{ locationPlaceholder }}
-          </v-btn>
-        </template>
 
-        <v-card min-width="300">
-          <v-card-title>
-            <div class="d-flex align-center ga-2">
-              <v-icon size="small">mdi-map-marker</v-icon>
-              <p class="text-subtitle-2">Choose Your Location</p>
-            </div>
-          </v-card-title>
+    <v-menu
+      v-model="userLocation"
+      :close-on-content-click="false"
 
-          <v-list v-for="(data, index) in country" :key="index">
-            <v-list-subheader>
-              <div class="d-flex align-center ga-2">
-                <v-avatar
-                  :image="$fileURL + data?.flag"
-                  size="x-small"
-                ></v-avatar>
-                <p class="text-subtitle-1 font-weight-medium">
-                  {{ data.country_name }} ({{ data.cities.length }} Properties)
-                </p>
-              </div>
-            </v-list-subheader>
+    >
+      <template v-slot:activator="{ props }">
+        <v-btn  variant="text" v-bind="props" color="#494949"
+          append-icon="mdi-chevron-down"
+        >
+          <template v-slot:prepend>
+            <v-avatar :image="$fileURL + itemSelectedComplete?.flag" size="x-small"></v-avatar>
+          </template>
+          {{selectedPlace}}
+        </v-btn>
+      </template>
 
-            <v-list-item
-              :active="activeCity.city_id === dataCity.city_id"
-              v-for="(dataCity, indexCities) in data.cities"
-              :key="indexCities"
-              :value="dataCity.city_id"
-              variant="text"
-              active-color="primary"
-              @click="changeItemSelected(dataCity, data)"
-            >
-              <v-list-item-title>
-                <div class="d-flex ml-7 align-center ga-2">
-                  <v-avatar
-                    :image="$fileURL + dataCity?.city_image"
-                    size="x-small"
-                  ></v-avatar>
-                  <p class="">{{ dataCity.city_name }}</p>
-                </div>
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-card>
-      </v-menu>
+      <v-card min-width="300">
 
-      <v-skeleton-loader
-        width="200"
-        v-else
-        type="list-item-two-line"
-      ></v-skeleton-loader>
-    </template>
+        <v-card-title>
+          <div class="d-flex align-center ga-2">
+            <v-icon size="small">mdi-map-marker</v-icon>
+            <p class="text-subtitle-2">Choose Your Location</p>
+          </div>
+        </v-card-title>
+
+
+       <v-list>
+        <v-list-subheader>
+          <div class="d-flex align-center ga-2">
+            <v-avatar :image="$fileURL + itemSelectedComplete?.flag" size="x-small"></v-avatar>
+            <p class="text-subtitle-1 font-weight-medium">Singapore</p>
+          </div>
+        </v-list-subheader>
+
+        <v-list-item value="jakarta" variant="plain">
+          <v-list-item-title>
+            <p class="ml-7">Jakarta</p>
+          </v-list-item-title>
+        </v-list-item>
+        </v-list>
+      </v-card>
+    </v-menu>
+
+
+
+    <!-- <v-btn
+      v-if="
+        !isSmall &&
+        ($route.name == 'Trending-buy' ||
+          $route.name == 'Trending-rent' ||
+          $route.name == 'Trending-roommates' ||
+          $route.name == 'Trending-staycation' ||
+          $route.name == 'Trending-vacation' ||
+          $route.name == 'Trending-co-living' ||
+          $route.name == 'Trending-co-working')
+      "
+      style="font-size: 15px; color: #494949"
+      variant="text"
+      :disabled="isLoading"
+      @click="dialog = true"
+    >
+      <template v-if="!itemSelectedComplete || itemSelectedComplete == null">
+        <span>{{ selectedPlace || itemSelected }}</span>
+      </template>
+      <template v-if="itemSelectedComplete || itemSelectedComplete != null">
+        <div style="border-radius: 50%; height: 20px; width: 20px">
+          <v-img :src="$fileURL + itemSelectedComplete?.flag"></v-img>
+          <v-img
+            style="
+              width: 100% !important;
+              height: 20px !important;
+              object-fit: cover !important;
+              object-position: center !important;
+            "
+            :src="$fileURL + itemSelectedComplete?.flag"
+          />
+        </div>
+        <span class="ml-2">{{
+          selectedPlace || itemSelectedComplete?.title
+        }}</span>
+      </template>
+      <v-icon right dark> mdi-menu-down </v-icon>
+    </v-btn> -->
 
     <div
       v-if="isHeader || isProfile"
@@ -950,7 +1105,7 @@ export default {
                       <div style="width: 100px">
                         <v-img height="40" :src="item?.raw?.mainImage">
                           <template #placeholder>
-                            <v-skeleton-loader type="image"></v-skeleton-loader>
+                             <v-skeleton-loader type="image"></v-skeleton-loader>
                           </template>
                         </v-img>
                       </div>
@@ -1024,8 +1179,12 @@ export default {
     </template>
   </v-app-bar>
 
-  <!-- v-if="isSmall" -->
-  <v-navigation-drawer v-model="drawer" temporary location="right">
+  <v-navigation-drawer
+    v-if="isSmall"
+    v-model="drawer"
+    temporary
+    location="right"
+  >
     <div
       class="drawer__top"
       :class="{ 'py-6': userName == null, 'py-2': userName != null }"
@@ -1049,7 +1208,7 @@ export default {
             "
           >
             <template #placeholder>
-              <v-skeleton-loader type="image"></v-skeleton-loader>
+               <v-skeleton-loader type="image"></v-skeleton-loader>
             </template>
           </v-img>
         </div>
@@ -1422,6 +1581,7 @@ export default {
       class="mt-16"
       style="border-top-left-radius: 30px; border-top-right-radius: 30px"
     >
+
       <v-card-title
         class="pt-10 d-flex justify-space-between position-fixed bg-white"
         style="z-index: 1000"
@@ -1472,7 +1632,7 @@ export default {
                   :src="item?.mainImage"
                 >
                   <template #placeholder>
-                    <v-skeleton-loader type="image"></v-skeleton-loader>
+                     <v-skeleton-loader type="image"></v-skeleton-loader>
                   </template>
                 </v-img>
               </div>
@@ -1507,7 +1667,7 @@ export default {
                   :src="item?.image"
                 >
                   <template #placeholder>
-                    <v-skeleton-loader type="image"></v-skeleton-loader>
+                     <v-skeleton-loader type="image"></v-skeleton-loader>
                   </template>
                 </v-img>
               </div>
@@ -1523,6 +1683,7 @@ export default {
     </v-card>
   </v-dialog>
 </template>
+
 
 <style scoped>
 .app-bar-mobile-start {
@@ -1603,6 +1764,7 @@ header.v-sheet.v-app-bar {
   border-radius: 0px;
 }
 
+
 .w15 {
   width: 15%;
 }
@@ -1610,4 +1772,6 @@ header.v-sheet.v-app-bar {
 .w85 {
   width: 85%;
 }
+
+
 </style>

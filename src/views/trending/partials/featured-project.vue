@@ -188,7 +188,6 @@ function getList() {
     })
     .catch((error) => {
       // eslint-disable-next-line
-      console.log(error);
       throw error;
     });
 }
