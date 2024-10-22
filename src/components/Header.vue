@@ -42,18 +42,6 @@ export default {
       isTrending: false,
       trendings: [],
       userLocation: false,
-      //Sample
-      admins: [
-        ["Management", "mdi-account-multiple-outline"],
-        ["Settings", "mdi-cog-outline"],
-      ],
-      cruds: [
-        ["Create", "mdi-plus-outline"],
-        ["Read", "mdi-file-outline"],
-        ["Update", "mdi-update"],
-        ["Delete", "mdi-delete"],
-      ],
-      open: ["Users"],
       latitude: null,
       longitude: null,
     };
