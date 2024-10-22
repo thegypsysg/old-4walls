@@ -1024,12 +1024,8 @@ export default {
     </template>
   </v-app-bar>
 
-  <v-navigation-drawer
-    v-if="isSmall"
-    v-model="drawer"
-    temporary
-    location="right"
-  >
+  <!-- v-if="isSmall" -->
+  <v-navigation-drawer v-model="drawer" temporary location="right">
     <div
       class="drawer__top"
       :class="{ 'py-6': userName == null, 'py-2': userName != null }"
