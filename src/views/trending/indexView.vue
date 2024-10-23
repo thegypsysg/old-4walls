@@ -83,7 +83,7 @@
         In
 
         <span class="text-red-darken-4">
-          {{ activeCity.city_name }}
+          {{ activeCity?.city_name }}
         </span>
       </div>
     </template>
