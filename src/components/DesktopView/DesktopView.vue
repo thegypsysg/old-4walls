@@ -67,7 +67,6 @@ export default {
         this.isLoading = false;
       })
       .catch((error) => {
-        console.log(error);
         this.isLoading = false;
       });
     app.config.globalProperties.$eventBus.$on(
@@ -99,7 +98,7 @@ export default {
               // flag: country.flag,
             };
           });
-          // console.log(this.country);
+          // .log.log(this.country);
           const defaultCountry = data
             .filter((c) => c.country_name == this.countryDevice)
             .map((country) => {
@@ -130,7 +129,6 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
         })
         .finally(() => {
           this.isLoading = false;
@@ -151,7 +149,6 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
         });
     },
     getPromoDiscount() {
@@ -172,7 +169,6 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
         });
     },
     getPromoCategory() {
@@ -193,7 +189,6 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
         });
     },
     getPromoMeals() {
@@ -214,7 +209,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
           throw error;
         });
     },
@@ -236,7 +231,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
           throw error;
         });
     },
@@ -259,7 +254,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
           throw error;
         });
     },
@@ -282,7 +277,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
           throw error;
         });
     },
@@ -305,7 +300,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
           throw error;
         });
     },
@@ -328,7 +323,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
           throw error;
         });
     },
@@ -426,7 +421,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
           throw error;
         });
     },
@@ -465,7 +460,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
           throw error;
         });
     },
@@ -499,7 +494,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
           throw error;
         });
     },

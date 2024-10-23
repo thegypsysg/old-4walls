@@ -119,7 +119,7 @@ function get4WallsPropertyData() {
     })
     .catch((error) => {
       // eslint-disable-next-line
-      console.log(error);
+      
       throw error;
     })
     .finally(() => {
@@ -136,7 +136,7 @@ function get4WallsPropertyDataCommercial() {
     })
     .catch((error) => {
       // eslint-disable-next-line
-      console.log(error);
+
       throw error;
     })
     .finally(() => {

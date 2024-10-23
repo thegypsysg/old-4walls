@@ -1,8 +1,11 @@
 <script setup>
 import axios from "@/util/axios";
 import { useStore } from "vuex";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { Carousel, Slide, Navigation } from "vue3-carousel";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 const settings = ref({
   itemsToShow: 1,
@@ -46,33 +49,36 @@ const store = useStore();
 
 const cities = ref([]);
 
-const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
+const activeCity = computed(() => store.state.activeCity);
 
-function getCities() {
+watch(activeCity, (value) => {
+  getCities(value.city_id);
+});
+
+const getCities = async (cityId) => {
   loader.value = true;
-  axios
-    // .get(`/towns/city/${itemSelected2}`) city_id
-    .get(`/towns/city/95`)
-    .then((response) => {
-      const data = response.data.data;
-      cities.value = data.map((item) => ({
+
+  let link = `/towns/city/${cityId}`;
+  try {
+    const { data } = await axios.get(link);
+
+    cities.value = data.data.map((item) => {
+      return {
         ...item,
-        img: item.town_image,
         city: item.town_name,
+        img: item.town_image,
         properties: 2,
-      }));
-    })
-    .catch((error) => {
-      // eslint-disable-next-line
-      throw error;
-    })
-    .finally(() => {
-      loader.value = false;
+      };
     });
-}
+  } catch (error) {
+    throw error;
+  } finally {
+    loader.value = false;
+  }
+};
 
 onMounted(() => {
-  getCities();
+  getCities(activeCity.value?.city_id);
 });
 </script>
 
@@ -94,6 +100,7 @@ onMounted(() => {
             <v-img
               :src="$fileURL + city.img"
               aspect-ratio="1.3"
+              :lazy-src="$fileURL + city.img"
               cover
               style="height: 100%"
             ></v-img>

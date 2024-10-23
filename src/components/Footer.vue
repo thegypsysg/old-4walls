@@ -486,7 +486,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
         });
       // .finally(() => {
       //   this.isLoading = false;
@@ -518,7 +518,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
         });
       // .finally(() => {
       //   this.isLoading = false;
@@ -534,7 +534,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
         });
       // .finally(() => {
       //   this.isLoading = false;
@@ -550,7 +550,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error);
+
         });
       // .finally(() => {
       //   this.isLoading = false;

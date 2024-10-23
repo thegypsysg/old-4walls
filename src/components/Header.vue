@@ -30,11 +30,11 @@ export default {
       logo: "",
       search: null,
       activeMalls: [],
-      country: [],
+      // country: [],
       currentTime: "",
       screenWidth: window.innerWidth,
-      selectedPlace: null,
-      activeCity: null,
+      // selectedPlace: null,
+      // activeCity: null,
       isTrending: false,
       trendings: [],
       userLocation: false,
@@ -47,7 +47,13 @@ export default {
     ...mapState(["itemSelected2"]),
     ...mapState(["itemSelectedComplete"]),
     ...mapState(["itemSelected2Complete"]),
-    ...mapState(["itemSelected", "ativeTag"]),
+    ...mapState([
+      "itemSelected",
+      "ativeTag",
+      "activeCity",
+      "selectedPlace",
+      "country",
+    ]),
     countryDevice() {
       return localStorage.getItem("countryDevice");
     },
@@ -127,6 +133,8 @@ export default {
       "setItemSelected2",
       "setItemSelected2Complete",
       "setSelectedTrending",
+      "setActiveCity",
+      "setSelectedPlace",
     ]),
     changeHeaderImage(image) {
       this.userImage = this.$fileURL + image;
@@ -374,131 +382,12 @@ export default {
           throw error;
         });
     },
-    async getLongLat() {
-      if (navigator.geolocation) {
-        try {
-          navigator.geolocation.getCurrentPosition((position) => {
-            if (position) {
-              this.latitude = position.coords.latitude;
-              this.longitude = position.coords.longitude;
-              localStorage.setItem("latitude", this.latitude);
-              localStorage.setItem("longitude", this.longitude);
-            }
-          });
-        } catch (error) {
-          throw error;
-        }
-      }
-    },
-    async setDefaultCountry() {
-      let link = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${this.latitude}&lon=${this.longitude}`;
 
-      try {
-        const dataCountry = await axios.get(link);
-
-        if (dataCountry.data.address) {
-          let country = dataCountry.data.address.country;
-          localStorage.setItem("countryDevice", country);
-
-          const currentLocation = this.country.find(
-            (data) => data.country_name === country,
-          );
-
-          this.setItemSelectedComplete(
-            currentLocation ? currentLocation : this.country[0],
-          );
-
-          localStorage.setItem(
-            "mallCount",
-            currentLocation.count
-              ? currentLocation.count
-              : this.country[0].count,
-          );
-
-          this.setItemSelected(
-            currentLocation ? currentLocation.title : this.country[0].title,
-          );
-
-          this.selectedPlace = currentLocation
-            ? currentLocation.title
-            : this.country[0].title;
-        }
-      } catch (error) {}
-    },
-    async getCountryMall() {
-      this.isLoading = true;
-
-      let link = `/app-country-list/${this.$appId}`;
-
-      try {
-        await this.getLongLat();
-
-        const { data: data } = await axios.get(link);
-
-        let allCountry = data.data.map((country) => {
-          let obj = {
-            ...country,
-            id: country.country_id,
-            title: country.country_name,
-            count: country.property_count,
-            oneCity: country.one_city == "Y" ? true : false,
-            path: "#",
-            flag: country.flag,
-            cities: [],
-          };
-
-          return obj;
-        });
-
-        this.country = allCountry;
-
-        await this.setDefaultCountry();
-
-        this.getCityMall();
-      } catch (error) {
-        throw error;
-      } finally {
-        this.isLoading = false;
-      }
-    },
-
-    async getCityMall() {
-      let link = `/app-city-list/${this.$appId}`;
-
-      try {
-        const { data } = await axios.get(link);
-
-        let filtering = this.country.map((item) => {
-          let obj = {
-            ...item,
-            cities: [],
-          };
-
-          obj.cities = data.data.filter((city) => city.country_id === item.id);
-
-          return obj;
-        });
-
-        this.country = filtering.filter(
-          (dataCountry) => dataCountry.cities.length > 0,
-        );
-
-        let getCountry = this.country.find(
-          (country) => country.title === this.selectedPlace,
-        );
-        if (!this.activeCity && getCountry?.cities.length > 0) {
-          this.activeCity = getCountry.cities[0];
-        }
-      } catch (error) {
-        throw error;
-      }
-    },
     changeItemSelected(city, country) {
-      this.activeCity = city;
+      this.setActiveCity(city);
 
       this.setItemSelectedComplete(country);
-
-      this.selectedPlace = city.country_name;
+      this.setSelectedPlace(city.country_name);
     },
 
     goToPath(data) {
@@ -532,9 +421,8 @@ export default {
 
   mounted() {
     const token = localStorage.getItem("token");
-    this.getCountryMall();
 
-    // this.$store.dispatch("getCountryMall");
+    this.$store.dispatch("getCountryMall");
     if (this.tokenProvider != null) {
       this.getHeaderUserData();
     } else if (token) {
@@ -656,10 +544,9 @@ export default {
         {{ $route.path.replaceAll("-", " ").replaceAll("/", "") }}
       </div>
     </data>
-
     <template v-if="activeLocationButton">
       <v-menu
-        v-if="selectedPlace"
+        v-if="locationPlaceholder"
         v-model="userLocation"
         :close-on-content-click="false"
       >
@@ -1308,106 +1195,6 @@ export default {
       </div>
     </div>
   </v-navigation-drawer>
-
-  <!-- <v-dialog
-    v-model="dialog"
-    fullscreen
-    persistent
-    height="100vh"
-    class="mt-16"
-    z-index="1000000"
-  >
-    <v-card
-      height="90vh"
-      class="mt-16"
-      style="border-top-left-radius: 30px; border-top-right-radius: 30px"
-      prepend-icon="mdi-map-marker"
-    >
-      <template #title>
-        <span class="font-weight-bold" style="font-size: 18px"
-          >Choose your location</span
-        >
-      </template>
-      <template #append>
-        <v-btn
-          variant="text"
-          icon="mdi-close"
-          text="Ok"
-          @click="dialog = false"
-        />
-      </template>
-      <v-card-text class="px-4" style="height: 100px">
-        <div v-for="item in country" :key="item.id">
-          <div
-            v-if="item.count > 0"
-            class="d-flex mb-6 align-content-center"
-            @click="changeItemSelected(item)"
-          >
-            <div class="w15">
-              <v-img height="20" width="30" :src="$fileURL + item?.flag" />
-            </div>
-            <div class="d-flex justify-space-between w85">
-              <p style="font-size: 14px !important">
-                <span
-                  :class="{
-                    'font-weight-bold': item.title == selectedPlace,
-                  }"
-                  >{{ item.title }}</span
-                >
-                (
-                <span class="text-blue-darken-4"
-                  >{{ item.count }}
-                  {{
-                    item?.count == "1" || item?.count == "0"
-                      ? "Property"
-                      : "Properties"
-                  }}</span
-                >
-                )
-              </p>
-
-              <v-icon v-if="item.title == selectedPlace" color="green">
-                mdi-check-circle
-              </v-icon>
-            </div>
-          </div>
-
-          <div
-            v-for="data in item.cities"
-            :key="data.id"
-            @click="changeItemSelected2(data)"
-          >
-            <div v-if="data.count > 0" class="d-flex mb-6 align-content-center">
-              <div class="w15" />
-              <div class="w85 d-flex justify-space-between">
-                <p style="font-size: 14px !important">
-                  <span
-                    :class="{
-                      'font-weight-bold': data.title == selectedPlace,
-                    }"
-                    >{{ data.title }}</span
-                  >
-                  (
-                  <span class="text-blue-darken-4"
-                    >{{ data.count }}
-                    {{
-                      data?.count == "1" || data?.count == "0"
-                        ? "Property"
-                        : "Properties"
-                    }}</span
-                  >
-                  )
-                </p>
-                <v-icon v-if="data.title == selectedPlace" color="green">
-                  mdi-check-circle
-                </v-icon>
-              </div>
-            </div>
-          </div>
-        </div>
-      </v-card-text>
-    </v-card>
-  </v-dialog> -->
 
   <v-dialog
     v-model="dialog2"
