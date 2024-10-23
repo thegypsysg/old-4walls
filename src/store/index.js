@@ -86,8 +86,6 @@ export default (app) =>
               (data) => data.country_name === country,
             );
 
-            console.log(currentLocation);
-
             commit(
               "setItemSelectedComplete",
               currentLocation ? currentLocation : state.country[0],
@@ -110,8 +108,6 @@ export default (app) =>
               currentLocation ? currentLocation.title : state.country[0].title,
             );
           }
-
-          // console.log(dataCountry);
         } catch (error) {
           throw error;
         }
@@ -146,6 +142,7 @@ export default (app) =>
 
           if (!state.activeCity && getCountry?.cities.length > 0) {
             this.activeCity = getCountry.cities[0];
+
             commit("setActiveCity", getCountry.cities[0]);
           }
         } catch (error) {}

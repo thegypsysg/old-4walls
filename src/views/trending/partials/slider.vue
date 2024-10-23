@@ -1,8 +1,11 @@
 <script setup>
 import axios from "@/util/axios";
 import { useStore } from "vuex";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { Carousel, Slide, Navigation } from "vue3-carousel";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 const settings = ref({
   itemsToShow: 1,
@@ -67,14 +70,16 @@ const getCities = async (cityId) => {
         properties: 2,
       };
     });
-
-    console.log(cities.value);
   } catch (error) {
     throw error;
   } finally {
     loader.value = false;
   }
 };
+
+onMounted(() => {
+  getCities(activeCity.value?.city_id);
+});
 </script>
 
 <template>
