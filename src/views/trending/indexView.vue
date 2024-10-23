@@ -81,11 +81,10 @@
 
       <div class="text-center text-h4 font-weight-black">
         In
-        <span class="text-red-darken-4">{{
-          itemSelected2Complete
-            ? itemSelected2Complete?.title
-            : itemSelectedComplete?.title
-        }}</span>
+
+        <span class="text-red-darken-4">
+          {{ activeCity.city_name }}
+        </span>
       </div>
     </template>
 
@@ -139,6 +138,7 @@ const loader = ref(true);
 const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
 const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
 const selectedTrending = computed(() => store.state.selectedTrending);
+const activeCity = computed(() => store.state.activeCity);
 
 const goToPath = (data) => {
   selectedItem.value = data;

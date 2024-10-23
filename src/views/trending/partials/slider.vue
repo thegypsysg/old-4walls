@@ -59,8 +59,6 @@ const getCities = async (cityId) => {
   try {
     const { data } = await axios.get(link);
 
-    console.log(data.data);
-
     cities.value = data.data.map((item) => {
       return {
         ...item,
@@ -69,6 +67,8 @@ const getCities = async (cityId) => {
         properties: 2,
       };
     });
+
+    console.log(cities.value);
   } catch (error) {
     throw error;
   } finally {
@@ -98,13 +98,6 @@ const getCities = async (cityId) => {
               :lazy-src="$fileURL + city.img"
               cover
               style="height: 100%"
-              ><template v-slot:placeholder>
-                <div class="d-flex align-center justify-center fill-height">
-                  <v-progress-circular
-                    color="grey-lighten-4"
-                    indeterminate
-                  ></v-progress-circular>
-                </div> </template
             ></v-img>
             <div class="d-flex flex-column justify-center align-center">
               <div class="font-weight-bold">
