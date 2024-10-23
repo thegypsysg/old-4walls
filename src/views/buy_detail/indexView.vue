@@ -189,7 +189,7 @@
       class="mt-6"
     />
     <Item :items="detailApart" class="mt-6" />
-    <Video class="mt-6" />
+    <Video :video_link="detailDev?.video_link" class="mt-6" />
     <Contact
       :agent_main_image="detailDev?.agent_main_image"
       :agent_name="detailDev?.agent_name"
@@ -231,8 +231,9 @@ const getBuyDetail = () => {
     .get(`/get-4walls-property-development-details/${buyId}`)
     .then((response) => {
       const data = response.data.data;
-      // console.log(data);
+      console.log(data);
       detailData.value = data;
+      detailDev.value = data;
     })
     .catch((error) => {
       // eslint-disable-next-line
@@ -263,24 +264,8 @@ const getBuyDetailApartment = (consId) => {
     .get(`/get-4-walls-construction-apartment-by-construction-id/${consId}`)
     .then((response) => {
       const data = response.data.data;
-      console.log(data);
-      detailApart.value = data;
-    })
-    .catch((error) => {
-      // eslint-disable-next-line
-      console.log(error);
-      throw error;
-    });
-};
-
-const getBuyDetailDev = () => {
-  const buyId = route.params.id;
-  axios
-    .get(`/get-4walls-property-development-details/${buyId}`)
-    .then((response) => {
-      const data = response.data.data;
       // console.log(data);
-      detailDev.value = data;
+      detailApart.value = data;
     })
     .catch((error) => {
       // eslint-disable-next-line
@@ -292,6 +277,5 @@ const getBuyDetailDev = () => {
 onMounted(() => {
   getBuyDetail();
   getBuyDetailConstruction();
-  getBuyDetailDev();
 });
 </script>
