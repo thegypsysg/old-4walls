@@ -1,7 +1,7 @@
 <script setup>
 import axios from "@/util/axios";
 import { useStore } from "vuex";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { Carousel, Slide, Navigation } from "vue3-carousel";
 
 const settings = ref({
@@ -46,34 +46,35 @@ const store = useStore();
 
 const cities = ref([]);
 
-const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
+const activeCity = computed(() => store.state.activeCity);
 
-function getCities() {
-  loader.value = true;
-  axios
-    // .get(`/towns/city/${itemSelected2}`) city_id
-    .get(`/towns/city/95`)
-    .then((response) => {
-      const data = response.data.data;
-      cities.value = data.map((item) => ({
-        ...item,
-        img: item.town_image,
-        city: item.town_name,
-        properties: 2,
-      }));
-    })
-    .catch((error) => {
-      // eslint-disable-next-line
-      throw error;
-    })
-    .finally(() => {
-      loader.value = false;
-    });
-}
-
-onMounted(() => {
-  getCities();
+watch(activeCity, (value) => {
+  getCities(value.city_id);
 });
+
+const getCities = async (cityId) => {
+  loader.value = true;
+
+  let link = `/towns/city/${cityId}`;
+  try {
+    const { data } = await axios.get(link);
+
+    console.log(data.data);
+
+    cities.value = data.data.map((item) => {
+      return {
+        ...item,
+        city: item.town_name,
+        img: item.town_image,
+        properties: 2,
+      };
+    });
+  } catch (error) {
+    throw error;
+  } finally {
+    loader.value = false;
+  }
+};
 </script>
 
 <template>
@@ -94,8 +95,16 @@ onMounted(() => {
             <v-img
               :src="$fileURL + city.img"
               aspect-ratio="1.3"
+              :lazy-src="$fileURL + city.img"
               cover
               style="height: 100%"
+              ><template v-slot:placeholder>
+                <div class="d-flex align-center justify-center fill-height">
+                  <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                  ></v-progress-circular>
+                </div> </template
             ></v-img>
             <div class="d-flex flex-column justify-center align-center">
               <div class="font-weight-bold">
