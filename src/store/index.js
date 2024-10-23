@@ -43,9 +43,6 @@ export default (app) =>
       setLongLat(state, item) {
         state.latitude = item.latitude;
         state.longitude = item.longitude;
-
-        localStorage.setItem("latitude", item.latitude);
-        localStorage.setItem("longitude", item.longitude);
       },
       setActiveCity(state, item) {
         state.activeCity = item;
@@ -60,6 +57,8 @@ export default (app) =>
           try {
             navigator.geolocation.getCurrentPosition((position) => {
               if (position) {
+                localStorage.setItem("latitude", position.coords.latitude);
+                localStorage.setItem("longitude", position.coords.longitude);
                 commit("setLongLat", {
                   latitude: position.coords.latitude,
                   longitude: position.coords.longitude,
@@ -72,44 +71,95 @@ export default (app) =>
         }
       },
 
-      async setDefaultCountry({ commit, state }) {
-        let link = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${state.latitude}&lon=${state.longitude}`;
+      async setDefaultCountry({ commit, state, dispatch }) {
+        if (state.latitude && state.longitude) {
+          let link = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${state.latitude}&lon=${state.longitude}`;
 
-        try {
-          const dataCountry = await axios.get(link);
+          try {
+            const dataCountry = await axios.get(link);
 
-          if (dataCountry.data.address) {
-            let country = dataCountry.data.address.country;
-            localStorage.setItem("countryDevice", country);
+            if (dataCountry.data.address) {
+              let country = dataCountry.data.address.country;
+              localStorage.setItem("countryDevice", country);
 
-            const currentLocation = state.country.find(
-              (data) => data.country_name === country,
-            );
+              const currentLocation = state.country.find(
+                (data) => data.country_name === country,
+              );
 
-            commit(
-              "setItemSelectedComplete",
-              currentLocation ? currentLocation : state.country[0],
-            );
+              commit(
+                "setItemSelectedComplete",
+                currentLocation ? currentLocation : state.country[0],
+              );
 
-            localStorage.setItem(
-              "mallCount",
-              currentLocation.count
-                ? currentLocation.count
-                : state.country[0].count,
-            );
+              localStorage.setItem(
+                "mallCount",
+                currentLocation.count
+                  ? currentLocation.count
+                  : state.country[0].count,
+              );
 
-            commit(
-              "setItemSelected",
-              currentLocation ? currentLocation.title : state.country[0].title,
-            );
+              commit(
+                "setItemSelected",
+                currentLocation
+                  ? currentLocation.title
+                  : state.country[0].title,
+              );
 
-            commit(
-              "setSelectedPlace",
-              currentLocation ? currentLocation.title : state.country[0].title,
-            );
+              commit(
+                "setSelectedPlace",
+                currentLocation
+                  ? currentLocation.title
+                  : state.country[0].title,
+              );
+            }
+          } catch (error) {
+            throw error;
           }
-        } catch (error) {
-          throw error;
+        } else {
+          try {
+            await dispatch("getLongLat");
+
+            let link = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${state.latitude}&lon=${state.longitude}`;
+
+            const dataCountry = await axios.get(link);
+
+            if (dataCountry.data.address) {
+              let country = dataCountry.data.address.country;
+              localStorage.setItem("countryDevice", country);
+
+              const currentLocation = state.country.find(
+                (data) => data.country_name === country,
+              );
+
+              commit(
+                "setItemSelectedComplete",
+                currentLocation ? currentLocation : state.country[0],
+              );
+
+              localStorage.setItem(
+                "mallCount",
+                currentLocation.count
+                  ? currentLocation.count
+                  : state.country[0].count,
+              );
+
+              commit(
+                "setItemSelected",
+                currentLocation
+                  ? currentLocation.title
+                  : state.country[0].title,
+              );
+
+              commit(
+                "setSelectedPlace",
+                currentLocation
+                  ? currentLocation.title
+                  : state.country[0].title,
+              );
+            }
+          } catch (error) {
+            throw error;
+          }
         }
       },
 
