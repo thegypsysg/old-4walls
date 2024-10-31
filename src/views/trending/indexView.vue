@@ -135,8 +135,6 @@ const selectedItem = ref();
 const trendings = ref([]);
 const loader = ref(true);
 
-const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
-const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
 const selectedTrending = computed(() => store.state.selectedTrending);
 const activeCity = computed(() => store.state.activeCity);
 

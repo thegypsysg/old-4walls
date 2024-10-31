@@ -34,9 +34,9 @@
       <div class="text-md-h4 font-weight-bold">
         {{
           `${item.name} (${item.count}) in ${
-            itemSelected2Complete
-              ? itemSelected2Complete?.title
-              : itemSelectedComplete?.title
+            activeCity?.city_name
+              ? activeCity?.city_name
+              : activeCity?.country_name
           } for Sale`
         }}
       </div>
@@ -184,15 +184,14 @@ const breakpoints = ref({
   },
 });
 
-const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
-const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
+const activeCity = computed(() => store.state.activeCity);
 
 const getPortfolios = () => {
   axios
     .get(
-      itemSelected2Complete.value
-        ? `/list-property-types-with-property-count/${itemSelectedComplete.value ? itemSelectedComplete.value.id : null}/${itemSelected2Complete.value ? itemSelected2Complete.value.id : null}`
-        : `/list-property-types-with-property-count/${itemSelectedComplete.value ? itemSelectedComplete.value.id : null}`,
+      activeCity.value?.city_id
+        ? `/list-property-types-with-property-count/${activeCity.value?.country_id ? activeCity.value?.country_id : null}/${activeCity.value?.city_id ? activeCity.value?.city_id : null}`
+        : `/list-property-types-with-property-count/${activeCity.value?.country_id ? activeCity.value?.country_id : null}`,
     )
     .then(async (response) => {
       const data = response.data.data;
@@ -229,9 +228,9 @@ const fetchItemsForPortfolios = async () => {
     const promises = sale_items.value.map((sale) => {
       return axios
         .get(
-          itemSelected2Complete.value
-            ? `/list-properties-by-property-type/${sale.id}/${itemSelectedComplete.value ? itemSelectedComplete.value.id : null}/${itemSelected2Complete.value ? itemSelected2Complete.value.id : null}`
-            : `/list-properties-by-property-type/${sale.id}/${itemSelectedComplete.value ? itemSelectedComplete.value.id : null}`,
+          activeCity.value?.city_id
+            ? `/list-properties-by-property-type/${sale.id}/${activeCity.value?.country_id ? activeCity.value?.country_id : null}/${activeCity.value?.city_id ? activeCity.value?.city_id : null}`
+            : `/list-properties-by-property-type/${sale.id}/${activeCity.value?.country_id ? activeCity.value?.country_id : null}`,
         )
         .then((response) => {
           const data = response.data.data;

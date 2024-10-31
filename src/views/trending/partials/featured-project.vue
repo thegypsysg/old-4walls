@@ -7,9 +7,9 @@
     <div class="featured-title text-h4 text-md-h3 text-center mt-6">
       EXPLORE NEW & UPCOMING PROJECTS IN
       {{
-        itemSelected2Complete
-          ? itemSelected2Complete?.title.toUpperCase()
-          : itemSelectedComplete?.title.toUpperCase()
+        activeCity?.city_name
+          ? activeCity?.city_name.toUpperCase()
+          : activeCity?.country_name.toUpperCase()
       }}
     </div>
 
@@ -158,8 +158,7 @@ const selectedYear = ref(null);
 const listData = ref([]);
 const filteredData = ref([]);
 
-const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
-const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
+const activeCity = computed(() => store.state.activeCity);
 
 watchEffect(() => {
   getList();
@@ -169,11 +168,10 @@ function getList() {
   listData.value = [];
   filteredData.value = [];
   axios
-    // .get(`/towns/city/${itemSelected2}`)
     .get(
-      itemSelected2Complete.value
-        ? `/list-4walls-property-developments/${itemSelectedComplete.value ? itemSelectedComplete.value.id : null}/${itemSelected2Complete.value ? itemSelected2Complete.value.id : null}`
-        : `/list-4walls-property-developments/${itemSelectedComplete.value ? itemSelectedComplete.value.id : null}`,
+      activeCity.value?.city_id
+        ? `/list-4walls-property-developments/${activeCity.value?.country_id ? activeCity.value?.country_id : null}/${activeCity.value?.city_id ? activeCity.value?.city_id : null}`
+        : `/list-4walls-property-developments/${activeCity.value?.country_id ? activeCity.value?.country_id : null}`,
     )
     .then((response) => {
       const data = response.data.data;
@@ -200,7 +198,7 @@ function filterList(year) {
 }
 
 function goToDetail(data) {
-  router.push(`/buy/${data.development_id}`)
+  router.push(`/buy/${data.development_id}`);
 }
 
 onMounted(() => {

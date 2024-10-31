@@ -7,9 +7,9 @@
     <div class="featured-title text-h4 text-md-h3 text-center mt-6">
       READY TO MOVE IN PROJECTS IN
       {{
-        itemSelected2Complete
-          ? itemSelected2Complete?.title.toUpperCase()
-          : itemSelectedComplete?.title.toUpperCase()
+        activeCity?.city_name
+          ? activeCity?.city_name.toUpperCase()
+          : activeCity?.country_name.toUpperCase()
       }}
     </div>
 
@@ -98,11 +98,11 @@ import { useStore } from "vuex";
 import { computed, onMounted, ref, watchEffect } from "vue";
 
 const store = useStore();
-const itemSelectedComplete = computed(() => store.state.itemSelectedComplete);
-const itemSelected2Complete = computed(() => store.state.itemSelected2Complete);
 const listData = ref([]);
 const filteredData = ref([]);
 const buildingTypes = ref([]);
+
+const activeCity = computed(() => store.state.activeCity);
 
 watchEffect(() => {
   getConstructionByCity();
@@ -116,10 +116,9 @@ onMounted(() => {
 function getConstructionByCity() {
   filteredData.value = [];
   listData.value = [];
-  // if(itemSelectedComplete.value || itemSelected2Complete.value){
   axios
     .get(
-      `/list-4-walls-construction-masters/${itemSelectedComplete.value?.id}/${itemSelected2Complete.value?.id}?move_in=Y`,
+      `/list-4-walls-construction-masters/${activeCity.value?.country_id}/${activeCity.value?.city_id}?move_in=Y`,
     )
     .then((response) => {
       const data = response.data.data;

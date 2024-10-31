@@ -544,7 +544,7 @@ export default {
         {{ $route.path.replaceAll("-", " ").replaceAll("/", "") }}
       </div>
     </data>
-    <template v-if="activeLocationButton">
+    <template v-if="activeLocationButton && !isSmall">
       <v-menu
         v-if="locationPlaceholder"
         v-model="userLocation"
@@ -756,62 +756,83 @@ export default {
 
     <template v-if="!isProfile" #extension>
       <div class="mobile__app text-center w-100">
-        <template
-          v-if="
-            $route.name == 'Trending-buy' ||
-            $route.name == 'Trending-rent' ||
-            $route.name == 'Trending-roommates' ||
-            $route.name == 'Trending-staycation' ||
-            $route.name == 'Trending-vacation' ||
-            $route.name == 'Trending-co-living' ||
-            $route.name == 'Trending-co-working'
-          "
-        >
-          <div class="d-flex justify-center mx-auto" style="width: max-content">
-            <v-btn
-              v-if="
-                isSmall &&
-                ($route.name == 'Trending-buy' ||
-                  $route.name == 'Trending-rent' ||
-                  $route.name == 'Trending-roommates' ||
-                  $route.name == 'Trending-staycation' ||
-                  $route.name == 'Trending-vacation' ||
-                  $route.name == 'Trending-co-living' ||
-                  $route.name == 'Trending-co-working')
-              "
-              style="font-size: 15px; color: #494949"
-              variant="text"
-              :disabled="isLoading"
-              @click="dialog = true"
-            >
-              <template
-                v-if="!itemSelectedComplete || itemSelectedComplete == null"
+        <template v-if="activeLocationButton && isSmall">
+          <v-menu
+            v-if="locationPlaceholder"
+            v-model="userLocation"
+            :close-on-content-click="false"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                variant="text"
+                v-bind="props"
+                color="#494949"
+                append-icon="mdi-chevron-down"
               >
-                <span>{{ selectedPlace || itemSelected }}</span>
-              </template>
-              <template
-                v-if="itemSelectedComplete || itemSelectedComplete != null"
-              >
-                <div style="border-radius: 50%; height: 20px; width: 20px">
-                  <v-img
-                    style="
-                      width: 100% !important;
-                      height: 20px !important;
-                      object-fit: cover !important;
-                      object-position: center !important;
-                    "
-                    :src="$fileURL + itemSelectedComplete?.flag"
-                  />
-                </div>
-                <span class="ml-2">{{
-                  selectedPlace || itemSelectedComplete?.title
-                }}</span>
-              </template>
-              <v-icon right dark> mdi-menu-down </v-icon>
-            </v-btn>
-          </div>
-        </template>
+                <template v-slot:prepend>
+                  <v-avatar
+                    :image="$fileURL + itemSelectedComplete?.flag"
+                    size="x-small"
+                  ></v-avatar>
+                </template>
 
+                {{ locationPlaceholder }}
+              </v-btn>
+            </template>
+
+            <v-card min-width="300">
+              <v-card-title>
+                <div class="d-flex align-center ga-2">
+                  <v-icon size="small">mdi-map-marker</v-icon>
+                  <p class="text-subtitle-2">Choose Your Location</p>
+                </div>
+              </v-card-title>
+
+              <v-list v-for="(data, index) in country" :key="index">
+                <v-list-subheader>
+                  <div class="d-flex align-center ga-2">
+                    <v-avatar
+                      :image="$fileURL + data?.flag"
+                      size="x-small"
+                    ></v-avatar>
+                    <p class="text-subtitle-1 font-weight-medium">
+                      {{ data.country_name }} ({{
+                        data.cities.length
+                      }}
+                      Properties)
+                    </p>
+                  </div>
+                </v-list-subheader>
+
+                <v-list-item
+                  :active="activeCity.city_id === dataCity.city_id"
+                  v-for="(dataCity, indexCities) in data.cities"
+                  :key="indexCities"
+                  :value="dataCity.city_id"
+                  variant="text"
+                  active-color="primary"
+                  @click="changeItemSelected(dataCity, data)"
+                >
+                  <v-list-item-title>
+                    <div class="d-flex ml-7 align-center ga-2">
+                      <v-avatar
+                        :image="$fileURL + dataCity?.city_image"
+                        size="x-small"
+                      ></v-avatar>
+                      <p class="">{{ dataCity.city_name }}</p>
+                    </div>
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
+
+          <v-skeleton-loader
+            width="200"
+            v-else
+            type="list-item-two-line"
+          ></v-skeleton-loader>
+        </template>
         <form class="navbar__search navbar__search__mobile mx-auto">
           <v-autocomplete
             id="product_name"
