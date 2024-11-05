@@ -92,9 +92,7 @@ export default {
         : false;
     },
     locationPlaceholder() {
-      return this.activeCity
-        ? `${this.selectedPlace} - ${this.activeCity?.city_name}`
-        : this.selectedPlace;
+      return this.activeCity ? this.activeCity?.city_name : this.selectedPlace;
     },
   },
   created() {
@@ -545,11 +543,7 @@ export default {
       </div>
     </data>
     <template v-if="activeLocationButton && !isSmall">
-      <v-menu
-        v-if="locationPlaceholder"
-        v-model="userLocation"
-        :close-on-content-click="false"
-      >
+      <v-menu v-if="locationPlaceholder" v-model="userLocation">
         <template v-slot:activator="{ props }">
           <v-btn
             variant="text"
@@ -757,11 +751,7 @@ export default {
     <template v-if="!isProfile" #extension>
       <div class="mobile__app text-center w-100">
         <template v-if="activeLocationButton && isSmall">
-          <v-menu
-            v-if="locationPlaceholder"
-            v-model="userLocation"
-            :close-on-content-click="false"
-          >
+          <v-menu v-if="locationPlaceholder" v-model="userLocation">
             <template v-slot:activator="{ props }">
               <v-btn
                 variant="text"
@@ -796,9 +786,7 @@ export default {
                       size="x-small"
                     ></v-avatar>
                     <p class="text-subtitle-1 font-weight-medium">
-                      {{ data.country_name }} ({{
-                        data.cities.length
-                      }}
+                      {{ data.country_name }} ({{ data.cities.length }}
                       Properties)
                     </p>
                   </div>
