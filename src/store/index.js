@@ -55,130 +55,142 @@ export default (app) =>
       async getLongLat({ commit }) {
         if (navigator.geolocation) {
           try {
-            navigator.geolocation.getCurrentPosition((position) => {
-              if (position) {
-                localStorage.setItem("latitude", position.coords.latitude);
-                localStorage.setItem("longitude", position.coords.longitude);
-                commit("setLongLat", {
-                  latitude: position.coords.latitude,
-                  longitude: position.coords.longitude,
-                });
-              }
-            });
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+
+                console.log("Geolocation berhasil:", lat, lon);
+
+                // Simpan ke state dan localStorage
+                localStorage.setItem("latitude", lat);
+                localStorage.setItem("longitude", lon);
+                commit("setLongLat", { latitude: lat, longitude: lon });
+              },
+              (error) => {
+                console.error("Error geolocation:", error);
+              },
+            );
           } catch (error) {
-            throw error;
-          }
-        }
-      },
-
-      async setDefaultCountry({ commit, state, dispatch }) {
-        if (state.latitude && state.longitude) {
-          let link = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${state.latitude}&lon=${state.longitude}`;
-
-          try {
-            const dataCountry = await axios.get(link);
-
-            if (dataCountry.data.address) {
-              let country = dataCountry.data.address.country;
-              localStorage.setItem("countryDevice", country);
-
-              const currentLocation = state.country.find(
-                (data) => data.country_name === country,
-              );
-
-              commit(
-                "setItemSelectedComplete",
-                currentLocation ? currentLocation : state.country[0],
-              );
-
-              localStorage.setItem(
-                "mallCount",
-                currentLocation.count
-                  ? currentLocation.count
-                  : state.country[0].count,
-              );
-
-              commit(
-                "setItemSelected",
-                currentLocation
-                  ? currentLocation.title
-                  : state.country[0].title,
-              );
-
-              commit(
-                "setSelectedPlace",
-                currentLocation
-                  ? currentLocation.title
-                  : state.country[0].title,
-              );
-            }
-          } catch (error) {
-            throw error;
+            console.error("Error di getLongLat:", error);
           }
         } else {
-          try {
-            await dispatch("getLongLat");
-
-            let link = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${state.latitude}&lon=${state.longitude}`;
-
-            const dataCountry = await axios.get(link);
-
-            if (dataCountry.data.address) {
-              let country = dataCountry.data.address.country;
-              localStorage.setItem("countryDevice", country);
-
-              const currentLocation = state.country.find(
-                (data) => data.country_name === country,
-              );
-
-              commit(
-                "setItemSelectedComplete",
-                currentLocation ? currentLocation : state.country[0],
-              );
-
-              localStorage.setItem(
-                "mallCount",
-                currentLocation.count
-                  ? currentLocation.count
-                  : state.country[0].count,
-              );
-
-              commit(
-                "setItemSelected",
-                currentLocation
-                  ? currentLocation.title
-                  : state.country[0].title,
-              );
-
-              commit(
-                "setSelectedPlace",
-                currentLocation
-                  ? currentLocation.title
-                  : state.country[0].title,
-              );
-            }
-          } catch (error) {
-            throw error;
-          }
+          console.error("Geolocation tidak didukung di perangkat ini.");
         }
       },
+      // async setDefaultCountry({ commit, state, dispatch }) {
+      //   state.latitude = localStorage.getItem("latitude") || state.latitude;
+      //   state.longitude = localStorage.getItem("longitude") || state.longitude;
 
-      async getCityMall({ commit, dispatch, state }) {
+      //   if (!state.latitude || !state.longitude) {
+      //     console.log("Latitude & Longitude kosong, mengambil ulang...");
+      //     await dispatch("getLongLat");
+      //   }
+
+      //   if (!state.latitude || !state.longitude) {
+      //     console.error(
+      //       "Latitude & Longitude tetap kosong setelah retry. setDefaultCountry dibatalkan.",
+      //     );
+      //     return;
+      //   }
+
+      //   // Lanjut dengan request country dari API
+      // },
+      async setDefaultCountry({ commit, state, dispatch }) {
+        console.log("Memulai setDefaultCountry...");
+
+        // Cek jika latitude & longitude kosong, coba ambil dari localStorage
+        if (!state.latitude || !state.longitude) {
+          console.log(
+            "Latitude & Longitude belum tersedia, mencoba mengambil dari localStorage...",
+          );
+          state.latitude = localStorage.getItem("latitude") || state.latitude;
+          state.longitude =
+            localStorage.getItem("longitude") || state.longitude;
+        }
+
+        // Jika masih kosong, panggil getLongLat untuk mendapatkan koordinat
+        if (!state.latitude || !state.longitude) {
+          console.log(
+            "Latitude & Longitude masih kosong, memanggil getLongLat...",
+          );
+          await dispatch("getLongLat");
+
+          // Cek ulang setelah getLongLat dipanggil
+          if (!state.latitude || !state.longitude) {
+            console.error(
+              "Latitude & Longitude tetap kosong setelah retry. setDefaultCountry dibatalkan.",
+            );
+            return;
+          }
+        }
+
+        console.log(
+          `Menggunakan Latitude: ${state.latitude}, Longitude: ${state.longitude}`,
+        );
+
+        let link = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${state.latitude}&lon=${state.longitude}`;
+
+        try {
+          const { data } = await axios.get(link);
+          console.log("Response dari Nominatim API:", data);
+
+          if (data.address) {
+            let country = data.address.country;
+            console.log("Negara yang ditemukan:", country);
+
+            // Simpan negara ke localStorage agar tidak perlu fetch ulang di lain waktu
+            localStorage.setItem("countryDevice", country);
+
+            // Cari negara di daftar negara yang sudah di-fetch sebelumnya
+            const currentLocation = state.country.find(
+              (data) => data.country_name === country,
+            );
+
+            if (currentLocation) {
+              console.log("Negara ditemukan di daftar:", currentLocation);
+              commit("setItemSelectedComplete", currentLocation);
+              commit("setItemSelected", currentLocation.title);
+              commit("setSelectedPlace", currentLocation.title);
+            } else {
+              console.warn(
+                "Negara tidak ditemukan dalam daftar country, menggunakan default.",
+              );
+              commit("setItemSelectedComplete", state.country[0]);
+              commit("setItemSelected", state.country[0]?.title || "");
+              commit("setSelectedPlace", state.country[0]?.title || "");
+            }
+
+            console.log("setDefaultCountry berhasil dijalankan.");
+          } else {
+            console.warn("Alamat tidak ditemukan dalam response Nominatim.");
+          }
+        } catch (error) {
+          console.error("Error di setDefaultCountry:", error);
+        }
+      },
+      async getCityMall({ commit, state }) {
+        console.log("Memulai getCityMall...");
+        // console.log("Data country sebelum request:", state.country);
+
+        if (state.country.length === 0) {
+          console.error(
+            "getCityMall tidak bisa dijalankan karena state.country kosong.",
+          );
+          return;
+        }
+
         let link = `/app-city-list/${app.config.globalProperties.$appId}`;
 
         try {
           const { data } = await axios.get(link);
+          // console.log("Data city list diterima:", data);
 
           let filtering = state.country.map((item) => {
-            let obj = {
-              ...item,
-              cities: [],
-            };
-
+            let obj = { ...item, cities: [] };
             obj.cities = data.data.filter(
               (city) => city.country_id === item.id,
             );
-
             return obj;
           });
 
@@ -190,43 +202,49 @@ export default (app) =>
             (country) => country.title === state.selectedPlace,
           );
 
-          if (!state.activeCity && getCountry?.cities.length > 0) {
-            this.activeCity = getCountry.cities[0];
-
+          if (getCountry?.cities.length > 0) {
             commit("setActiveCity", getCountry.cities[0]);
           }
-        } catch (error) {}
+          console.log("getCityMall selesai.");
+        } catch (error) {
+          console.error("Error di getCityMall:", error);
+        }
       },
       async getCountryMall({ commit, dispatch }) {
         let link = `/app-country-list/${app.config.globalProperties.$appId}`;
 
         try {
+          // Tunggu getLongLat selesai agar latitude & longitude terisi
           await dispatch("getLongLat");
+          console.log(
+            "getLongLat selesai, Latitude & Longitude sudah tersedia.",
+          );
 
           const { data } = await axios.get(link);
+          // console.log("Data country:", data);
 
-          let allCountry = data.data.map((country) => {
-            let obj = {
-              ...country,
-              id: country.country_id,
-              title: country.country_name,
-              count: country.property_count,
-              oneCity: country.one_city == "Y" ? true : false,
-              path: "#",
-              flag: country.flag,
-              cities: [],
-            };
-
-            return obj;
-          });
+          let allCountry = data.data.map((country) => ({
+            ...country,
+            id: country.country_id,
+            title: country.country_name,
+            count: country.property_count,
+            oneCity: country.one_city == "Y",
+            path: "#",
+            flag: country.flag,
+            cities: [],
+          }));
 
           commit("setCountry", allCountry);
+          console.log("setCountry selesai");
 
+          // Panggil setDefaultCountry hanya jika latitude & longitude ada
           await dispatch("setDefaultCountry");
+          console.log("setDefaultCountry selesai");
 
           await dispatch("getCityMall");
+          console.log("getCityMall selesai");
         } catch (error) {
-          throw error;
+          console.error("Error di getCountryMall:", error);
         }
       },
     },

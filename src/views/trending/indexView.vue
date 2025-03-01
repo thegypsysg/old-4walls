@@ -105,9 +105,9 @@
       <ForSale />
     </v-container>
 
-    <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px">
+    <!-- <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px">
       <Guide class="mt-10" />
-    </v-container>
+    </v-container> -->
     <Footer />
   </div>
 </template>

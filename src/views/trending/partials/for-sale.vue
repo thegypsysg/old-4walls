@@ -13,21 +13,35 @@
       THOUGHTFUL DESIGNED TOWNHOUSES
     </div>
 
-    <div class="d-flex flex-column flex-md-row ga-10 justify-center mt-10">
+    <div class="mx-auto px-4 mt-10" style="max-width: 1200px; overflow-x: auto">
+      <div
+        class="d-flex justify-center ga-6 my-5"
+        style="min-width: fit-content"
+      >
+        <template v-for="(p, i) in portfolios" :key="i">
+          <v-btn class="font-weight-bold"
+            >{{ p.name }} (<span class="text-red">{{ p.count }}</span
+            >)</v-btn
+          >
+        </template>
+      </div>
+    </div>
+
+    <!-- <div class="d-flex flex-column flex-md-row ga-10 justify-center mt-10">
       <template v-for="(p, i) in portfolios" :key="i">
         <v-btn class="font-weight-bold"
           >{{ p.name }} (<span class="text-red">{{ p.count }}</span
           >)</v-btn
         >
       </template>
-    </div>
+    </div> -->
 
-    <div class="w-100 d-flex justify-center mt-6">
+    <!-- <div class="w-100 d-flex justify-center mt-6">
       <v-btn class="bg-black">
         View More
         <v-icon right class="ml-4">mdi-plus</v-icon>
       </v-btn>
-    </div>
+    </div> -->
   </div>
   <div v-for="(item, j) in sale_items" :key="j">
     <div class="d-flex justify-space-between align-center">
@@ -52,7 +66,7 @@
                 :src="$fileURL + img.url"
                 cover
                 aspect-ratio="1.3"
-                style="height: 100%"
+                style="height: 170px; width: 220px"
               >
                 <div
                   v-bind="props"

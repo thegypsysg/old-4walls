@@ -94,8 +94,8 @@ onMounted(() => {
       ></v-skeleton-loader>
     </div>
     <Carousel v-else v-bind="settings" :breakpoints>
-      <Slide v-for="(city, i) in cities" :key="i">
-        <v-responsive class="border pa-4 ma-6">
+      <Slide style="width: 200px" v-for="(city, i) in cities" :key="i">
+        <v-responsive class="border pa-4 my-6 mx-2">
           <div>
             <v-img
               :src="$fileURL + city.img"
@@ -115,7 +115,7 @@ onMounted(() => {
       </Slide>
 
       <template #addons>
-        <Navigation />
+        <!-- <Navigation /> -->
       </template>
     </Carousel>
   </div>
