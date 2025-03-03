@@ -71,17 +71,22 @@
         <v-row>
           <v-col cols="6">
             <ul class="footer_links" style="margin-top: 37px">
-              <li class="font-weight-bold">Buy</li>
-              <li class="font-weight-bold">Rent</li>
-              <li class="font-weight-bold">Roommates</li>
-              <li class="font-weight-bold">Staycation</li>
-              <li class="font-weight-bold">Vacation</li>
+              <li
+                v-for="item in trendings.slice(0, 5)"
+                class="font-weight-bold"
+              >
+                {{ item.title }}
+              </li>
             </ul>
           </v-col>
           <v-col cols="6">
             <ul class="footer_links" style="margin-top: 37px">
-              <li class="font-weight-bold">Co-Working</li>
-              <li class="font-weight-bold">Co-Living</li>
+              <li
+                v-for="item in trendings.slice(5, 10)"
+                class="font-weight-bold"
+              >
+                {{ item.title }}
+              </li>
             </ul>
           </v-col>
           <!-- <v-col cols="6">
@@ -299,6 +304,7 @@ export default {
       appDetails1: null,
       appDetails2: null,
       superAppData: null,
+      trendings: [],
       footerData: null,
       screenWidth: window.innerWidth,
     };
@@ -329,6 +335,7 @@ export default {
     this.getAppDetails1();
     this.getSupeApp();
     this.getAppDetails2();
+    this.getTrendings();
 
     const token = localStorage.getItem("token");
     if (this.tokenProvider != null) {
@@ -462,8 +469,8 @@ export default {
           localStorage.setItem("user_image", null);
           localStorage.setItem("token", null);
           app.config.globalProperties.$eventBus.$emit("getUserName");
-          this.path = "/";
-          window.location.href = "/";
+          this.path = "/rent";
+          window.location.href = "/rent";
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -486,7 +493,6 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-
         });
       // .finally(() => {
       //   this.isLoading = false;
@@ -518,7 +524,6 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-
         });
       // .finally(() => {
       //   this.isLoading = false;
@@ -534,7 +539,6 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-
         });
       // .finally(() => {
       //   this.isLoading = false;
@@ -550,11 +554,33 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
-
         });
       // .finally(() => {
       //   this.isLoading = false;
       // });
+    },
+    getTrendings() {
+      axios
+        .get(`/list-main-categories`)
+        .then((response) => {
+          const data = response.data.data;
+          this.trendings = data
+            .sort((a, b) => a.category_id < b.category_id)
+            .map((item) => ({
+              ...item,
+              icon: item.icon_image,
+              title: item.category_name,
+              to: item.link_name.includes("asdf")
+                ? "/buy"
+                : item.link_name.includes("roomates")
+                  ? "/roommates"
+                  : item.link_name.split("https://4walls.sg")[1],
+            }));
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          throw error;
+        });
     },
   },
 };

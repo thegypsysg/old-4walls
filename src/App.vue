@@ -116,9 +116,13 @@ export default {
     }
 
     this.getApplicant(tokenParam);
+    this.$router.push("/rent");
   },
   mounted() {
     this.isDesktop = window.innerWidth >= 768;
+    // if (this.currentRoute == "/") {
+    //   this.$router.push("/rent");
+    // }
   },
   methods: {
     getApplicant(tokenParam) {

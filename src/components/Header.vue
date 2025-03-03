@@ -40,6 +40,7 @@ export default {
       userLocation: false,
       latitude: null,
       longitude: null,
+      currentRoute: this.$route.path,
     };
   },
   computed: {
@@ -172,8 +173,8 @@ export default {
           localStorage.setItem("user_image", null);
           localStorage.setItem("token", null);
           app.config.globalProperties.$eventBus.$emit("getUserName");
-          this.path = "/";
-          window.location.href = "/";
+          this.path = "/rent";
+          window.location.href = "/rent";
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -466,7 +467,7 @@ export default {
     elevation="1"
     fixed
   >
-    <router-link to="/">
+    <router-link to="/rent">
       <div class="logo-img-container ml-4">
         <v-img
           class="logo-img"
@@ -535,12 +536,59 @@ export default {
     </div>
 
     <data v-if="activeLocationButton" class="d-flex align-center ga-4">
-      <div
+      <!-- <div
         class="d-none d-md-block text-h5 font-weight-black text-no-wrap text-red-darken-4"
         style="text-transform: capitalize !important"
       >
         {{ $route.path.replaceAll("-", " ").replaceAll("/", "") }}
-      </div>
+      </div> -->
+
+      <v-btn
+        style="
+          background: #f4f5f7;
+          color: black;
+          text-transform: capitalize !important;
+        "
+        variant="text"
+        color="black"
+        append-icon="mdi-chevron-down"
+        class="mr-2 text-h5 font-weight-black text-no-wrap text-red-darken-4 text-capitalize"
+      >
+        {{
+          $route.path
+            .replaceAll("-", " ")
+            .replaceAll("/", "")
+            .replace(/\b\w/g, (str) => str.toUpperCase())
+        }}
+
+        <v-menu activator="parent">
+          <div
+            class="d-flex justify-center bg-white ga-6 my-5"
+            style="min-width: fit-content"
+          >
+            <template v-for="n in trendings" :key="n">
+              <v-btn
+                @click="goToPath(n)"
+                elevation="0"
+                class="pa-2"
+                style="min-width: 100px; min-height: 70px"
+              >
+                <div class="d-flex flex-column align-center ga-3 text-caption">
+                  <v-responsive>
+                    <v-img
+                      :src="$fileURL + n.icon"
+                      cover
+                      style="height: 25px; width: 25px"
+                      aspect-ratio="1"
+                    ></v-img>
+                  </v-responsive>
+                  {{ n.title }}
+                </div>
+              </v-btn>
+            </template>
+          </div>
+        </v-menu>
+      </v-btn>
     </data>
     <template v-if="activeLocationButton && !isSmall">
       <v-menu v-if="locationPlaceholder" v-model="userLocation">
@@ -636,7 +684,11 @@ export default {
         item-value="name"
         :items="activeMalls"
         style="font-style: italic"
-        placeholder="Explore Properties"
+        :placeholder="
+          currentRoute == '/rent'
+            ? 'Search for Rental Properties'
+            : 'Explore Properties'
+        "
         density="compact"
         color="blue-grey-lighten-2"
       >
@@ -830,7 +882,11 @@ export default {
             item-value="name"
             :items="activeMalls"
             style="font-style: italic"
-            placeholder="Explore Properties"
+            :placeholder="
+              $router.path == '/rent'
+                ? 'Search for Rental Properties'
+                : 'Explore Properties'
+            "
             density="compact"
             color="blue-grey-lighten-2"
           >

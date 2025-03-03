@@ -96,9 +96,9 @@ export default {
     changeHeader() {
       app.config.globalProperties.$eventBus.$emit(
         "changeHeaderWelcome2",
-        "Sign-Up / Sign-in"
+        "Sign-Up / Sign-in",
       );
-      this.$router.push("/");
+      this.$router.push("/rent");
     },
     nextStep() {
       this.$emit("nextStep");

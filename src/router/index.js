@@ -8,6 +8,7 @@ import CreatePasswordForm from "@/views/CreatePasswordForm.vue";
 import SocialLogin from "@/views/SocialLoginForm.vue";
 import DiscoverLocation from "@/views/city-properties/indexView.vue";
 import Trending from "@/views/trending/indexView.vue";
+import Rent from "@/views/rent/RentView.vue";
 import BuySegment from "@/views/buy_segment/indexView.vue";
 import BuyDetail from "@/views/buy_detail/indexView.vue";
 // import MyProfile from "@/views/MyProfileView.vue";
@@ -37,7 +38,7 @@ import BuyDetail from "@/views/buy_detail/indexView.vue";
 
 const routes = [
   {
-    path: "/",
+    path: "/home1",
     component: Home,
   },
   {
@@ -96,56 +97,56 @@ const routes = [
     name: "Trending-buy",
     component: Trending,
     meta: {
-      locationSelection: true
-    }
+      locationSelection: true,
+    },
   },
   {
     path: "/rent",
     name: "Trending-rent",
-    component: Trending,
+    component: Rent,
     meta: {
-      locationSelection: true
-    }
+      locationSelection: true,
+    },
   },
   {
     path: "/roommates",
     name: "Trending-roommates",
     component: Trending,
     meta: {
-      locationSelection: true
-    }
+      locationSelection: true,
+    },
   },
   {
     path: "/staycation",
     name: "Trending-staycation",
     component: Trending,
     meta: {
-      locationSelection: true
-    }
+      locationSelection: true,
+    },
   },
   {
     path: "/vacation",
     name: "Trending-vacation",
     component: Trending,
     meta: {
-      locationSelection: true
-    }
+      locationSelection: true,
+    },
   },
   {
     path: "/co-living",
     name: "Trending-co-living",
     component: Trending,
     meta: {
-      locationSelection: true
-    }
+      locationSelection: true,
+    },
   },
   {
     path: "/co-working",
     name: "Trending-co-working",
     component: Trending,
     meta: {
-      locationSelection: true
-    }
+      locationSelection: true,
+    },
   },
   {
     path: "/buy/studio",
