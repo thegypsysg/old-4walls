@@ -1,10 +1,11 @@
 <template>
   <!-- <Banner /> -->
-  <div class="mt-16">
+  <div v-if="!isSmall" class="d-sm-none mt-16">
     <TrendingList :desktop="true" />
   </div>
   <div
     id="trending-container"
+    :style="isSmall ? 'margin-top: 250px' : ''"
     style="position: relative; z-index: 2; background-color: #fff"
   >
     <v-container class="mx-auto px-4" style="max-width: 1200px">
@@ -25,7 +26,7 @@
 import "vue3-carousel/dist/carousel.css";
 
 import Interested from "./partials/interested";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import axios from "@/util/axios";
 import TrendingList from "../TrendingList.vue";
 import RentItems from "./partials/rentItems.vue";
@@ -42,6 +43,10 @@ const buildings = ref([
   },
 ]);
 const loader = ref(true);
+
+const isSmall = computed(() => {
+  return window.innerWidth < 640;
+});
 
 const getRentItems = () => {
   loader.value = true;
@@ -61,9 +66,12 @@ const getRentItems = () => {
               {
                 rent_id: 1,
                 rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City View",
+                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
                 type: "Condo",
-                qty: 50,
+                building: "Studio",
+                bedQty: 1,
+                bathQty: 1,
+                address: "Batam Center, Batam, Indonesia",
                 image: "80e2685508467d6bdae9aca6313348ff.jpg",
                 active: "Y",
                 price: 50,
@@ -71,29 +79,38 @@ const getRentItems = () => {
               {
                 rent_id: 2,
                 rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City View",
+                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
                 type: "Condo",
-                qty: 50,
+                building: "Studio",
+                bedQty: 1,
+                bathQty: 1,
+                address: "Batam Center, Batam, Indonesia",
                 image: "80e2685508467d6bdae9aca6313348ff.jpg",
-                active: "Y",
+                active: "N",
                 price: 50,
               },
               {
                 rent_id: 3,
                 rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City View",
+                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
                 type: "Condo",
-                qty: 50,
+                building: "Studio",
+                bedQty: 1,
+                bathQty: 1,
+                address: "Batam Center, Batam, Indonesia",
                 image: "80e2685508467d6bdae9aca6313348ff.jpg",
-                active: "Y",
+                active: "N",
                 price: 50,
               },
               {
                 rent_id: 4,
                 rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City View",
+                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
                 type: "Condo",
-                qty: 50,
+                building: "Studio",
+                bedQty: 1,
+                bathQty: 1,
+                address: "Batam Center, Batam, Indonesia",
                 image: "80e2685508467d6bdae9aca6313348ff.jpg",
                 active: "Y",
                 price: 50,
@@ -101,11 +118,14 @@ const getRentItems = () => {
               {
                 rent_id: 5,
                 rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City View",
+                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
                 type: "Condo",
-                qty: 50,
+                bedQty: 1,
+                building: "Studio",
+                bathQty: 1,
+                address: "Batam Center, Batam, Indonesia",
                 image: "80e2685508467d6bdae9aca6313348ff.jpg",
-                active: "Y",
+                active: "N",
                 price: 50,
               },
             ],

@@ -196,55 +196,55 @@
                     placeholder="Email Address"
                     :persistent-hint="true"
                   />
-                  <transition name="fade">
-                    <div v-if="isLogin">
-                      <label style="font-size: 24px; font-weight: 600"
-                        >Password</label
-                      >
-                      <v-text-field
-                        v-model="password"
-                        :append-inner-icon="
-                          showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                  <!-- <transition name="fade"> -->
+                  <div v-if="isLogin">
+                    <label style="font-size: 24px; font-weight: 600"
+                      >Password</label
+                    >
+                    <v-text-field
+                      v-model="password"
+                      :append-inner-icon="
+                        showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                      "
+                      :type="showPassword ? 'text' : 'password'"
+                      :rules="passwordRules"
+                      variant="outlined"
+                      class="login-input mb-3"
+                      placeholder="Password"
+                      :max-length="8"
+                      @click:append-inner="showPassword = !showPassword"
+                    />
+                    <div class="d-flex align-center" style="gap: 10px">
+                      <v-checkbox v-model="rememberMe" class="black--text">
+                        <template #label>
+                          <span
+                            style="
+                              font-weight: 400;
+                              font-size: 14px;
+                              color: #000 !important;
+                            "
+                            >Remember this Device</span
+                          >
+                        </template>
+                      </v-checkbox>
+                      <v-btn
+                        variant="text"
+                        :disabled="isLoadingForgot"
+                        class="text-body-2 font-weight-regular mt-n4"
+                        style="
+                          text-decoration: none;
+                          color: #4b80b1;
+                          font-weight: 400;
+                          font-size: 12px;
+                          cursor: pointer;
                         "
-                        :type="showPassword ? 'text' : 'password'"
-                        :rules="passwordRules"
-                        variant="outlined"
-                        class="login-input mb-3"
-                        placeholder="Password"
-                        :max-length="8"
-                        @click:append-inner="showPassword = !showPassword"
-                      />
-                      <div class="d-flex align-center" style="gap: 10px">
-                        <v-checkbox v-model="rememberMe" class="black--text">
-                          <template #label>
-                            <span
-                              style="
-                                font-weight: 400;
-                                font-size: 14px;
-                                color: #000 !important;
-                              "
-                              >Remember this Device</span
-                            >
-                          </template>
-                        </v-checkbox>
-                        <v-btn
-                          variant="text"
-                          :disabled="isLoadingForgot"
-                          class="text-body-2 font-weight-regular mt-n4"
-                          style="
-                            text-decoration: none;
-                            color: #4b80b1;
-                            font-weight: 400;
-                            font-size: 12px;
-                            cursor: pointer;
-                          "
-                          @click="forgotPassword()"
-                        >
-                          Forgot Password?
-                        </v-btn>
-                      </div>
+                        @click="forgotPassword()"
+                      >
+                        Forgot Password?
+                      </v-btn>
                     </div>
-                  </transition>
+                  </div>
+                  <!-- </transition> -->
                 </template>
                 <template v-if="isMobile && !isSendOtp">
                   <label class="mt-n4" style="font-size: 24px; font-weight: 600"

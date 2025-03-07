@@ -3,6 +3,7 @@ import { mapState, mapMutations } from "vuex";
 import axios from "@/util/axios";
 import moment from "moment-timezone";
 import app from "@/util/eventBus";
+import TrendingList from "@/views/TrendingList.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names, vue/no-reserved-component-names
@@ -41,8 +42,10 @@ export default {
       latitude: null,
       longitude: null,
       currentRoute: this.$route.path,
+      showSearch: false,
     };
   },
+  components: { TrendingList },
   computed: {
     ...mapState(["itemSelected"]),
     ...mapState(["itemSelected2"]),
@@ -54,6 +57,7 @@ export default {
       "activeCity",
       "selectedPlace",
       "country",
+      "selectedTrending",
     ]),
     countryDevice() {
       return localStorage.getItem("countryDevice");
@@ -543,7 +547,7 @@ export default {
         {{ $route.path.replaceAll("-", " ").replaceAll("/", "") }}
       </div> -->
 
-      <v-btn
+      <!-- <v-btn
         style="
           background: #f4f5f7;
           color: black;
@@ -588,6 +592,81 @@ export default {
             </template>
           </div>
         </v-menu>
+      </v-btn> -->
+
+      <v-menu>
+        <template #activator="{ props }">
+          <v-btn
+            v-bind="props"
+            style="
+              background: #f4f5f7;
+              color: black;
+              text-transform: capitalize !important;
+            "
+            variant="text"
+            color="black"
+            append-icon="mdi-chevron-down"
+            class="mr-0 mr-md-2 text-h5 text-no-wrap text-body-2"
+          >
+            <v-img
+              :src="
+                selectedTrending?.icon
+                  ? $fileURL + selectedTrending?.icon
+                  : 'https://admin1.the-gypsy.sg/img/app/f003cc409e92d7b18bd55ceabc291043.jpg'
+              "
+              cover
+              height="25"
+              width="25"
+              class="mr-3"
+              aspect-ratio="1"
+            ></v-img>
+            <span>
+              {{
+                $route.path
+                  .replaceAll("-", " ")
+                  .replaceAll("/", "")
+                  .replace(/\b\w/g, (str) => str.toUpperCase())
+              }}
+            </span>
+          </v-btn>
+        </template>
+        <v-list max-height="300">
+          <v-list-item
+            @click="goToPath(n)"
+            v-for="n in trendings"
+            :key="n"
+            :value="n"
+          >
+            <v-list-item-title class="text-caption">
+              <v-row align="center" no-gutters>
+                <v-col cols="auto">
+                  <v-img
+                    :src="$fileURL + n.icon"
+                    cover
+                    height="25"
+                    width="25"
+                    aspect-ratio="1"
+                  ></v-img>
+                </v-col>
+                <v-col class="text-left pl-2">
+                  {{ n.title }}
+                </v-col>
+              </v-row>
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
+      <v-btn
+        v-if="isSmall"
+        variant="text"
+        color="black"
+        icon="mdi-magnify"
+        width="20"
+        height="20"
+        @click="showSearch = !showSearch"
+      >
+        <v-icon size="25"> mdi-magnify </v-icon>
       </v-btn>
     </data>
     <template v-if="activeLocationButton && !isSmall">
@@ -757,7 +836,10 @@ export default {
       </div>
     </div>
 
-    <div v-if="!isHeader && !isProfile && !userName" class="btn_sign__up-cont">
+    <div
+      v-if="!isHeader && !isProfile && !userName && !isSmall"
+      class="btn_sign__up-cont"
+    >
       <v-btn elevation="0" class="btn_sign__up" to="/sign-in">
         <span> Sign Up / Sign In</span>
       </v-btn>
@@ -802,6 +884,65 @@ export default {
 
     <template v-if="!isProfile" #extension>
       <div class="mobile__app text-center w-100">
+        <form
+          v-if="showSearch"
+          class="navbar__search navbar__search__mobile mx-auto mb-2"
+        >
+          <v-autocomplete
+            id="product_name"
+            v-model="search"
+            class="form-control mr-sm-2 ml-md-n3 search-input"
+            item-title="name"
+            item-value="name"
+            :items="activeMalls"
+            style="font-style: italic"
+            :placeholder="
+              $router.path == '/rent'
+                ? 'Search for Rental Properties'
+                : 'Explore Properties'
+            "
+            density="compact"
+            color="blue-grey-lighten-2"
+          >
+            <template #item="{ props, item }">
+              <div class="mb-2" v-bind="props">
+                <router-link
+                  class="text-decoration-none text-black font-weight-bold"
+                  style="font-size: 12px"
+                  to="#"
+                >
+                  <div class="d-flex align-center" style="width: 100%">
+                    <div style="width: 30% !important" class="py-1">
+                      <div style="width: 100px">
+                        <v-img height="40" :src="item?.raw?.mainImage">
+                          <template #placeholder>
+                            <v-skeleton-loader type="image"></v-skeleton-loader>
+                          </template>
+                        </v-img>
+                      </div>
+                    </div>
+                    <div style="width: 70% !important" class="pl-2">
+                      <p class="mb-1">
+                        {{
+                          `${item?.raw?.name} (${item?.raw?.subIndustryName})`
+                        }}
+                      </p>
+                      <p class="text-grey">
+                        <span>{{ `${item?.raw?.town}` }}</span> (<span
+                          class="text-red"
+                          >{{ `${item?.raw?.distanceText}` }}</span
+                        ><span class="text-black"> away</span>)
+                      </p>
+                    </div>
+                  </div>
+                </router-link>
+              </div>
+            </template>
+          </v-autocomplete>
+          <button class="btn btn--search" type="submit">
+            <v-icon color="white"> mdi-magnify </v-icon>
+          </button>
+        </form>
         <template v-if="activeLocationButton && isSmall">
           <v-menu v-if="locationPlaceholder" v-model="userLocation">
             <template v-slot:activator="{ props }">
@@ -873,65 +1014,9 @@ export default {
             type="list-item-two-line"
           ></v-skeleton-loader>
         </template>
-        <form class="navbar__search navbar__search__mobile mx-auto">
-          <v-autocomplete
-            id="product_name"
-            v-model="search"
-            class="form-control mr-sm-2 ml-md-n3 search-input"
-            item-title="name"
-            item-value="name"
-            :items="activeMalls"
-            style="font-style: italic"
-            :placeholder="
-              $router.path == '/rent'
-                ? 'Search for Rental Properties'
-                : 'Explore Properties'
-            "
-            density="compact"
-            color="blue-grey-lighten-2"
-          >
-            <template #item="{ props, item }">
-              <div class="mb-2" v-bind="props">
-                <router-link
-                  class="text-decoration-none text-black font-weight-bold"
-                  style="font-size: 12px"
-                  to="#"
-                >
-                  <div class="d-flex align-center" style="width: 100%">
-                    <div style="width: 30% !important" class="py-1">
-                      <div style="width: 100px">
-                        <v-img height="40" :src="item?.raw?.mainImage">
-                          <template #placeholder>
-                            <v-skeleton-loader type="image"></v-skeleton-loader>
-                          </template>
-                        </v-img>
-                      </div>
-                    </div>
-                    <div style="width: 70% !important" class="pl-2">
-                      <p class="mb-1">
-                        {{
-                          `${item?.raw?.name} (${item?.raw?.subIndustryName})`
-                        }}
-                      </p>
-                      <p class="text-grey">
-                        <span>{{ `${item?.raw?.town}` }}</span> (<span
-                          class="text-red"
-                          >{{ `${item?.raw?.distanceText}` }}</span
-                        ><span class="text-black"> away</span>)
-                      </p>
-                    </div>
-                  </div>
-                </router-link>
-              </div>
-            </template>
-          </v-autocomplete>
-          <button class="btn btn--search" type="submit">
-            <v-icon color="white"> mdi-magnify </v-icon>
-          </button>
-        </form>
         <div id="trending-container" class="d-sm-none"></div>
 
-        <div
+        <!-- <div
           v-if="
             $route.name == 'Trending-buy' ||
             $route.name == 'Trending-rent' ||
@@ -947,8 +1032,8 @@ export default {
           <div
             class="d-flex justify-center ga-6 my-5"
             style="min-width: fit-content"
-          >
-            <template v-for="n in trendings" :key="n">
+          > -->
+        <!-- <template v-for="n in trendings" :key="n">
               <v-btn
                 @click="goToPath(n)"
                 elevation="0"
@@ -968,8 +1053,25 @@ export default {
                 </div>
               </v-btn>
             </template>
-          </div>
+          </div> -->
+
+        <div
+          v-if="
+            isSmall &&
+            ($route.name == 'Trending-buy' ||
+              $route.name == 'Trending-rent' ||
+              $route.name == 'Trending-roommates' ||
+              $route.name == 'Trending-staycation' ||
+              $route.name == 'Trending-vacation' ||
+              $route.name == 'Trending-co-living' ||
+              $route.name == 'Trending-co-working')
+          "
+          class="ma-4"
+        >
+          <TrendingList :desktop="false" />
         </div>
+        <!-- </div>
+        </div> -->
         <!-- <div>TEST</div>
         <div>TEST</div> -->
       </div>
@@ -982,13 +1084,19 @@ export default {
       class="drawer__top"
       :class="{ 'py-6': userName == null, 'py-2': userName != null }"
     >
-      <router-link
+      <!-- <router-link
         v-if="userName == null"
         class="text-decoration-none"
         to="/sign-in"
       >
         <span style="font-size: 1.125rem; color: white">Sign up / Sign In</span>
-      </router-link>
+      </router-link> -->
+      <div v-if="userName == null" class="btn_sign__up-cont">
+        <v-btn elevation="0" class="btn_sign__up" to="/sign-in">
+          <span> Sign Up / Sign In</span>
+        </v-btn>
+        <div class="btn_sign__up-hover" />
+      </div>
       <div v-else class="d-flex align-center">
         <div style="width: 55px; height: 55px; border-radius: 50%">
           <v-img
@@ -1165,7 +1273,7 @@ export default {
           :class="{ 'mb-2': userName == null }"
         >
           <v-col cols="3" class="d-flex justify-end">
-            <a :href="contactData?.facebook">
+            <a>
               <v-img
                 src="@/assets/images/icons/facebook.png"
                 height="40"
@@ -1174,7 +1282,7 @@ export default {
             </a>
           </v-col>
           <v-col class="d-flex justify-center" cols="3">
-            <a :href="contactData?.instagram">
+            <a>
               <v-img
                 src="@/assets/images/icons/insta.png"
                 height="40"
@@ -1183,7 +1291,7 @@ export default {
             </a>
           </v-col>
           <v-col class="d-flex justify-start" cols="3">
-            <a :href="contactData?.tiktok">
+            <a>
               <v-img
                 src="@/assets/images/icons/tiktok.png"
                 class="mt-1"
@@ -1198,7 +1306,7 @@ export default {
           >
             <p class="text-caption">Wha'ts App Support (24 hrs)</p>
             <a
-              :href="`https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=The Gypsy Support here - How may I help you. ?`"
+              :href="`https://api.whatsapp.com/send?phone=&text=The Gypsy Support here - How may I help you. ?`"
             >
               <v-img
                 src="@/assets/whatsapp.svg"

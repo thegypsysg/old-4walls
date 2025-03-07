@@ -121,7 +121,7 @@ onMounted(() => {
       @click="scrollToSection(formatName(menu.property_name), true)"
     >
       <a class="d-flex flex-column align-center border-black pa-2 rounded-lg">
-        <v-avatar :size="70">
+        <v-avatar :size="60">
           <v-img aspect-ratio="1" cover :src="fileURL + menu.image"></v-img>
         </v-avatar>
         <p class="text-no-wrap d-flex align-center mt-2 text-caption">

@@ -17,6 +17,7 @@
               elevation="0"
               class="px-5 text-body-1 font-weight-bold"
               style="width: max-content"
+              @click="handleContactUs"
               >CONTACT US</v-btn
             >
           </v-col>
@@ -31,6 +32,16 @@
   </v-row>
 </template>
 
-<script setup lang="ts"></script>
+<script setup>
+import { computed } from "vue";
+
+const footerData = computed(() => {
+  return JSON.parse(localStorage.getItem("footerData"));
+});
+
+const handleContactUs = () => {
+  window.location.href = `https://api.whatsapp.com/send?phone=${footerData.value?.whats_app}&text=I am a Property Owner and interested to list on 4walls`;
+};
+</script>
 
 <style scoped></style>

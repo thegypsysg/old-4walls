@@ -169,12 +169,26 @@ onUnmounted(() => {
       <Splide ref="splideRef" :options="splideOptions">
         <SplideSlide v-for="menu in rents" :key="menu.rent_id">
           <!-- :key="menu?.product_id" -->
-          <v-card class="card-wrapper" height="330" elevation="3">
+          <v-card class="card-wrapper" height="350" elevation="3">
             <!-- <router-link
               class="text-decoration-none"
               :to="`/rent/${menu.product_id}`"
             > -->
-            <v-img :src="fileURL + menu?.image" height="160" cover></v-img>
+            <v-img
+              :src="fileURL + menu?.image"
+              height="160"
+              class="position-relative"
+              cover
+            ></v-img>
+            <div
+              v-if="menu?.active == 'Y'"
+              class="position-absolute top-0 left-0 bg-white w-25 mt-4 ml-4"
+            >
+              <span
+                class="text-blue-darken-4 text-caption font-weight-bold pl-2"
+                >{{ menu?.type }}</span
+              >
+            </div>
             <!-- </router-link> -->
             <div
               class="card-title d-flex flex-column justify-space-between"
@@ -183,13 +197,17 @@ onUnmounted(() => {
               <p class="font-weight-bold text-subtitle-2">
                 {{ menu?.rent_name }}
               </p>
-              <p class="font-weight-bold text-grey text-subtitle-2 mt-1">
-                <span>{{ menu?.type }}</span> |
-                <span>{{ menu?.qty }} Bedroom</span>
+              <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
+                <span>{{ menu?.building }}</span> |
+                <span>{{ menu?.bedQty }} Bed</span> |
+                <span>{{ menu?.bathQty }} Bathroom</span>
+              </p>
+              <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
+                <span>{{ menu?.address }}</span>
               </p>
               <p class="font-weight-bold text-grey text-subtitle-2 mt-1">
-                <span>{{ formatSGD(menu?.qty) }}</span> (<span>{{
-                  formatIDR(menu?.qty)
+                <span>{{ formatSGD(menu?.price) }}</span> (<span>{{
+                  formatIDR(menu?.price)
                 }}</span
                 >)
               </p>

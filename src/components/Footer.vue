@@ -46,19 +46,36 @@
         </ul>
       </v-col>
       <v-col cols="12" sm="12" md="3">
-        <h2 class="footer_title" style="margin-bottom: 16px">Quick links</h2>
+        <h2 class="footer_title" style="margin-bottom: 16px">
+          Business Partners
+        </h2>
         <ul class="footer_links" style="margin-top: 37px">
           <li class="font-weight-bold">
             <!-- <img src="@/assets/links-arrow.svg" height="12" /> -->
-            Property Developers
+            <a
+              style="text-decoration: none; color: black"
+              :href="`https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=I am a Property Developer and interested to list on 4walls`"
+            >
+              Property Developers
+            </a>
           </li>
           <li class="font-weight-bold">
             <!-- <img src="@/assets/links-arrow.svg" height="12" /> -->
-            Property Agents
+            <a
+              style="text-decoration: none; color: black"
+              :href="`https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=I am a Property Agent and interested to list on 4walls`"
+            >
+              Property Agents
+            </a>
           </li>
           <li class="font-weight-bold">
             <!-- <img src="@/assets/links-arrow.svg" height="12" /> -->
-            Owners
+            <a
+              style="text-decoration: none; color: black"
+              :href="`https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=I am a Property Owner and interested to list on 4walls`"
+            >
+              Owners
+            </a>
           </li>
           <!-- <li class="text-blue-accent-4">
             <img src="@/assets/links-arrow.svg" height="12" />
@@ -67,7 +84,7 @@
         </ul>
       </v-col>
       <v-col cols="12" sm="12" md="3">
-        <h2 class="footer_title">Our Apps</h2>
+        <h2 class="footer_title">Categories</h2>
         <v-row>
           <v-col cols="6">
             <ul class="footer_links" style="margin-top: 37px">
@@ -75,7 +92,12 @@
                 v-for="item in trendings.slice(0, 5)"
                 class="font-weight-bold"
               >
-                {{ item.title }}
+                <img
+                  :src="$fileURL + item.icon"
+                  height="20"
+                  width="20"
+                  alt=""
+                /><span>{{ item.title }}</span>
               </li>
             </ul>
           </v-col>
@@ -85,7 +107,12 @@
                 v-for="item in trendings.slice(5, 10)"
                 class="font-weight-bold"
               >
-                {{ item.title }}
+                <img
+                  :src="$fileURL + item.icon"
+                  height="20"
+                  width="20"
+                  alt=""
+                /><span>{{ item.title }}</span>
               </li>
             </ul>
           </v-col>
@@ -117,7 +144,7 @@
         </p>
         <h5
           v-if="isSmall"
-          class="font-weight-bold mb-4"
+          class="font-weight-bold mb-4 mt-10"
           style="margin-bottom: 16px; text-align: center"
         >
           Explore {{ footerData?.company_name }} on your Mobile
@@ -551,6 +578,7 @@ export default {
         .then((response) => {
           const data = response.data.data;
           this.footerData = data;
+          localStorage.setItem("footerData", JSON.stringify(data));
         })
         .catch((error) => {
           // eslint-disable-next-line

@@ -35,9 +35,9 @@
         :is-signin="isSignIn"
       />
       <RouterView v-slot="{ Component }">
-        <Transition name="page-opacity" mode="out-in">
-          <component :is="Component" />
-        </Transition>
+        <!-- <Transition name="page-opacity" mode="out-in"> -->
+        <component :is="Component" />
+        <!-- </Transition> -->
       </RouterView>
     </div>
   </v-app>
@@ -116,13 +116,12 @@ export default {
     }
 
     this.getApplicant(tokenParam);
-    this.$router.push("/rent");
-  },
-  mounted() {
-    this.isDesktop = window.innerWidth >= 768;
     // if (this.currentRoute == "/") {
     //   this.$router.push("/rent");
     // }
+  },
+  mounted() {
+    this.isDesktop = window.innerWidth >= 768;
   },
   methods: {
     getApplicant(tokenParam) {
