@@ -202,10 +202,10 @@ onUnmounted(() => {
             ></v-img>
             <div
               v-if="menu?.featured == 'Y'"
-              class="position-absolute top-0 left-0 bg-white w-25 mt-4 ml-4"
+              class="position-absolute top-0 left-0 bg-white mt-4 ml-4"
             >
               <span
-                class="text-blue-darken-4 text-caption font-weight-bold pl-2"
+                class="text-blue-darken-4 text-caption font-weight-bold px-2"
                 >{{ menu?.type }}</span
               >
             </div>
