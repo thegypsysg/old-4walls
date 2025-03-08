@@ -32,10 +32,10 @@ const selected = ref(null);
 
 const splideOptions = computed(() => ({
   type: "slide",
-  perPage: isMobile.value ? 1.5 : 4,
+  perPage: isMobile.value ? 1.5 : 3,
   arrows: false,
   pagination: false,
-  gap: isMobile.value ? "1rem" : "2rem",
+  gap: isMobile.value ? "0.1rem" : "0.2rem",
   drag: true,
   snap: true,
   rewind: false,

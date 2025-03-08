@@ -38,6 +38,10 @@ import BuyDetail from "@/views/buy_detail/indexView.vue";
 
 const routes = [
   {
+    path: "/",
+    redirect: "/rent", // Redirect otomatis ke /rent
+  },
+  {
     path: "/home1",
     component: Home,
   },

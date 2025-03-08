@@ -1,6 +1,6 @@
 <template>
   <!-- <Banner /> -->
-  <div v-if="!isSmall" class="d-sm-none mt-16">
+  <div v-if="!isSmall" class="mt-16">
     <TrendingList :desktop="true" />
   </div>
   <div
@@ -32,6 +32,21 @@ import TrendingList from "../TrendingList.vue";
 import RentItems from "./partials/rentItems.vue";
 
 const rentItems = ref([]);
+const rentExample = [
+  {
+    rent_id: 1,
+    rent_name:
+      "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
+    type: "Condo",
+    building: "Studio",
+    bedQty: 1,
+    bathQty: 1,
+    address: "Batam Center, Batam, Indonesia",
+    image: "80e2685508467d6bdae9aca6313348ff.jpg",
+    active: "Y",
+    price: 50,
+  },
+];
 const buildings = ref([
   {
     building_id: 1,
