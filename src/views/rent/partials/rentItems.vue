@@ -103,9 +103,18 @@ function formatSGD(amount) {
   return `S$ ${Number(amount).toFixed(2)}`;
 }
 
-function formatIDR(amount) {
-  return `IDR ${Number(amount * 10000).toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+function formatIDR(symbol, amount) {
+  return `${symbol} ${Number(amount * 10000).toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
+
+const getYouTubeEmbedUrl = (videoLink) => {
+  if (!videoLink) return null;
+
+  const match = videoLink.match(
+    /(?:shorts\/|video\/|watch\?v=|embed\/|youtu\.be\/)([^#\&\?]+)/,
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+};
 
 onMounted(() => {
   checkMobile();
@@ -174,14 +183,25 @@ onUnmounted(() => {
               class="text-decoration-none"
               :to="`/rent/${menu.product_id}`"
             > -->
+            <div v-if="menu?.video && getYouTubeEmbedUrl(menu.video)">
+              <iframe
+                width="100%"
+                height="160"
+                :src="getYouTubeEmbedUrl(menu.video)"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </div>
+
             <v-img
+              v-else
               :src="fileURL + menu?.image"
               height="160"
               class="position-relative"
               cover
             ></v-img>
             <div
-              v-if="menu?.active == 'Y'"
+              v-if="menu?.featured == 'Y'"
               class="position-absolute top-0 left-0 bg-white w-25 mt-4 ml-4"
             >
               <span
@@ -198,7 +218,7 @@ onUnmounted(() => {
                 {{ menu?.rent_name }}
               </p>
               <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
-                <span>{{ menu?.building }}</span> |
+                <span>{{ menu?.rent_parent_name }}</span> |
                 <span>{{ menu?.bedQty }} Bed</span> |
                 <span>{{ menu?.bathQty }} Bathroom</span>
               </p>
@@ -207,7 +227,7 @@ onUnmounted(() => {
               </p>
               <p class="font-weight-bold text-grey text-subtitle-2 mt-1">
                 <span>{{ formatSGD(menu?.price) }}</span> (<span>{{
-                  formatIDR(menu?.price)
+                  formatIDR(menu?.currency_symbol, menu?.price)
                 }}</span
                 >)
               </p>

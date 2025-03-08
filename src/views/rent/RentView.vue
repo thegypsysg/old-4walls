@@ -32,21 +32,6 @@ import TrendingList from "../TrendingList.vue";
 import RentItems from "./partials/rentItems.vue";
 
 const rentItems = ref([]);
-const rentExample = [
-  {
-    rent_id: 1,
-    rent_name:
-      "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
-    type: "Condo",
-    building: "Studio",
-    bedQty: 1,
-    bathQty: 1,
-    address: "Batam Center, Batam, Indonesia",
-    image: "80e2685508467d6bdae9aca6313348ff.jpg",
-    active: "Y",
-    price: 50,
-  },
-];
 const buildings = ref([
   {
     building_id: 1,
@@ -58,104 +43,102 @@ const buildings = ref([
   },
 ]);
 const loader = ref(true);
+const isLoading = ref(false);
+const requestCount = ref(0);
+const errorMessage = ref("");
+const isError = ref(false);
 
 const isSmall = computed(() => {
   return window.innerWidth < 640;
 });
 
-const getRentItems = () => {
-  loader.value = true;
-  axios
-    .get(`/list-4walls-property-types`)
-    .then((response) => {
-      const data = response.data.data;
-      rentItems.value = data
-        .sort(function (a, b) {
-          return a.property_type_id - b.property_type_id;
-        })
-        .map((item) => {
-          return {
-            rent_parent_id: item.property_type_id,
-            rent_parent_name: item.property_name,
-            rents: [
-              {
-                rent_id: 1,
-                rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
-                type: "Condo",
-                building: "Studio",
-                bedQty: 1,
-                bathQty: 1,
-                address: "Batam Center, Batam, Indonesia",
-                image: "80e2685508467d6bdae9aca6313348ff.jpg",
-                active: "Y",
-                price: 50,
-              },
-              {
-                rent_id: 2,
-                rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
-                type: "Condo",
-                building: "Studio",
-                bedQty: 1,
-                bathQty: 1,
-                address: "Batam Center, Batam, Indonesia",
-                image: "80e2685508467d6bdae9aca6313348ff.jpg",
-                active: "N",
-                price: 50,
-              },
-              {
-                rent_id: 3,
-                rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
-                type: "Condo",
-                building: "Studio",
-                bedQty: 1,
-                bathQty: 1,
-                address: "Batam Center, Batam, Indonesia",
-                image: "80e2685508467d6bdae9aca6313348ff.jpg",
-                active: "N",
-                price: 50,
-              },
-              {
-                rent_id: 4,
-                rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
-                type: "Condo",
-                building: "Studio",
-                bedQty: 1,
-                bathQty: 1,
-                address: "Batam Center, Batam, Indonesia",
-                image: "80e2685508467d6bdae9aca6313348ff.jpg",
-                active: "Y",
-                price: 50,
-              },
-              {
-                rent_id: 5,
-                rent_name:
-                  "Lovey 1 Bedroom in Pollux Habbie Tower 1, High Floor, Sea and City",
-                type: "Condo",
-                bedQty: 1,
-                building: "Studio",
-                bathQty: 1,
-                address: "Batam Center, Batam, Indonesia",
-                image: "80e2685508467d6bdae9aca6313348ff.jpg",
-                active: "N",
-                price: 50,
-              },
-            ],
-          };
-        });
-      // let itemFinal = [];
-    })
-    .catch((error) => {
-      // eslint-disable-next-line
+const getItemsData = async () => {
+  isLoading.value = true;
+  requestCount.value = 0; // Reset request count
 
-      throw error;
-    })
-    .finally(() => {
-      loader.value = false;
-    });
+  try {
+    let data = await getRentTypes();
+    console.log(data);
+    rentItems.value = data.sort(
+      (a, b) => a.property_type_id - b.property_type_id,
+    );
+    requestCount.value++;
+
+    const updatedItems = await Promise.all(
+      data.map(async (item) => {
+        const rentItems = await getRentItemsByTypeId(item.property_type_id);
+        requestCount.value++;
+        return {
+          ...item,
+          rents: rentItems.map((data) => {
+            return {
+              ...data,
+              rent_parent_id: item.rent_parent_id,
+              rent_parent_name: item.rent_parent_name,
+            };
+          }),
+        };
+      }),
+    );
+
+    rentItems.value = updatedItems.sort((a, b) => a.id - b.id);
+    // console.log(updatedItems);
+  } catch (error) {
+    console.error("Error fetching items data:", error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const getRentTypes = async () => {
+  isLoading.value = true;
+  try {
+    const response = await axios.get("/list-4walls-property-types");
+    const data = response.data.data;
+
+    return data
+      .sort((a, b) => a.property_type_id - b.property_type_id)
+      .map((item) => ({
+        ...item,
+        rent_parent_id: item.property_type_id,
+        rent_parent_name: item.property_name,
+        id: item.property_type_id || 0,
+        name: item.property_name || "",
+        image: item.image || "",
+      }))
+      .slice(0, 10);
+  } catch (error) {
+    console.error(error);
+    errorMessage.value =
+      error.response?.data?.message || "Something went wrong!!!";
+    isError.value = true;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const getRentItemsByTypeId = async (id) => {
+  try {
+    const response = await axios.get(`/list-properties-by-property-type/${id}`);
+    const data = response.data.data;
+    return data.map((item) => ({
+      ...item,
+      rent_id: item?.property_id,
+      rent_name: item?.tag_line,
+      type: item?.button_name,
+      bedQty: item?.bedrooms || 0,
+      bathQty: item?.bathrooms || 0,
+      address: `Static Town, Static City, ${item?.country_name}`,
+      image: item?.main_image,
+      active: item?.active,
+      featured: item?.featured,
+      price: 0,
+      video: item?.video_link || null,
+    }));
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 const getBuildingItems = () => {
@@ -177,7 +160,7 @@ const getBuildingItems = () => {
 };
 
 onMounted(() => {
-  getRentItems();
+  getItemsData();
   getBuildingItems();
 });
 </script>
