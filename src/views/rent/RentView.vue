@@ -129,10 +129,11 @@ const getRentItemsByTypeId = async (id) => {
       bedQty: item?.bedrooms || 0,
       bathQty: item?.bathrooms || 0,
       address: `Static Town, Static City, ${item?.country_name}`,
+      city: item?.city_name,
       image: item?.main_image,
       active: item?.active,
       featured: item?.featured,
-      price: 0,
+      price: 50,
       video: item?.video_link || null,
     }));
   } catch (error) {

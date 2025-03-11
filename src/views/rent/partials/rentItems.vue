@@ -212,7 +212,7 @@ onUnmounted(() => {
             >
               <span
                 class="text-red-darken-1 text-caption font-weight-black pl-2 pr-8"
-                >{{ menu?.type }} in Batam</span
+                >{{ menu?.type }} in {{ menu?.city }}</span
               >
             </div>
             <!-- </router-link> -->
