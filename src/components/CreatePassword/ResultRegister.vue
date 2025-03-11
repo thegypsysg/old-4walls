@@ -351,7 +351,7 @@ export default {
 
 <style scoped>
 .login-container {
-  background-image: url("@/assets/background-sign-in.jpg");
+  background-image: url("@/assets/header.png");
   background-position: center;
   background-size: cover;
   background-color: #cccccc;
