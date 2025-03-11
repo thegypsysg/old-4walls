@@ -141,18 +141,18 @@ onUnmounted(() => {
   >
     <div class="d-flex justify-space-between align-center mb-4">
       <div class="d-block d-md-flex align-center">
-        <span class="ml-4 mr-8 ml-md-0 text-h6 font-weight-bold">{{
+        <span class="ml-4 mr-8 ml-md-2 text-h5 font-weight-black">{{
           props.title
         }}</span>
         <v-select
           style="min-width: 200px"
-          class="text-red-darken-4"
+          class="text-grey-darken-1"
           variant="outlined"
           v-model="selected"
           :items="[{ building_type: 'Show All', bt_id: 0 }, ...props.buildings]"
           item-value="bt_id"
           item-title="building_type"
-          placeholder="Building Types"
+          placeholder="Apartment Type"
         >
         </v-select>
       </div>
@@ -178,7 +178,7 @@ onUnmounted(() => {
       <Splide ref="splideRef" :options="splideOptions">
         <SplideSlide v-for="menu in rents" :key="menu.rent_id">
           <!-- :key="menu?.product_id" -->
-          <v-card class="card-wrapper" height="350" elevation="3">
+          <v-card class="card-wrapper" height="480" elevation="3">
             <!-- <router-link
               class="text-decoration-none"
               :to="`/rent/${menu.product_id}`"
@@ -186,7 +186,7 @@ onUnmounted(() => {
             <div v-if="menu?.video && getYouTubeEmbedUrl(menu.video)">
               <iframe
                 width="100%"
-                height="160"
+                height="260"
                 :src="getYouTubeEmbedUrl(menu.video)"
                 frameborder="0"
                 allowfullscreen
@@ -196,41 +196,65 @@ onUnmounted(() => {
             <v-img
               v-else
               :src="fileURL + menu?.image"
-              height="160"
+              height="260"
               class="position-relative"
               cover
             ></v-img>
             <div
+              class="position-absolute bg-transparent top-0 right-0 bg-white mt-6 mr-12 cursor-pointer"
+            >
+              <v-icon class="text-white">mdi-heart-outline</v-icon>
+            </div>
+            <div
               v-if="menu?.featured == 'Y'"
-              class="position-absolute top-0 left-0 bg-white mt-4 ml-4"
+              class="position-absolute left-0 bg-white mb-4 ml-4"
+              style="bottom: 220px"
             >
               <span
-                class="text-blue-darken-4 text-caption font-weight-bold px-2"
-                >{{ menu?.type }}</span
+                class="text-red-darken-1 text-caption font-weight-black pl-2 pr-8"
+                >{{ menu?.type }} in Batam</span
               >
             </div>
             <!-- </router-link> -->
             <div
               class="card-title d-flex flex-column justify-space-between"
-              style="height: 170px"
+              style="height: 200px"
             >
-              <p class="font-weight-bold text-subtitle-2">
+              <p class="font-weight-black text-body-2">
                 {{ menu?.rent_name }}
               </p>
-              <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
-                <span>{{ menu?.rent_parent_name }}</span> |
-                <span>{{ menu?.bedQty }} Bed</span> |
-                <span>{{ menu?.bathQty }} Bathroom</span>
+              <p class="font-weight-bold text-grey-darken-1 text-caption mt-1">
+                <!-- <span>{{ menu?.rent_parent_name }}</span> | -->
+                <span>{{ menu?.bedQty }} Beds</span> |
+                <span>{{ menu?.bathQty }} Bathrooms</span>
               </p>
-              <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
+              <!-- <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
                 <span>{{ menu?.address }}</span>
-              </p>
-              <p class="font-weight-bold text-grey text-subtitle-2 mt-1">
-                <span>{{ formatSGD(menu?.price) }}</span> (<span>{{
+              </p> -->
+              <p class="text-subtitle-2 mt-1">
+                <span class="text-red-darken-1 font-weight-black">{{
+                  formatSGD(menu?.price)
+                }}</span>
+                <span class="text-grey-darken-1"> per day</span>
+                <!-- (<span>{{
                   formatIDR(menu?.currency_symbol, menu?.price)
                 }}</span
-                >)
+                >) -->
               </p>
+              <v-btn
+                elevation="0"
+                style="
+                  border-radius: 0;
+                  height: 35px;
+                  font-size: 14px;
+                  background: #e41d5b !important;
+                  color: white !important;
+                  width: 150px;
+                "
+                class="font-weight-bold px-8"
+              >
+                View Details
+              </v-btn>
             </div>
           </v-card>
         </SplideSlide>

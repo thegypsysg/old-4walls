@@ -10,7 +10,7 @@ defineProps({
 });
 
 const splideOptions = {
-  perPage: 10,
+  perPage: 9,
   arrows: true,
   pagination: false,
   gap: "2rem",
@@ -131,9 +131,9 @@ onMounted(() => {
     </div>
   </div>
 
-  <div v-if="desktop" class="explore-section d-none d-md-block">
+  <div v-if="desktop" class="explore-section d-none d-md-block pt-14 pb-12">
     <!-- <v-container> -->
-    <div class="position-relative">
+    <div class="position-relative pt-14">
       <!-- <v-btn
         v-if="!isBeginning"
         icon
@@ -143,7 +143,7 @@ onMounted(() => {
         <span class="arrow-icon">←</span>
       </v-btn> -->
 
-      <Splide ref="splideRef" :options="splideOptions">
+      <Splide class="px-16" ref="splideRef" :options="splideOptions">
         <SplideSlide v-for="menu in menuLists" :key="menu.category_id">
           <v-card
             @click="scrollToSection(formatName(menu.property_name), false)"
@@ -172,10 +172,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.explore-section {
-  padding: 2rem;
-}
-
 .card-wrapper {
   margin: 0.5rem;
   overflow: hidden;
