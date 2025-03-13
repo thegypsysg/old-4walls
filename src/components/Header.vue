@@ -43,6 +43,9 @@ export default {
       longitude: null,
       currentRoute: this.$route.path,
       showSearch: false,
+      isZero: false,
+      cityName: null,
+      categoryName: null,
     };
   },
   components: { TrendingList },
@@ -387,6 +390,12 @@ export default {
     },
 
     changeItemSelected(city, country) {
+      if (city.property_count == 0) {
+        this.isZero = true;
+        this.cityName = city.city_name;
+        this.categoryName = this.selectedTrending.title;
+        return false;
+      }
       this.setActiveCity(city);
 
       this.setItemSelectedComplete(country);
@@ -705,7 +714,10 @@ export default {
                   size="x-small"
                 ></v-avatar>
                 <p class="text-subtitle-1 font-weight-medium">
-                  {{ data.country_name }} ({{ data.cities.length }} Properties)
+                  {{ data.country_name }} (<span class="text-blue-lighten-1">{{
+                    data.count
+                  }}</span>
+                  Properties)
                 </p>
               </div>
             </v-list-subheader>
@@ -725,7 +737,9 @@ export default {
                     :image="$fileURL + dataCity?.city_image"
                     size="x-small"
                   ></v-avatar>
-                  <p class="">{{ dataCity.city_name }}</p>
+                  <p class="">
+                    {{ dataCity.city_name }} ({{ dataCity.property_count }})
+                  </p>
                 </div>
               </v-list-item-title>
             </v-list-item>
@@ -979,7 +993,10 @@ export default {
                       size="x-small"
                     ></v-avatar>
                     <p class="text-subtitle-1 font-weight-medium">
-                      {{ data.country_name }} ({{ data.cities.length }}
+                      {{ data.country_name }} (<span
+                        class="text-blue-lighten-1"
+                        >{{ data.count }}</span
+                      >
                       Properties)
                     </p>
                   </div>
@@ -1000,7 +1017,9 @@ export default {
                         :image="$fileURL + dataCity?.city_image"
                         size="x-small"
                       ></v-avatar>
-                      <p class="">{{ dataCity.city_name }}</p>
+                      <p class="">
+                        {{ dataCity.city_name }} ({{ dataCity.property_count }})
+                      </p>
                     </div>
                   </v-list-item-title>
                 </v-list-item>
@@ -1368,6 +1387,20 @@ export default {
       </div>
     </div>
   </v-navigation-drawer>
+
+  <v-dialog v-model="isZero" persistent width="auto">
+    <v-card width="350">
+      <v-card-text class="">
+        <p class="my-4">
+          We don't have any property for {{ cityName }} on
+          {{ categoryName || "Rent" }} as of now.
+        </p>
+        <v-btn class="mb-4 w-100 bg-primary" @click="isZero = false">
+          OK
+        </v-btn>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 
   <v-dialog
     v-model="dialog2"

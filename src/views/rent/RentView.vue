@@ -11,6 +11,7 @@
     <v-container class="mx-auto px-4" style="max-width: 1200px">
       <template v-for="item in rentItems" :key="item?.rent_parent_id">
         <RentItems
+          v-if="item?.rents?.length > 0"
           :title="item?.rent_parent_name"
           :rents="item?.rents"
           :buildings="buildings"

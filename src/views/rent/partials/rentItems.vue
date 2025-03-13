@@ -116,6 +116,13 @@ const getYouTubeEmbedUrl = (videoLink) => {
   return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 };
 
+const goWhatsapp = (data) => {
+  const footerData = JSON.parse(localStorage.getItem("footerData"));
+  console.log(footerData);
+  const url = `https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=I would like to Inquiry about ${data?.rent_name}`;
+  window.location.href = url;
+};
+
 onMounted(() => {
   checkMobile();
   window.addEventListener("resize", checkMobile);
@@ -157,6 +164,7 @@ onUnmounted(() => {
         </v-select>
       </div>
       <v-btn
+        v-if="!isMobile"
         class="text-capitalize font-weight-bold"
         variant="text"
         height="40"
@@ -220,7 +228,7 @@ onUnmounted(() => {
               class="card-title d-flex flex-column justify-space-between"
               style="height: 200px"
             >
-              <p class="font-weight-black text-body-2">
+              <p class="font-weight-black text-body-2 two-lines">
                 {{ menu?.rent_name }}
               </p>
               <p class="font-weight-bold text-grey-darken-1 text-caption mt-1">
@@ -249,11 +257,12 @@ onUnmounted(() => {
                   font-size: 14px;
                   background: #e41d5b !important;
                   color: white !important;
-                  width: 150px;
+                  width: 180px;
                 "
+                @click="goWhatsapp(menu)"
                 class="font-weight-bold px-8"
               >
-                View Details
+                Check Availability
               </v-btn>
             </div>
           </v-card>
@@ -355,7 +364,7 @@ onUnmounted(() => {
 
   .card-wrapper {
     margin: 0.25rem;
-    /* width: calc(66.666% - 0.5rem); */
+    width: 100%;
   }
 
   .v-img {
@@ -369,5 +378,13 @@ onUnmounted(() => {
 .arrow-hidden {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.two-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Maksimal 2 baris */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

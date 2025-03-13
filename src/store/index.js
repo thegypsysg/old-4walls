@@ -17,6 +17,7 @@ export default (app) =>
       country: [],
       selectedPlace: "",
       activeCity: null,
+      footerData: null,
     },
     mutations: {
       setActiveTag(state, tag) {
@@ -49,6 +50,9 @@ export default (app) =>
       },
       setSelectedPlace(state, item) {
         state.selectedPlace = item;
+      },
+      setFooterData(state, item) {
+        state.footerData = item;
       },
     },
     actions: {
@@ -223,16 +227,18 @@ export default (app) =>
           const { data } = await axios.get(link);
           // console.log("Data country:", data);
 
-          let allCountry = data.data.map((country) => ({
-            ...country,
-            id: country.country_id,
-            title: country.country_name,
-            count: country.property_count,
-            oneCity: country.one_city == "Y",
-            path: "#",
-            flag: country.flag,
-            cities: [],
-          }));
+          let allCountry = data.data
+            .sort((a, b) => b.property_count - a.property_count)
+            .map((country) => ({
+              ...country,
+              id: country.country_id,
+              title: country.country_name,
+              count: country.property_count,
+              oneCity: country.one_city == "Y",
+              path: "#",
+              flag: country.flag,
+              cities: [],
+            }));
 
           commit("setCountry", allCountry);
           console.log("setCountry selesai");

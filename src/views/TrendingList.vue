@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, ref, nextTick } from "vue";
+import { onMounted, ref, nextTick, computed } from "vue";
+import { useStore } from "vuex";
 import axios from "@/util/axios";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import "@splidejs/vue-splide/css";
@@ -8,6 +9,11 @@ import { appId, fileURL } from "../main";
 defineProps({
   desktop: Boolean,
 });
+
+const store = useStore();
+
+const activeCity = computed(() => store.state.activeCity);
+const selectedPlace = computed(() => store.state.selectedPlace);
 
 const splideOptions = {
   perPage: 9,
@@ -30,6 +36,8 @@ const splideOptions = {
 const splideRef = ref(null);
 const isBeginning = ref(true);
 const isEnd = ref(false);
+const isZero = ref(false);
+const propertyName = ref(null);
 
 const menuLists = ref([]);
 
@@ -43,7 +51,12 @@ const formatName = (name) => name.toLowerCase().replace(/\s+/g, "");
 //   }
 // };
 
-function scrollToSection(sectionId, mobile) {
+function scrollToSection(sectionId, mobile, data) {
+  if (data.property_type_id != 3) {
+    isZero.value = true;
+    propertyName.value = data.property_name;
+    return false;
+  }
   const cardSection = document.getElementById(sectionId);
 
   // this.$nextTick(() => {
@@ -118,7 +131,7 @@ onMounted(() => {
       v-for="menu in menuLists"
       :key="menu.category_id"
       class="d-flex align-center ga-4 flex-column"
-      @click="scrollToSection(formatName(menu.property_name), true)"
+      @click="scrollToSection(formatName(menu.property_name), true, menu)"
     >
       <a class="d-flex flex-column align-center border-black pa-2 rounded-lg">
         <v-avatar :size="60">
@@ -126,6 +139,20 @@ onMounted(() => {
         </v-avatar>
         <p class="text-no-wrap d-flex align-center mt-2 text-caption">
           {{ menu.property_name }}
+        </p>
+        <p
+          class="text-no-wrap d-flex align-center font-weight-bold text-caption"
+        >
+          <span
+            :class="
+              menu.property_type_id == 3
+                ? 'text-blue-darken-3'
+                : 'text-red-darken-1'
+            "
+            >{{ menu.property_type_id == 3 ? "1" : "0" }}</span
+          >
+          &nbsp;
+          <span> Properties</span>
         </p>
       </a>
     </div>
@@ -146,7 +173,9 @@ onMounted(() => {
       <Splide class="px-16" ref="splideRef" :options="splideOptions">
         <SplideSlide v-for="menu in menuLists" :key="menu.category_id">
           <v-card
-            @click="scrollToSection(formatName(menu.property_name), false)"
+            @click="
+              scrollToSection(formatName(menu.property_name), false, menu)
+            "
             class="card-wrapper"
             elevation="3"
           >
@@ -159,6 +188,20 @@ onMounted(() => {
                 >{{ menu.property_name }}</span
               >
             </div>
+            <div
+              class="text-no-wrap d-flex align-center font-weight-bold text-caption"
+            >
+              <span
+                :class="
+                  menu.property_type_id == 3
+                    ? 'text-blue-darken-3'
+                    : 'text-red-darken-1'
+                "
+                >{{ menu.property_type_id == 3 ? "1" : "0" }}
+              </span>
+              &nbsp;
+              <span> Properties</span>
+            </div>
           </v-card>
         </SplideSlide>
       </Splide>
@@ -168,6 +211,20 @@ onMounted(() => {
       </v-btn> -->
     </div>
     <!-- </v-container> -->
+    <v-dialog v-model="isZero" persistent width="auto">
+      <v-card width="350">
+        <v-card-text class="">
+          <p class="my-4">
+            We don't have any {{ propertyName }} for
+            {{ selectedTrending?.title || "Rent" }} in
+            {{ activeCity?.city_name }}
+          </p>
+          <v-btn class="mb-4 w-100 bg-primary" @click="isZero = false">
+            OK
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
