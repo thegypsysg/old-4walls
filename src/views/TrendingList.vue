@@ -52,9 +52,10 @@ const formatName = (name) => name.toLowerCase().replace(/\s+/g, "");
 // };
 
 function scrollToSection(sectionId, mobile, data) {
-  if (data.property_type_id != 3) {
+  console.log(data);
+  if (data?.properties_count == 0) {
     isZero.value = true;
-    propertyName.value = data.property_name;
+    propertyName.value = data?.property_name;
     return false;
   }
   const cardSection = document.getElementById(sectionId);
@@ -131,9 +132,16 @@ onMounted(() => {
       v-for="menu in menuLists"
       :key="menu.category_id"
       class="d-flex align-center ga-4 flex-column"
-      @click="scrollToSection(formatName(menu.property_name), true, menu)"
     >
-      <a class="d-flex flex-column align-center border-black pa-2 rounded-lg">
+      <!-- <div
+        @click="scrollToSection(formatName(menu.property_name), true, menu)"
+        class="d-flex flex-column align-center border-black pa-2 rounded-lg"
+      > -->
+      <v-card
+        @click="scrollToSection(formatName(menu.property_name), false, menu)"
+        class="card-wrapper"
+        elevation="3"
+      >
         <v-avatar :size="60">
           <v-img aspect-ratio="1" cover :src="fileURL + menu.image"></v-img>
         </v-avatar>
@@ -145,16 +153,17 @@ onMounted(() => {
         >
           <span
             :class="
-              menu.property_type_id == 3
-                ? 'text-blue-darken-3'
-                : 'text-red-darken-1'
+              menu?.properties_count == 0
+                ? 'text-red-darken-1'
+                : 'text-blue-darken-3'
             "
-            >{{ menu.property_type_id == 3 ? "1" : "0" }}</span
+            >{{ menu?.properties_count }}</span
           >
           &nbsp;
           <span> Properties</span>
         </p>
-      </a>
+      </v-card>
+      <!-- </div> -->
     </div>
   </div>
 
@@ -189,16 +198,16 @@ onMounted(() => {
               >
             </div>
             <div
-              class="text-no-wrap d-flex align-center font-weight-bold text-caption"
+              class="text-no-wrap d-flex align-center font-weight-bold text-caption mt-n2"
             >
               <span
                 :class="
-                  menu.property_type_id == 3
-                    ? 'text-blue-darken-3'
-                    : 'text-red-darken-1'
+                  menu?.properties_count == 0
+                    ? 'text-red-darken-1'
+                    : 'text-blue-darken-3'
                 "
-                >{{ menu.property_type_id == 3 ? "1" : "0" }}
-              </span>
+                >{{ menu?.properties_count }}</span
+              >
               &nbsp;
               <span> Properties</span>
             </div>
@@ -211,21 +220,21 @@ onMounted(() => {
       </v-btn> -->
     </div>
     <!-- </v-container> -->
-    <v-dialog v-model="isZero" persistent width="auto">
-      <v-card width="350">
-        <v-card-text class="">
-          <p class="my-4">
-            We don't have any {{ propertyName }} for
-            {{ selectedTrending?.title || "Rent" }} in
-            {{ activeCity?.city_name }}
-          </p>
-          <v-btn class="mb-4 w-100 bg-primary" @click="isZero = false">
-            OK
-          </v-btn>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </div>
+  <v-dialog v-model="isZero" persistent width="auto">
+    <v-card width="350">
+      <v-card-text class="">
+        <p class="my-4">
+          We don't have any {{ propertyName }} for
+          {{ selectedTrending?.title || "Rent" }} in
+          {{ activeCity?.city_name }}
+        </p>
+        <v-btn class="mb-4 w-100 bg-primary" @click="isZero = false">
+          OK
+        </v-btn>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped>

@@ -32,10 +32,10 @@ const selected = ref(null);
 
 const splideOptions = computed(() => ({
   type: "slide",
-  perPage: isMobile.value ? 1.5 : 3,
+  perPage: isMobile.value ? 1 : 3,
   arrows: false,
   pagination: false,
-  gap: isMobile.value ? "0.1rem" : "0.2rem",
+  gap: isMobile.value ? "0.5rem" : "0.2rem",
   drag: true,
   snap: true,
   rewind: false,
@@ -49,7 +49,7 @@ const splideOptions = computed(() => ({
   updateOnMove: true,
   breakpoints: {
     640: {
-      perPage: 1.5,
+      perPage: 1,
       gap: "1rem",
       padding: { left: 0, right: 0 },
       focus: 0,
@@ -147,12 +147,12 @@ onUnmounted(() => {
     class="nursing-section mt-md-n8 mt-sm-2"
   >
     <div class="d-flex justify-space-between align-center mb-4">
-      <div class="d-block d-md-flex align-center">
-        <span class="ml-4 mr-8 ml-md-2 text-h5 font-weight-black">{{
+      <div class="d-flex align-center justify-space-between w-100 w-md-33">
+        <span class="ml-2 mr-0 mr-md-8 text-h6 text-md-h5 font-weight-black">{{
           props.title
         }}</span>
         <v-select
-          style="min-width: 200px"
+          style="min-width: 150px; max-width: 200px"
           class="text-grey-darken-1"
           variant="outlined"
           v-model="selected"
