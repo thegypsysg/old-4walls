@@ -27,10 +27,15 @@
 import "vue3-carousel/dist/carousel.css";
 
 import Interested from "./partials/interested";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import axios from "@/util/axios";
 import TrendingList from "../TrendingList.vue";
 import RentItems from "./partials/rentItems.vue";
+import { useStore } from "vuex";
+
+const store = useStore();
+
+const activeCity = computed(() => store.state.activeCity);
 
 const rentItems = ref([]);
 const buildings = ref([
@@ -53,13 +58,22 @@ const isSmall = computed(() => {
   return window.innerWidth < 640;
 });
 
-const getItemsData = async () => {
+watch(
+  () => store.state.activeCity?.city_id,
+  (newCityId, oldCityId) => {
+    if (newCityId !== oldCityId) {
+      getItemsData(activeCity.value); // Panggil API saat city_id berubah
+    }
+  },
+  { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
+);
+
+const getItemsData = async (city) => {
   isLoading.value = true;
   requestCount.value = 0; // Reset request count
 
   try {
     let data = await getRentTypes();
-    console.log(data);
     rentItems.value = data.sort(
       (a, b) => a.property_type_id - b.property_type_id,
     );
@@ -67,7 +81,11 @@ const getItemsData = async () => {
 
     const updatedItems = await Promise.all(
       data.map(async (item) => {
-        const rentItems = await getRentItemsByTypeId(item.property_type_id);
+        const rentItems = await getRentItemsByTypeId(
+          item.property_type_id,
+          city?.country_id,
+          city?.city_id,
+        );
         requestCount.value++;
         return {
           ...item,
@@ -83,7 +101,7 @@ const getItemsData = async () => {
     );
 
     rentItems.value = updatedItems.sort((a, b) => a.id - b.id);
-    // console.log(updatedItems);
+    console.log(rentItems.value);
   } catch (error) {
     console.error("Error fetching items data:", error);
   } finally {
@@ -118,9 +136,11 @@ const getRentTypes = async () => {
   }
 };
 
-const getRentItemsByTypeId = async (id) => {
+const getRentItemsByTypeId = async (id, countryId, cityId) => {
   try {
-    const response = await axios.get(`/list-properties-by-property-type/${id}`);
+    const response = await axios.get(
+      `/list-properties-by-property-type/${id}/${countryId}/${cityId}`,
+    );
     const data = response.data.data;
     return data.map((item) => ({
       ...item,
@@ -162,7 +182,7 @@ const getBuildingItems = () => {
 };
 
 onMounted(() => {
-  getItemsData();
+  // getItemsData(activeCity.value);
   getBuildingItems();
 });
 </script>

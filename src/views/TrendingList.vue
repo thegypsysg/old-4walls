@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, nextTick, computed } from "vue";
+import { onMounted, ref, nextTick, computed, watch } from "vue";
 import { useStore } from "vuex";
 import axios from "@/util/axios";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
@@ -93,9 +93,19 @@ const handleSlideMove = () => {
   }
 };
 
-const getMenuListData = () => {
+watch(
+  () => store.state.activeCity?.city_id,
+  (newCityId, oldCityId) => {
+    if (newCityId !== oldCityId) {
+      getMenuListData(activeCity.value); // Panggil API saat city_id berubah
+    }
+  },
+  { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
+);
+
+const getMenuListData = (city) => {
   axios
-    .get(`/list-4walls-property-types`)
+    .get(`/list-4walls-property-types/${city?.city_id}`)
     .then((response) => {
       const data = response.data.data;
       menuLists.value = data.sort(function (a, b) {
@@ -119,7 +129,7 @@ onMounted(() => {
       handleSlideMove();
     }
   });
-  getMenuListData();
+  // getMenuListData();
 });
 </script>
 
