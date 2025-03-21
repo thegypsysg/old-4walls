@@ -105,7 +105,7 @@ watch(
 
 const getMenuListData = (city) => {
   axios
-    .get(`/list-4walls-property-types/${city?.city_id}`)
+    .get(`/list-4walls-property-types/-1/${city?.city_id}`)
     .then((response) => {
       const data = response.data.data;
       menuLists.value = data.sort(function (a, b) {
