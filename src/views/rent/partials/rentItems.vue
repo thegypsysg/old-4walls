@@ -30,6 +30,41 @@ const isEnd = ref(false);
 const isMobile = ref(false);
 const selected = ref(null);
 
+const filteredRents = computed(() => {
+  const mapRents = (item) => {
+    const rateItems = item.property_rates.map((range, index) => ({
+      ...range,
+      selected: ref(index === 0), // Set selected true hanya untuk item pertama
+    }));
+
+    return {
+      ...item,
+      selectedRateSG: computed(() => {
+        const selectedRate = rateItems.find((rate) => rate.selected.value);
+        return selectedRate?.rate_sg || null;
+      }),
+      selectedRateHome: computed(() => {
+        const selectedRate = rateItems.find((rate) => rate.selected.value);
+        return selectedRate?.rate_home || null;
+      }),
+      selectedDescription: computed(() => {
+        const selectedRate = rateItems.find((rate) => rate.selected.value);
+        return selectedRate?.rate_type?.description || null;
+      }),
+      selectedVideo: ref("youtube"),
+      rateItems,
+    };
+  };
+
+  if (selected.value) {
+    return props.rents.map(mapRents);
+  } else {
+    return props.rents.map(mapRents);
+  }
+});
+
+// console.log(filteredRents.value);
+
 const splideOptions = computed(() => ({
   type: "slide",
   perPage: isMobile.value ? 1 : 3,
@@ -67,6 +102,30 @@ const splideOptions = computed(() => ({
 }));
 
 const formatName = (name) => name.toLowerCase().replace(/\s+/g, "");
+
+function handleSelectRate(menu, selectedItem) {
+  // const isAlreadySelected = selectedItem.selected.value;
+
+  // Set semua rangeItems menjadi tidak terpilih
+  menu.rateItems.forEach((item) => {
+    item.selected.value = false;
+  });
+
+  // Undone the unselect quantity here
+  selectedItem.selected.value = true;
+
+  // Jika belum dipilih sebelumnya, jadikan selected
+  /* if (!isAlreadySelected) {
+    selectedItem.selected.value = true;
+  }
+  else {
+    selectedItem.selected.value = true;
+  } */
+}
+
+const setSelectedVideo = (menu, platform) => {
+  menu.selectedVideo.value = platform;
+};
 
 const goNext = () => {
   splideRef.value?.splide?.go("+1");
@@ -116,9 +175,16 @@ const getYouTubeEmbedUrl = (videoLink) => {
   return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 };
 
+const getTikTokEmbedUrl = (videoLink) => {
+  if (!videoLink) return null;
+
+  const match = videoLink.match(/tiktok\.com\/@[\w.]+\/video\/(\d+)/);
+  return match ? `https://www.tiktok.com/embed/${match[1]}` : null;
+};
+
 const goWhatsapp = (data) => {
   const footerData = JSON.parse(localStorage.getItem("footerData"));
-  console.log(footerData);
+  // console.log(footerData);
   const url = `https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=I would like to Inquiry about ${data?.rent_name}`;
   window.location.href = url;
 };
@@ -184,18 +250,60 @@ onUnmounted(() => {
       </v-btn>
 
       <Splide ref="splideRef" :options="splideOptions">
-        <SplideSlide v-for="menu in rents" :key="menu.rent_id">
+        <SplideSlide v-for="menu in filteredRents" :key="menu.rent_id">
           <!-- :key="menu?.product_id" -->
-          <v-card class="card-wrapper" height="480" elevation="3">
+          <div class="d-flex align-center justify-space-between px-4">
+            <v-btn
+              variant="text"
+              class="bg-grey-darken-4"
+              @click="setSelectedVideo(menu, 'youtube')"
+            >
+              Youtube
+            </v-btn>
+            <v-btn
+              variant="text"
+              class="bg-blue-darken-4"
+              @click="setSelectedVideo(menu, 'tiktok')"
+            >
+              Tik Tok
+            </v-btn>
+          </div>
+          <v-card
+            class="card-wrapper"
+            :height="menu?.selectedVideo.value == 'youtube' ? 500 : 800"
+            elevation="3"
+          >
             <!-- <router-link
               class="text-decoration-none"
               :to="`/rent/${menu.product_id}`"
             > -->
-            <div v-if="menu?.video && getYouTubeEmbedUrl(menu.video)">
+            <div
+              v-if="
+                menu?.selectedVideo.value == 'youtube' &&
+                menu?.video &&
+                getYouTubeEmbedUrl(menu.video)
+              "
+            >
               <iframe
                 width="100%"
                 height="260"
                 :src="getYouTubeEmbedUrl(menu.video)"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </div>
+
+            <div
+              v-else-if="
+                menu?.selectedVideo.value == 'tiktok' &&
+                menu?.tik_tok_video_link &&
+                getTikTokEmbedUrl(menu.tik_tok_video_link)
+              "
+            >
+              <iframe
+                width="100%"
+                height="560"
+                :src="getTikTokEmbedUrl(menu.tik_tok_video_link)"
                 frameborder="0"
                 allowfullscreen
               ></iframe>
@@ -216,7 +324,7 @@ onUnmounted(() => {
             <div
               v-if="menu?.featured == 'Y'"
               class="position-absolute left-0 bg-white mb-4 ml-4"
-              style="bottom: 220px"
+              style="bottom: 240px"
             >
               <span
                 class="text-red-darken-1 text-caption font-weight-black pl-2 pr-8"
@@ -224,10 +332,7 @@ onUnmounted(() => {
               >
             </div>
             <!-- </router-link> -->
-            <div
-              class="card-title d-flex flex-column justify-space-between"
-              style="height: 200px"
-            >
+            <div class="card-title d-flex flex-column justify-space-between">
               <p class="font-weight-black text-body-2 two-lines">
                 {{ menu?.rent_name }}
               </p>
@@ -239,31 +344,59 @@ onUnmounted(() => {
               <!-- <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
                 <span>{{ menu?.address }}</span>
               </p> -->
-              <p class="text-subtitle-2 mt-1">
-                <span class="text-red-darken-1 font-weight-black">{{
-                  formatSGD(menu?.price)
-                }}</span>
-                <span class="text-grey-darken-1"> per day</span>
-                <!-- (<span>{{
+              <div class="d-flex align-center ga-1 my-2">
+                <template v-for="item in menu?.rateItems" :key="item.pr_id">
+                  <v-btn
+                    size="xs"
+                    color="black"
+                    class="text-caption pa-1 rounded-lg"
+                    @click="handleSelectRate(menu, item)"
+                    :variant="item.selected.value ? 'flat' : 'outlined'"
+                    >{{ item?.rate_type?.rate_name }}</v-btn
+                  >
+                  <!-- @click="item.selected.value = !item.selected.value" -->
+                </template>
+              </div>
+              <p
+                v-if="menu?.selectedDescription.value"
+                class="text-caption font-weight-bold"
+              >
+                ({{ menu?.selectedDescription.value }})
+              </p>
+              <div class="d-flex align-center justify-space-between my-2">
+                <p class="text-subtitle-2 mt-1">
+                  <span
+                    v-if="menu?.selectedRateSG.value"
+                    class="text-red-darken-1 font-weight-black"
+                    >S$ {{ menu?.selectedRateSG.value }}</span
+                  >
+                  <!-- (<span>{{
                   formatIDR(menu?.currency_symbol, menu?.price)
                 }}</span
                 >) -->
-              </p>
-              <v-btn
-                elevation="0"
-                style="
-                  border-radius: 0;
-                  height: 35px;
-                  font-size: 14px;
-                  background: #e41d5b !important;
-                  color: white !important;
-                  width: 180px;
-                "
-                @click="goWhatsapp(menu)"
-                class="font-weight-bold px-8"
+                </p>
+                <v-btn
+                  elevation="0"
+                  style="
+                    border-radius: 0;
+                    height: 35px;
+                    font-size: 14px;
+                    background: #e41d5b !important;
+                    color: white !important;
+                    width: 180px;
+                  "
+                  @click="goWhatsapp(menu)"
+                  class="font-weight-bold px-8"
+                >
+                  Check Availability
+                </v-btn>
+              </div>
+              <p
+                v-if="menu?.selectedRateHome.value"
+                class="text-caption font-weight-bold"
               >
-                Check Availability
-              </v-btn>
+                (IDR {{ menu?.selectedRateHome.value }})
+              </p>
             </div>
           </v-card>
         </SplideSlide>
