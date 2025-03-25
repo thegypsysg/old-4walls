@@ -328,7 +328,7 @@ onUnmounted(() => {
             >
               <span
                 class="text-red-darken-1 text-caption font-weight-black pl-2 pr-8"
-                >{{ menu?.type }} in {{ menu?.city }}</span
+                >Condominium {{ menu?.type }} in {{ menu?.city }}</span
               >
             </div>
             <!-- </router-link> -->
@@ -336,11 +336,16 @@ onUnmounted(() => {
               <p class="font-weight-black text-body-2 two-lines">
                 {{ menu?.rent_name }}
               </p>
-              <p class="font-weight-bold text-grey-darken-1 text-caption mt-1">
-                <!-- <span>{{ menu?.rent_parent_name }}</span> | -->
-                <span>{{ menu?.bedQty }} Beds</span> |
-                <span>{{ menu?.bathQty }} Bathrooms</span>
-              </p>
+              <div class="d-flex align-center justify-space-between">
+                <p
+                  class="font-weight-bold text-grey-darken-1 text-caption mt-1"
+                >
+                  <!-- <span>{{ menu?.rent_parent_name }}</span> | -->
+                  <span>{{ menu?.bedQty }} Beds</span> |
+                  <span>{{ menu?.bathQty }} Bathrooms</span>
+                </p>
+                <p class="font-weight-black text-body-2">(Pollux Tower 1)</p>
+              </div>
               <!-- <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
                 <span>{{ menu?.address }}</span>
               </p> -->
