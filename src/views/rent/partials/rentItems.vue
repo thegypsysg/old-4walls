@@ -328,7 +328,8 @@ onUnmounted(() => {
             >
               <span
                 class="text-red-darken-1 text-caption font-weight-black pl-2 pr-8"
-                >Condominium {{ menu?.type }} in {{ menu?.city }}</span
+                >{{ menu?.building_type }} {{ menu?.type }} in
+                {{ menu?.city }}</span
               >
             </div>
             <!-- </router-link> -->
@@ -344,7 +345,15 @@ onUnmounted(() => {
                   <span>{{ menu?.bedQty }} Beds</span> |
                   <span>{{ menu?.bathQty }} Bathrooms</span>
                 </p>
-                <p class="font-weight-black text-body-2">(Pollux Tower 1)</p>
+                <p class="font-weight-black text-body-2">
+                  <span
+                    v-if="
+                      menu?.display_construction == 'Y' &&
+                      menu?.construction_category_name
+                    "
+                    >({{ menu?.construction_category_name }})</span
+                  >
+                </p>
               </div>
               <!-- <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
                 <span>{{ menu?.address }}</span>
