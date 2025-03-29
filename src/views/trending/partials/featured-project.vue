@@ -160,10 +160,6 @@ const filteredData = ref([]);
 
 const activeCity = computed(() => store.state.activeCity);
 
-watchEffect(() => {
-  getList();
-});
-
 function getList() {
   listData.value = [];
   filteredData.value = [];
@@ -189,6 +185,10 @@ function getList() {
       throw error;
     });
 }
+
+watchEffect(() => {
+  getList();
+});
 
 function filterList(year) {
   selectedYear.value = year;

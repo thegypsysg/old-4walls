@@ -51,10 +51,6 @@ const cities = ref([]);
 
 const activeCity = computed(() => store.state.activeCity);
 
-watch(activeCity, (value) => {
-  getCities(value.city_id);
-});
-
 const getCities = async (cityId) => {
   loader.value = true;
 
@@ -76,6 +72,10 @@ const getCities = async (cityId) => {
     loader.value = false;
   }
 };
+
+watch(activeCity, (value) => {
+  getCities(value.city_id);
+});
 
 onMounted(() => {
   getCities(activeCity.value?.city_id);

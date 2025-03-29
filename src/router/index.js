@@ -8,6 +8,7 @@ import CreatePasswordForm from "@/views/CreatePasswordForm.vue";
 import SocialLogin from "@/views/SocialLoginForm.vue";
 import DiscoverLocation from "@/views/city-properties/indexView.vue";
 import Trending from "@/views/trending/indexView.vue";
+import Buy from "@/views/buy/indexView.vue";
 import Rent from "@/views/rent/RentView.vue";
 import BuySegment from "@/views/buy_segment/indexView.vue";
 import BuyDetail from "@/views/buy_detail/indexView.vue";
@@ -97,9 +98,17 @@ const routes = [
     component: DiscoverLocation,
   },
   {
-    path: "/buy",
+    path: "/buy1",
     name: "Trending-buy",
     component: Trending,
+    meta: {
+      locationSelection: true,
+    },
+  },
+  {
+    path: "/buy",
+    name: "Trending-buy",
+    component: Buy,
     meta: {
       locationSelection: true,
     },

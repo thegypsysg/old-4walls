@@ -104,10 +104,6 @@ const buildingTypes = ref([]);
 
 const activeCity = computed(() => store.state.activeCity);
 
-watchEffect(() => {
-  getConstructionByCity();
-});
-
 onMounted(() => {
   getConstructionByCity();
   getBuildingType();
@@ -147,6 +143,10 @@ function getConstructionByCity() {
     });
   // }
 }
+
+watchEffect(() => {
+  getConstructionByCity();
+});
 
 function getBuildingType() {
   axios.get(`/list-four-walls-building-types`).then((response) => {

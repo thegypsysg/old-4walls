@@ -1,21 +1,7 @@
 <template>
   <div class="w-100">
-    <div class="d-flex gap-2 justify-center ga-3 mt-12">
-      <span class="mdi mdi-office-building-outline"></span>
-      <span>FEATURED PROJECT</span>
-    </div>
-    <div class="featured-title text-h4 text-md-h3 text-center mt-6">
-      EXPLORE NEW & UPCOMING PROJECTS IN
-      {{
-        activeCity?.city_name
-          ? activeCity?.city_name.toUpperCase()
-          : activeCity?.country_name.toUpperCase()
-      }}
-    </div>
-
-    <div class="featured-sub-title text-center text-grey-darken-1 mt-6">
-      READY TO INVEST IN OUR PORTFOLIO OF NEW PROJECTS FOR INVESTMENT OR
-      RESIDENTIAL
+    <div class="featured-title text-h5 text-md-h4 font-weight-black mb-4">
+      New & Upcoming Orojects
     </div>
 
     <div class="mx-5 d-flex ga-5 mt-6 mb-3">
@@ -99,12 +85,12 @@
                     {{ data?.partner_name }}
                   </div>
                 </div>
-                <div class="font-weight-bold text-body-1 text-left my-2">
+                <!-- <div class="font-weight-bold text-body-1 text-left my-2">
                   {{ data?.project_header }}
                 </div>
                 <div class="text-body-2 font-weight-light text-left">
                   {{ data?.project_description }}
-                </div>
+                </div> -->
               </div>
             </v-container>
           </v-responsive>

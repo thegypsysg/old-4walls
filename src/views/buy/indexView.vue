@@ -5,10 +5,20 @@
   </div>
   <div
     id="trending-container"
-    :style="isSmall ? 'margin-top: 250px' : ''"
-    style="position: relative; z-index: 2; background-color: #fff"
+    style="
+      min-height: 100vh;
+      position: relative;
+      z-index: 2;
+      background-color: #fff;
+    "
   >
+    <div class="mx-auto px-10 w-100">
+      <FeaturedProject />
+    </div>
+
     <v-container class="mx-auto px-4" style="max-width: 1200px">
+      <FeaturedMove />
+      <Interested class="mt-10 mb-16" />
       <template v-for="item in rentItems" :key="item?.rent_parent_id">
         <RentItems
           v-if="item?.rents?.length > 0"
@@ -17,8 +27,16 @@
           :buildings="buildings"
         />
       </template>
-      <Interested class="mt-10 mb-16" />
+      <!-- <Portfolio class="mt-10" /> -->
     </v-container>
+
+    <!-- <v-container class="mx-auto px-4" style="max-width: 1400px">
+      <ForSale />
+    </v-container> -->
+
+    <!-- <v-container class="mx-auto px-4 medium:px-16" style="max-width: 1200px">
+      <Guide class="mt-10" />
+    </v-container> -->
     <Footer />
   </div>
 </template>
@@ -26,20 +44,18 @@
 <script setup>
 import "vue3-carousel/dist/carousel.css";
 
-import Interested from "./partials/interested";
-import { onMounted, ref, computed, watch } from "vue";
-import axios from "@/util/axios";
 import TrendingList from "../TrendingList.vue";
+import FeaturedProject from "./partials/featured-project";
+import FeaturedMove from "./partials/featured-move";
+import Interested from "./partials/interested";
 import RentItems from "./partials/rentItems.vue";
+import { computed, ref, watch } from "vue";
+import axios from "@/util/axios";
 import { useStore } from "vuex";
 
 const store = useStore();
 
-const activeCity = computed(() => store.state.activeCity);
-
 const rentItems = ref([]);
-const buildings = ref();
-const loader = ref(true);
 const isLoading = ref(false);
 const requestCount = ref(0);
 const errorMessage = ref("");
@@ -48,6 +64,8 @@ const isError = ref(false);
 const isSmall = computed(() => {
   return window.innerWidth < 640;
 });
+
+const activeCity = computed(() => store.state.activeCity);
 
 const getItemsData = async (city) => {
   isLoading.value = true;
@@ -153,29 +171,6 @@ watch(
   },
   { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
 );
-
-const getBuildingItems = () => {
-  loader.value = true;
-  axios
-    .get(`/list-four-walls-building-types`)
-    .then((response) => {
-      const data = response.data.data;
-      buildings.value = data;
-    })
-    .catch((error) => {
-      // eslint-disable-next-line
-
-      throw error;
-    })
-    .finally(() => {
-      loader.value = false;
-    });
-};
-
-onMounted(() => {
-  // getItemsData(activeCity.value);
-  getBuildingItems();
-});
 </script>
 
 <style scoped>
@@ -203,5 +198,15 @@ onMounted(() => {
   font-family: "Satisfy", cursive;
   font-weight: 400;
   font-style: normal;
+}
+
+#trending-container {
+  margin-top: 105px;
+}
+
+@media (max-width: 959px) {
+  #trending-container {
+    margin-top: 320px;
+  }
 }
 </style>

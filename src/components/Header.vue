@@ -415,6 +415,7 @@ export default {
             .sort((a, b) => a.category_id < b.category_id)
             .map((item) => ({
               ...item,
+              id: item.category_id,
               icon: item.icon_image,
               title: item.category_name,
               to: item.link_name.includes("asdf")

@@ -93,19 +93,15 @@ const handleSlideMove = () => {
   }
 };
 
-watch(
-  () => store.state.activeCity?.city_id,
-  (newCityId, oldCityId) => {
-    if (newCityId !== oldCityId) {
-      getMenuListData(activeCity.value); // Panggil API saat city_id berubah
-    }
-  },
-  { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
-);
+const selectedTrending = computed(() => store.state.selectedTrending);
 
-const getMenuListData = (city) => {
+console.log("SELECTED CATEGORY", selectedTrending.value);
+
+const getMenuListData = (cat, city) => {
   axios
-    .get(`/list-4walls-property-types/-1/${city?.city_id}`)
+    .get(
+      `/list-4walls-property-types/${cat?.id ? cat.id : "-1"}/${city?.city_id}`,
+    )
     .then((response) => {
       const data = response.data.data;
       menuLists.value = data.sort(function (a, b) {
@@ -120,6 +116,26 @@ const getMenuListData = (city) => {
       throw error;
     });
 };
+
+watch(
+  () => store.state.activeCity?.city_id,
+  (newCityId, oldCityId) => {
+    if (newCityId !== oldCityId) {
+      getMenuListData(selectedTrending.value, activeCity.value); // Panggil API saat city_id berubah
+    }
+  },
+  { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
+);
+
+watch(
+  () => store.state.selectedTrending?.id,
+  (newCatId, oldCatId) => {
+    if (newCatId !== oldCatId) {
+      getMenuListData(selectedTrending.value, activeCity.value); // Panggil API saat city_id berubah
+    }
+  },
+  { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
+);
 
 onMounted(() => {
   nextTick(() => {

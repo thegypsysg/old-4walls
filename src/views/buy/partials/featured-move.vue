@@ -1,20 +1,12 @@
 <template>
   <div>
-    <div class="d-flex gap-2 justify-center ga-3 mt-12">
-      <span class="mdi mdi-office-building-outline"></span>
-      <span>FEATURED MOVE-In PROJECTS</span>
-    </div>
-    <div class="featured-title text-h4 text-md-h3 text-center mt-6">
+    <div class="featured-title text-h5 text-md-h4 mb-6">
       READY TO MOVE IN PROJECTS IN
       {{
         activeCity?.city_name
           ? activeCity?.city_name.toUpperCase()
           : activeCity?.country_name.toUpperCase()
       }}
-    </div>
-
-    <div class="featured-sub-title text-center text-grey-darken-1 mt-6">
-      CANT WAIT ? EAGER TO BY A PROPERTI IMMEDIATELY
     </div>
 
     <div class="mx-5 d-flex flex-wrap ga-5 mt-6">
@@ -53,7 +45,7 @@
                   <div class="font-weight-bold text-body-1">
                     {{ data.name }}
                   </div>
-                  <div class="d-flex ga-2 justify-space-between">
+                  <!-- <div class="d-flex ga-2 justify-space-between">
                     <div class="text-orange">{{ data.price }}</div>
                     <div class="d-flex ga-2" style="color: #636363">
                       <div class="d-flex ga-3">
@@ -75,7 +67,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </v-container>
             </v-hover>
@@ -83,12 +75,12 @@
         </template>
       </transition-group>
     </v-row>
-    <div class="w-100 d-flex justify-center mt-6">
+    <!-- <div class="w-100 d-flex justify-center mt-6">
       <v-btn class="bg-black">
         View More
         <v-icon right class="ml-4">mdi-plus</v-icon>
       </v-btn>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -11,7 +11,7 @@ export default (app) =>
       itemSelectedComplete: null,
       itemSelected2: "---Select City---",
       itemSelected2Complete: null,
-      selectedTrending: "",
+      selectedTrending: null,
       latitude: "",
       longitude: "",
       country: [],
