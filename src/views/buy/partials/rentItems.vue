@@ -349,9 +349,9 @@ onUnmounted(() => {
                   <span
                     v-if="
                       menu?.display_construction == 'Y' &&
-                      menu?.construction_category_name
+                      menu?.construction_name
                     "
-                    >({{ menu?.construction_category_name }})</span
+                    >({{ menu?.construction_name }})</span
                   >
                 </p>
               </div>
@@ -384,6 +384,16 @@ onUnmounted(() => {
                     class="text-red-darken-1 font-weight-black"
                     >S$ {{ menu?.selectedRateSG.value }}</span
                   >
+                  <span
+                    v-else-if="
+                      !menu?.selectedRateSG.value &&
+                      menu?.selectedRateHome.value
+                    "
+                    class="text-red-darken-1 font-weight-black"
+                    >{{ menu?.currency_symbol }}
+                    {{ menu?.selectedRateHome.value }}</span
+                  >
+
                   <!-- (<span>{{
                   formatIDR(menu?.currency_symbol, menu?.price)
                 }}</span
@@ -406,10 +416,12 @@ onUnmounted(() => {
                 </v-btn>
               </div>
               <p
-                v-if="menu?.selectedRateHome.value"
+                v-if="
+                  menu?.selectedRateHome.value && menu?.selectedRateSG.value
+                "
                 class="text-caption font-weight-bold"
               >
-                (IDR {{ menu?.selectedRateHome.value }})
+                ({{ menu?.currency_symbol }} {{ menu?.selectedRateHome.value }})
               </p>
             </div>
           </v-card>

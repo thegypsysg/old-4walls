@@ -36,6 +36,7 @@ import { useStore } from "vuex";
 const store = useStore();
 
 const activeCity = computed(() => store.state.activeCity);
+const selectedTrending = computed(() => store.state.selectedTrending);
 
 const rentItems = ref([]);
 const buildings = ref();
@@ -49,12 +50,12 @@ const isSmall = computed(() => {
   return window.innerWidth < 640;
 });
 
-const getItemsData = async (city) => {
+const getItemsData = async (cat, city) => {
   isLoading.value = true;
   requestCount.value = 0; // Reset request count
 
   try {
-    let data = await getRentTypes();
+    let data = await getRentTypes(cat, city);
     rentItems.value = data.sort(
       (a, b) => a.property_type_id - b.property_type_id,
     );
@@ -90,10 +91,12 @@ const getItemsData = async (city) => {
   }
 };
 
-const getRentTypes = async () => {
+const getRentTypes = async (cat, city) => {
   isLoading.value = true;
   try {
-    const response = await axios.get("/list-4walls-property-types");
+    const response = await axios.get(
+      `/list-4walls-property-types/1/${city?.city_id}`,
+    );
     const data = response.data.data;
 
     return data
@@ -148,7 +151,17 @@ watch(
   () => store.state.activeCity?.city_id,
   (newCityId, oldCityId) => {
     if (newCityId !== oldCityId) {
-      getItemsData(activeCity.value); // Panggil API saat city_id berubah
+      getItemsData(selectedTrending.value, activeCity.value); // Panggil API saat city_id berubah
+    }
+  },
+  { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
+);
+
+watch(
+  () => store.state.selectedTrending?.id,
+  (newCatId, oldCatId) => {
+    if (newCatId !== oldCatId) {
+      getItemsData(selectedTrending.value, activeCity.value); // Panggil API saat city_id berubah
     }
   },
   { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat

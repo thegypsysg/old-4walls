@@ -5,10 +5,13 @@ import axios from "@/util/axios";
 import { Splide, SplideSlide } from "@splidejs/vue-splide";
 import "@splidejs/vue-splide/css";
 import { appId, fileURL } from "../main";
+import { useRoute } from "vue-router";
 
 defineProps({
   desktop: Boolean,
 });
+
+const route = useRoute();
 
 const store = useStore();
 
@@ -99,9 +102,7 @@ console.log("SELECTED CATEGORY", selectedTrending.value);
 
 const getMenuListData = (cat, city) => {
   axios
-    .get(
-      `/list-4walls-property-types/${cat?.id ? cat.id : "-1"}/${city?.city_id}`,
-    )
+    .get(`/list-4walls-property-types/${cat}/${city?.city_id}`)
     .then((response) => {
       const data = response.data.data;
       menuLists.value = data.sort(function (a, b) {
@@ -121,7 +122,16 @@ watch(
   () => store.state.activeCity?.city_id,
   (newCityId, oldCityId) => {
     if (newCityId !== oldCityId) {
-      getMenuListData(selectedTrending.value, activeCity.value); // Panggil API saat city_id berubah
+      getMenuListData(
+        selectedTrending.value
+          ? selectedTrending.value.id
+          : route.path == "/rent"
+            ? "1"
+            : route.path == "/buy"
+              ? "2"
+              : "-1",
+        activeCity.value,
+      ); // Panggil API saat city_id berubah
     }
   },
   { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
@@ -131,7 +141,16 @@ watch(
   () => store.state.selectedTrending?.id,
   (newCatId, oldCatId) => {
     if (newCatId !== oldCatId) {
-      getMenuListData(selectedTrending.value, activeCity.value); // Panggil API saat city_id berubah
+      getMenuListData(
+        selectedTrending.value
+          ? selectedTrending.value.id
+          : route.path == "rent"
+            ? "1"
+            : route.path == "buy"
+              ? "2"
+              : "-1",
+        activeCity.value,
+      ); // Panggil API saat city_id berubah
     }
   },
   { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
