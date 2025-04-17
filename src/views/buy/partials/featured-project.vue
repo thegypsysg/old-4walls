@@ -1,10 +1,16 @@
 <template>
   <div class="w-100">
-    <div class="featured-title text-h5 text-md-h4 font-weight-black mb-4">
-      New & Upcoming Orojects
+    <div class="featured-title text-h5 text-md-h3 font-weight-black mb-4">
+      New & Upcoming Projects
     </div>
 
-    <div class="mx-5 d-flex ga-5 mt-6 mb-3">
+    <div
+      @click="resetList"
+      class="mx-5 text-blue-darken-4 font-weight-bold mt-6 cursor-pointer"
+    >
+      Clear
+    </div>
+    <div class="mx-5 d-flex ga-5 mt-2 mb-3">
       <v-btn
         @click="() => filterList('2025')"
         class="text-red-darken-2"
@@ -128,11 +134,13 @@ const breakpoints = ref({
   768: {
     itemsToShow: 2,
     snapAlign: "left",
+    wrapAround: true,
   },
   // 700px and up
   1024: {
     itemsToShow: 3,
     snapAlign: "left",
+    wrapAround: true,
   },
 });
 
@@ -181,6 +189,11 @@ function filterList(year) {
   filteredData.value = listData.value.filter(
     (item) => item.completion_year === year,
   );
+}
+
+function resetList() {
+  selectedYear.value = null;
+  filteredData.value = listData.value;
 }
 
 function goToDetail(data) {

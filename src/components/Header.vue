@@ -45,6 +45,8 @@ export default {
       showSearch: false,
       isZero: false,
       cityName: null,
+      isNotLive: false,
+      liveName: null,
       categoryName: null,
     };
   },
@@ -403,8 +405,14 @@ export default {
     },
 
     goToPath(data) {
-      this.setSelectedTrending(data);
-      this.$router.push(data.to);
+      console.log(data);
+      if (data.id == 1 || data.id == 2) {
+        this.setSelectedTrending(data);
+        this.$router.push(data.to);
+      } else {
+        this.isNotLive = true;
+        this.liveName = data.category_name;
+      }
     },
     getTrendings() {
       axios
@@ -1388,6 +1396,20 @@ export default {
       </div>
     </div>
   </v-navigation-drawer>
+
+  <v-dialog v-model="isNotLive" persistent width="auto">
+    <v-card width="350">
+      <v-card-text class="">
+        <p class="my-4">
+          <span class="text-blue-lighten-1">{{ liveName }}</span> is not Live
+          now pls come back later.
+        </p>
+        <v-btn class="mb-4 w-100 bg-primary" @click="isNotLive = false">
+          OK
+        </v-btn>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 
   <v-dialog v-model="isZero" persistent width="auto">
     <v-card width="350">

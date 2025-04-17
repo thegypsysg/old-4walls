@@ -16,7 +16,7 @@
       <FeaturedProject />
     </div>
 
-    <v-container class="mx-auto px-4" style="max-width: 1200px">
+    <v-container class="mx-auto px-6" style="max-width: 1200px">
       <FeaturedMove />
       <Interested class="mt-10 mb-16" />
       <template v-for="item in rentItems" :key="item?.rent_parent_id">
