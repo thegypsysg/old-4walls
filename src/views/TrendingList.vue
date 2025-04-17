@@ -56,6 +56,7 @@ const formatName = (name) => name.toLowerCase().replace(/\s+/g, "");
 
 function scrollToSection(sectionId, mobile, data) {
   console.log(data);
+  store.commit("setSelectedCategory", data);
   if (data?.properties_count == 0) {
     isZero.value = true;
     propertyName.value = data?.property_name;
@@ -97,8 +98,6 @@ const handleSlideMove = () => {
 };
 
 const selectedTrending = computed(() => store.state.selectedTrending);
-
-console.log("SELECTED CATEGORY", selectedTrending.value);
 
 const getMenuListData = (cat, city) => {
   axios

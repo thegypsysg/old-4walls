@@ -243,7 +243,7 @@ const fetchItemsForPortfolios = async () => {
       return axios
         .get(
           activeCity.value?.city_id
-            ? `/list-properties-by-property-type/${sale.id}/${activeCity.value?.country_id ? activeCity.value?.country_id : null}/${activeCity.value?.city_id ? activeCity.value?.city_id : null}`
+            ? `/list-properties-by-property-type/${sale.id}/${activeCity.value?.country_id ? activeCity.value?.country_id : null}/${activeCity.value?.city_id ? activeCity.value?.city_id : null}/2`
             : `/list-properties-by-property-type/${sale.id}/${activeCity.value?.country_id ? activeCity.value?.country_id : null}`,
         )
         .then((response) => {

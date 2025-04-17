@@ -8,8 +8,8 @@
     :style="isSmall ? 'margin-top: 250px' : ''"
     style="position: relative; z-index: 2; background-color: #fff"
   >
-    <v-container class="mx-auto px-4" style="max-width: 1200px">
-      <template v-for="item in rentItems" :key="item?.rent_parent_id">
+    <v-container class="mx-auto px-4">
+      <template v-for="item in filteredRentItems" :key="item?.rent_parent_id">
         <RentItems
           v-if="item?.rents?.length > 0"
           :title="item?.rent_parent_name"
@@ -37,8 +37,10 @@ const store = useStore();
 
 const activeCity = computed(() => store.state.activeCity);
 const selectedTrending = computed(() => store.state.selectedTrending);
+const selectedCategory = computed(() => store.state.selectedCategory);
 
 const rentItems = ref([]);
+const filteredRentItems = ref([]);
 const buildings = ref();
 const loader = ref(true);
 const isLoading = ref(false);
@@ -123,7 +125,7 @@ const getRentTypes = async (cat, city) => {
 const getRentItemsByTypeId = async (id, countryId, cityId) => {
   try {
     const response = await axios.get(
-      `/list-properties-by-property-type/${id}/${countryId}/${cityId}`,
+      `/list-properties-by-property-type/${id}/${countryId}/${cityId}/1`,
     );
     const data = response.data.data;
     return data.map((item) => ({
@@ -165,6 +167,22 @@ watch(
     }
   },
   { immediate: true }, // Agar dipanggil saat komponen pertama kali dimuat
+);
+
+watch(
+  [rentItems, () => store.state.selectedCategory?.property_type_id],
+  ([newRentItems, selectedCatId]) => {
+    if (!newRentItems.length) return;
+
+    if (isSmall.value) {
+      filteredRentItems.value = newRentItems.filter(
+        (item) => item.property_type_id === selectedCatId,
+      );
+    } else {
+      filteredRentItems.value = newRentItems;
+    }
+  },
+  { immediate: true },
 );
 
 const getBuildingItems = () => {

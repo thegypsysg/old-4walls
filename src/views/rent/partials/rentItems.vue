@@ -213,13 +213,19 @@ onUnmounted(() => {
     class="nursing-section mt-md-n8 mt-sm-2"
   >
     <div class="d-flex justify-space-between align-center mb-4">
-      <div class="d-flex align-center justify-space-between w-100 w-md-33">
-        <span class="ml-2 mr-0 mr-md-8 text-h6 text-md-h5 font-weight-black">{{
-          props.title
-        }}</span>
+      <div class="d-md-flex align-center justify-space-between w-100 w-md-50">
+        <div
+          class="d-flex ml-2 mr-0 mr-md-8 text-h6 text-md-h5 font-weight-black"
+        >
+          <span class="mr-2">{{ props.title }}</span>
+          <p>
+            (
+            <span class="text-blue-darken-4">{{ filteredRents.length }}</span>
+            Properties )
+          </p>
+        </div>
         <v-select
           style="min-width: 150px; max-width: 200px"
-          class="text-grey-darken-1"
           variant="outlined"
           v-model="selected"
           :items="[{ building_type: 'Show All', bt_id: 0 }, ...props.buildings]"
@@ -249,7 +255,7 @@ onUnmounted(() => {
         <span class="arrow-icon">←</span>
       </v-btn>
 
-      <Splide ref="splideRef" :options="splideOptions">
+      <Splide v-if="!isMobile" ref="splideRef" :options="splideOptions">
         <SplideSlide v-for="menu in filteredRents" :key="menu.rent_id">
           <!-- :key="menu?.product_id" -->
           <div class="d-flex align-center justify-space-between px-4">
@@ -316,11 +322,11 @@ onUnmounted(() => {
               class="position-relative"
               cover
             ></v-img>
-            <div
+            <!-- <div
               class="position-absolute bg-transparent top-0 right-0 bg-white mt-6 mr-12 cursor-pointer"
             >
               <v-icon class="text-white">mdi-heart-outline</v-icon>
-            </div>
+            </div> -->
             <div
               v-if="menu?.featured == 'Y'"
               class="position-absolute left-0 bg-white mb-4 ml-4"
@@ -351,7 +357,10 @@ onUnmounted(() => {
                       menu?.display_construction == 'Y' &&
                       menu?.construction_name
                     "
-                    >({{ menu?.construction_name }})</span
+                    >(<span class="text-blue-darken-4">{{
+                      menu?.construction_name
+                    }}</span
+                    >)</span
                   >
                 </p>
               </div>
@@ -377,7 +386,7 @@ onUnmounted(() => {
               >
                 ({{ menu?.selectedDescription.value }})
               </p>
-              <div class="d-flex align-center justify-space-between my-2">
+              <div class="d-flex align-center ga-10">
                 <p class="text-subtitle-2 mt-1">
                   <span
                     v-if="menu?.selectedRateSG.value"
@@ -396,9 +405,20 @@ onUnmounted(() => {
 
                   <!-- (<span>{{
                   formatIDR(menu?.currency_symbol, menu?.price)
-                }}</span
-                >) -->
+                  }}</span
+                  >) -->
                 </p>
+                <p
+                  v-if="
+                    menu?.selectedRateHome.value && menu?.selectedRateSG.value
+                  "
+                  class="text-caption font-weight-bold"
+                >
+                  ({{ menu?.currency_symbol }}
+                  {{ menu?.selectedRateHome.value }})
+                </p>
+              </div>
+              <div class="d-flex align-center justify-space-between my-2">
                 <v-btn
                   elevation="0"
                   style="
@@ -414,19 +434,214 @@ onUnmounted(() => {
                 >
                   Check Availability
                 </v-btn>
+                <v-btn
+                  elevation="2"
+                  rounded
+                  class="font-weight-bold px-8 rounded-full"
+                >
+                  <v-icon class="text-pink">mdi-heart-outline</v-icon>
+                </v-btn>
               </div>
-              <p
-                v-if="
-                  menu?.selectedRateHome.value && menu?.selectedRateSG.value
-                "
-                class="text-caption font-weight-bold"
-              >
-                ({{ menu?.currency_symbol }} {{ menu?.selectedRateHome.value }})
-              </p>
             </div>
           </v-card>
         </SplideSlide>
       </Splide>
+      <template v-else>
+        <div
+          class="pb-8 pt-4"
+          :class="{ 'border-b-md': index != filteredRents.length - 1 }"
+          v-for="(menu, index) in filteredRents"
+          :key="menu.rent_id"
+        >
+          <!-- :key="menu?.product_id" -->
+          <div class="d-flex align-center justify-space-between px-4">
+            <v-btn
+              variant="text"
+              class="bg-grey-darken-4"
+              @click="setSelectedVideo(menu, 'youtube')"
+            >
+              Youtube
+            </v-btn>
+            <v-btn
+              variant="text"
+              class="bg-blue-darken-4"
+              @click="setSelectedVideo(menu, 'tiktok')"
+            >
+              Tik Tok
+            </v-btn>
+          </div>
+          <v-card
+            class="card-wrapper"
+            :height="menu?.selectedVideo.value == 'youtube' ? 500 : 800"
+            elevation="3"
+          >
+            <!-- <router-link
+              class="text-decoration-none"
+              :to="`/rent/${menu.product_id}`"
+            > -->
+            <div
+              v-if="
+                menu?.selectedVideo.value == 'youtube' &&
+                menu?.video &&
+                getYouTubeEmbedUrl(menu.video)
+              "
+            >
+              <iframe
+                width="100%"
+                height="260"
+                :src="getYouTubeEmbedUrl(menu.video)"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </div>
+
+            <div
+              v-else-if="
+                menu?.selectedVideo.value == 'tiktok' &&
+                menu?.tik_tok_video_link &&
+                getTikTokEmbedUrl(menu.tik_tok_video_link)
+              "
+            >
+              <iframe
+                width="100%"
+                height="560"
+                :src="getTikTokEmbedUrl(menu.tik_tok_video_link)"
+                frameborder="0"
+                allowfullscreen
+              ></iframe>
+            </div>
+
+            <v-img
+              v-else
+              :src="fileURL + menu?.image"
+              height="260"
+              class="position-relative"
+              cover
+            ></v-img>
+            <!-- <div
+              class="position-absolute bg-transparent top-0 right-0 bg-white mt-6 mr-12 cursor-pointer"
+            >
+              <v-icon class="text-white">mdi-heart-outline</v-icon>
+            </div> -->
+            <div
+              v-if="menu?.featured == 'Y'"
+              class="position-absolute left-0 bg-white mb-4 ml-4"
+              style="bottom: 240px"
+            >
+              <span
+                class="text-red-darken-1 text-caption font-weight-black pl-2 pr-8"
+                >{{ menu?.building_type }} {{ menu?.type }} in
+                {{ menu?.city }}</span
+              >
+            </div>
+            <!-- </router-link> -->
+            <div class="card-title d-flex flex-column justify-space-between">
+              <p class="font-weight-black text-body-2 two-lines">
+                {{ menu?.rent_name }}
+              </p>
+              <div class="d-flex align-center justify-space-between">
+                <p
+                  class="font-weight-bold text-grey-darken-1 text-caption mt-1"
+                >
+                  <!-- <span>{{ menu?.rent_parent_name }}</span> | -->
+                  <span>{{ menu?.bedQty }} Beds</span> |
+                  <span>{{ menu?.bathQty }} Bathrooms</span>
+                </p>
+                <p class="font-weight-black text-body-2">
+                  <span
+                    v-if="
+                      menu?.display_construction == 'Y' &&
+                      menu?.construction_name
+                    "
+                    >(<span class="text-blue-darken-4">{{
+                      menu?.construction_name
+                    }}</span
+                    >)</span
+                  >
+                </p>
+              </div>
+              <!-- <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
+                <span>{{ menu?.address }}</span>
+              </p> -->
+              <div class="d-flex align-center ga-1 my-2">
+                <template v-for="item in menu?.rateItems" :key="item.pr_id">
+                  <v-btn
+                    size="xs"
+                    color="black"
+                    class="text-caption pa-1 rounded-lg"
+                    @click="handleSelectRate(menu, item)"
+                    :variant="item.selected.value ? 'flat' : 'outlined'"
+                    >{{ item?.rate_type?.rate_name }}</v-btn
+                  >
+                  <!-- @click="item.selected.value = !item.selected.value" -->
+                </template>
+              </div>
+              <p
+                v-if="menu?.selectedDescription.value"
+                class="text-caption font-weight-bold"
+              >
+                ({{ menu?.selectedDescription.value }})
+              </p>
+              <div class="d-flex align-center ga-10">
+                <p class="text-subtitle-2 mt-1">
+                  <span
+                    v-if="menu?.selectedRateSG.value"
+                    class="text-red-darken-1 font-weight-black"
+                    >S$ {{ menu?.selectedRateSG.value }}</span
+                  >
+                  <span
+                    v-else-if="
+                      !menu?.selectedRateSG.value &&
+                      menu?.selectedRateHome.value
+                    "
+                    class="text-red-darken-1 font-weight-black"
+                    >{{ menu?.currency_symbol }}
+                    {{ menu?.selectedRateHome.value }}</span
+                  >
+
+                  <!-- (<span>{{
+                  formatIDR(menu?.currency_symbol, menu?.price)
+                  }}</span
+                  >) -->
+                </p>
+                <p
+                  v-if="
+                    menu?.selectedRateHome.value && menu?.selectedRateSG.value
+                  "
+                  class="text-caption font-weight-bold"
+                >
+                  ({{ menu?.currency_symbol }}
+                  {{ menu?.selectedRateHome.value }})
+                </p>
+              </div>
+              <div class="d-flex align-center justify-space-between my-2">
+                <v-btn
+                  elevation="0"
+                  style="
+                    border-radius: 0;
+                    height: 35px;
+                    font-size: 14px;
+                    background: #e41d5b !important;
+                    color: white !important;
+                    width: 180px;
+                  "
+                  @click="goWhatsapp(menu)"
+                  class="font-weight-bold px-8"
+                >
+                  Check Availability
+                </v-btn>
+                <v-btn
+                  elevation="2"
+                  rounded
+                  class="font-weight-bold px-8 rounded-full"
+                >
+                  <v-icon class="text-pink">mdi-heart-outline</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </v-card>
+        </div>
+      </template>
 
       <v-btn
         v-if="!isMobile && !isEnd"

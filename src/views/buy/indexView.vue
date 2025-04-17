@@ -141,7 +141,7 @@ const getRentTypes = async (cat, city) => {
 const getRentItemsByTypeId = async (id, countryId, cityId) => {
   try {
     const response = await axios.get(
-      `/list-properties-by-property-type/${id}/${countryId}/${cityId}`,
+      `/list-properties-by-property-type/${id}/${countryId}/${cityId}/2`,
     );
     const data = response.data.data;
     return data.map((item) => ({

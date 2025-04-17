@@ -12,6 +12,9 @@ export default (app) =>
       itemSelected2: "---Select City---",
       itemSelected2Complete: null,
       selectedTrending: null,
+      selectedCategory: {
+        property_type_id: 1,
+      },
       latitude: "",
       longitude: "",
       country: [],
@@ -37,6 +40,9 @@ export default (app) =>
       },
       setSelectedTrending(state, item) {
         state.selectedTrending = item;
+      },
+      setSelectedCategory(state, item) {
+        state.selectedCategory = item;
       },
       setCountry(state, item) {
         state.country = item;
