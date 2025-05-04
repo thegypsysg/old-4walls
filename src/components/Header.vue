@@ -105,6 +105,13 @@ export default {
       return this.activeCity ? this.activeCity?.city_name : this.selectedPlace;
     },
   },
+  watch: {
+    selectedTrending(newVal) {
+      setTimeout(() => {
+        this.$store.dispatch("getCountryMall");
+      }, 400);
+    },
+  },
   created() {
     window.addEventListener("resize", this.handleResize);
     setInterval(this.updateTime, 1000);
@@ -442,8 +449,20 @@ export default {
 
   mounted() {
     const token = localStorage.getItem("token");
+    setTimeout(() => {
+      const trendingData =
+        this.$route.path == "/rent"
+          ? { id: "1" }
+          : this.$route.path == "/buy"
+            ? { id: "2" }
+            : { id: "-1" };
+      console.log(this.$route.path);
+      this.setSelectedTrending(trendingData);
+    }, 300);
 
-    this.$store.dispatch("getCountryMall");
+    setTimeout(() => {
+      this.$store.dispatch("getCountryMall");
+    }, 800);
     if (this.tokenProvider != null) {
       this.getHeaderUserData();
     } else if (token) {

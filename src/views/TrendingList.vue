@@ -143,9 +143,9 @@ watch(
       getMenuListData(
         selectedTrending.value
           ? selectedTrending.value.id
-          : route.path == "rent"
+          : route.path == "/rent"
             ? "1"
-            : route.path == "buy"
+            : route.path == "/buy"
               ? "2"
               : "-1",
         activeCity.value,

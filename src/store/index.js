@@ -62,6 +62,24 @@ export default (app) =>
       },
     },
     actions: {
+      // async setDefaultCountry({ commit, state, dispatch }) {
+      //   state.latitude = localStorage.getItem("latitude") || state.latitude;
+      //   state.longitude = localStorage.getItem("longitude") || state.longitude;
+
+      //   if (!state.latitude || !state.longitude) {
+      //     console.log("Latitude & Longitude kosong, mengambil ulang...");
+      //     await dispatch("getLongLat");
+      //   }
+
+      //   if (!state.latitude || !state.longitude) {
+      //     console.error(
+      //       "Latitude & Longitude tetap kosong setelah retry. setDefaultCountry dibatalkan.",
+      //     );
+      //     return;
+      //   }
+
+      //   // Lanjut dengan request country dari API
+      // },
       async getLongLat({ commit }) {
         if (navigator.geolocation) {
           try {
@@ -88,24 +106,6 @@ export default (app) =>
           console.error("Geolocation tidak didukung di perangkat ini.");
         }
       },
-      // async setDefaultCountry({ commit, state, dispatch }) {
-      //   state.latitude = localStorage.getItem("latitude") || state.latitude;
-      //   state.longitude = localStorage.getItem("longitude") || state.longitude;
-
-      //   if (!state.latitude || !state.longitude) {
-      //     console.log("Latitude & Longitude kosong, mengambil ulang...");
-      //     await dispatch("getLongLat");
-      //   }
-
-      //   if (!state.latitude || !state.longitude) {
-      //     console.error(
-      //       "Latitude & Longitude tetap kosong setelah retry. setDefaultCountry dibatalkan.",
-      //     );
-      //     return;
-      //   }
-
-      //   // Lanjut dengan request country dari API
-      // },
       async setDefaultCountry({ commit, state, dispatch }) {
         console.log("Memulai setDefaultCountry...");
 
@@ -190,7 +190,7 @@ export default (app) =>
           return;
         }
 
-        let link = `/app-city-list/${app.config.globalProperties.$appId}`;
+        let link = `/app-city-list/${app.config.globalProperties.$appId}/${state.selectedTrending ? state.selectedTrending.id : "1"}`;
 
         try {
           const { data } = await axios.get(link);
@@ -220,8 +220,8 @@ export default (app) =>
           console.error("Error di getCityMall:", error);
         }
       },
-      async getCountryMall({ commit, dispatch }) {
-        let link = `/app-country-list/${app.config.globalProperties.$appId}`;
+      async getCountryMall({ commit, dispatch, state }) {
+        let link = `/app-country-list/${app.config.globalProperties.$appId}/${state.selectedTrending ? state.selectedTrending.id : "1"}`;
 
         try {
           // Tunggu getLongLat selesai agar latitude & longitude terisi
