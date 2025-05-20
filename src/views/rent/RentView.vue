@@ -7,18 +7,19 @@
     id="trending-container"
     :style="isSmall ? 'margin-top: 250px' : ''"
     style="position: relative; z-index: 2; background-color: #fff"
+    :class="isSmall ? 'px-3' : 'px-14'"
   >
-    <v-container class="mx-auto px-4">
-      <template v-for="item in filteredRentItems" :key="item?.rent_parent_id">
-        <RentItems
-          v-if="item?.rents?.length > 0"
-          :title="item?.rent_parent_name"
-          :rents="item?.rents"
-          :buildings="buildings"
-        />
-      </template>
-      <Interested class="mt-10 mb-16" />
-    </v-container>
+    <!-- <v-container class="mx-auto px-4"> -->
+    <template v-for="item in filteredRentItems" :key="item?.rent_parent_id">
+      <RentItems
+        v-if="item?.rents?.length > 0"
+        :title="item?.rent_parent_name"
+        :rents="item?.rents"
+        :buildings="buildings"
+      />
+    </template>
+    <Interested class="mt-10 mb-16" />
+    <!-- </v-container> -->
     <Footer />
   </div>
 </template>

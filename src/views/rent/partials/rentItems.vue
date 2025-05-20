@@ -28,6 +28,7 @@ const splideRef = ref(null);
 const isBeginning = ref(true);
 const isEnd = ref(false);
 const isMobile = ref(false);
+const isBestViewed = ref(false);
 const selected = ref(null);
 
 const filteredRents = computed(() => {
@@ -56,18 +57,20 @@ const filteredRents = computed(() => {
     };
   };
 
-  if (selected.value) {
-    return props.rents.map(mapRents);
-  } else {
-    return props.rents.map(mapRents);
+  let filtered = props.rents;
+
+  if (selected.value && selected.value !== 0) {
+    filtered = props.rents.filter((rent) => rent.bt_id === selected.value);
   }
+
+  return filtered.map(mapRents);
 });
 
 // console.log(filteredRents.value);
 
 const splideOptions = computed(() => ({
   type: "slide",
-  perPage: isMobile.value ? 1 : 3,
+  perPage: isMobile.value ? 1 : 3.5,
   arrows: false,
   pagination: false,
   gap: isMobile.value ? "0.5rem" : "0.2rem",
@@ -96,7 +99,7 @@ const splideOptions = computed(() => ({
       perPage: 2,
     },
     1200: {
-      perPage: 4,
+      perPage: 3.5,
     },
   },
 }));
@@ -184,9 +187,21 @@ const getTikTokEmbedUrl = (videoLink) => {
 
 const goWhatsapp = (data) => {
   const footerData = JSON.parse(localStorage.getItem("footerData"));
-  // console.log(footerData);
-  const url = `https://api.whatsapp.com/send?phone=${footerData?.whats_app}&text=I would like to Inquiry about ${data?.rent_name}`;
-  window.location.href = url;
+
+  const message = `
+${data?.button_name}
+—-------------------------------
+Property ID : ${data?.property_id || ""}
+
+Ref No        : ${data?.property_ref_no || ""}
+
+${data?.tag_line || ""}
+${data?.town_name || ""}, ${data?.city_name || ""}, ${data?.country_name || ""}
+  `.trim();
+
+  const encodedMessage = encodeURIComponent(message);
+  const url = `https://api.whatsapp.com/send?phone=${footerData?.whats_app || ""}&text=${encodedMessage}`;
+  window.open(url, "_blank");
 };
 
 onMounted(() => {
@@ -232,6 +247,7 @@ onUnmounted(() => {
           item-value="bt_id"
           item-title="building_type"
           placeholder="Apartment Type"
+          clearable
         >
         </v-select>
       </div>
@@ -240,6 +256,7 @@ onUnmounted(() => {
         class="text-capitalize font-weight-bold"
         variant="text"
         height="40"
+        @click="isBestViewed = true"
       >
         <span style="color: #00a4e4">View all</span>
       </v-btn>
@@ -258,10 +275,16 @@ onUnmounted(() => {
       <Splide v-if="!isMobile" ref="splideRef" :options="splideOptions">
         <SplideSlide v-for="menu in filteredRents" :key="menu.rent_id">
           <!-- :key="menu?.product_id" -->
-          <div class="d-flex align-center justify-space-between px-4">
+          <div
+            class="d-flex align-center justify-space-between px-4"
+            :class="
+              !menu?.video && !menu?.tik_tok_video_link ? 'py-4' : undefined
+            "
+          >
             <v-btn
               variant="text"
               class="bg-grey-darken-4"
+              v-if="menu?.video"
               @click="setSelectedVideo(menu, 'youtube')"
             >
               Youtube
@@ -269,6 +292,7 @@ onUnmounted(() => {
             <v-btn
               variant="text"
               class="bg-blue-darken-4"
+              v-if="menu?.tik_tok_video_link"
               @click="setSelectedVideo(menu, 'tiktok')"
             >
               Tik Tok
@@ -276,7 +300,7 @@ onUnmounted(() => {
           </div>
           <v-card
             class="card-wrapper"
-            :height="menu?.selectedVideo.value == 'youtube' ? 500 : 800"
+            :height="menu?.selectedVideo.value == 'youtube' ? 600 : 900"
             elevation="3"
           >
             <!-- <router-link
@@ -330,7 +354,7 @@ onUnmounted(() => {
             <div
               v-if="menu?.featured == 'Y'"
               class="position-absolute left-0 bg-white mb-4 ml-4"
-              style="bottom: 240px"
+              style="bottom: 340px"
             >
               <span
                 class="text-red-darken-1 text-caption font-weight-black pl-2 pr-8"
@@ -339,31 +363,31 @@ onUnmounted(() => {
               >
             </div>
             <!-- </router-link> -->
-            <div class="card-title d-flex flex-column justify-space-between">
+            <div
+              class="card-title d-flex flex-column justify-space-between ga-3"
+            >
               <p class="font-weight-black text-body-2 two-lines">
                 {{ menu?.rent_name }}
               </p>
-              <div class="d-flex align-center justify-space-between">
-                <p
-                  class="font-weight-bold text-grey-darken-1 text-caption mt-1"
+              <!-- <div class="d-flex align-center justify-space-between"> -->
+              <p class="font-weight-black text-body-2">
+                <span
+                  v-if="
+                    menu?.display_construction == 'Y' && menu?.construction_name
+                  "
+                  >(<span class="text-blue-darken-4">{{
+                    menu?.construction_name
+                  }}</span
+                  >)</span
                 >
-                  <!-- <span>{{ menu?.rent_parent_name }}</span> | -->
-                  <span>{{ menu?.bedQty }} Beds</span> |
-                  <span>{{ menu?.bathQty }} Bathrooms</span>
-                </p>
-                <p class="font-weight-black text-body-2">
-                  <span
-                    v-if="
-                      menu?.display_construction == 'Y' &&
-                      menu?.construction_name
-                    "
-                    >(<span class="text-blue-darken-4">{{
-                      menu?.construction_name
-                    }}</span
-                    >)</span
-                  >
-                </p>
-              </div>
+              </p>
+              <p class="font-weight-bold text-grey-darken-1 text-caption mt-1">
+                <!-- <span>{{ menu?.rent_parent_name }}</span> | -->
+                <span>{{ menu?.bedQty }} Beds</span> |
+                <span>{{ menu?.bathQty }} Bathrooms</span>
+              </p>
+
+              <!-- </div> -->
               <!-- <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
                 <span>{{ menu?.address }}</span>
               </p> -->
@@ -432,7 +456,7 @@ onUnmounted(() => {
                   @click="goWhatsapp(menu)"
                   class="font-weight-bold px-8"
                 >
-                  Check Availability
+                  Inquire Now
                 </v-btn>
                 <v-btn
                   elevation="2"
@@ -458,6 +482,7 @@ onUnmounted(() => {
             <v-btn
               variant="text"
               class="bg-grey-darken-4"
+              v-if="menu?.video"
               @click="setSelectedVideo(menu, 'youtube')"
             >
               Youtube
@@ -465,6 +490,7 @@ onUnmounted(() => {
             <v-btn
               variant="text"
               class="bg-blue-darken-4"
+              v-if="menu?.tik_tok_video_link"
               @click="setSelectedVideo(menu, 'tiktok')"
             >
               Tik Tok
@@ -472,7 +498,7 @@ onUnmounted(() => {
           </div>
           <v-card
             class="card-wrapper"
-            :height="menu?.selectedVideo.value == 'youtube' ? 500 : 800"
+            :height="menu?.selectedVideo.value == 'youtube' ? 600 : 900"
             elevation="3"
           >
             <!-- <router-link
@@ -526,7 +552,7 @@ onUnmounted(() => {
             <div
               v-if="menu?.featured == 'Y'"
               class="position-absolute left-0 bg-white mb-4 ml-4"
-              style="bottom: 240px"
+              style="bottom: 340px"
             >
               <span
                 class="text-red-darken-1 text-caption font-weight-black pl-2 pr-8"
@@ -535,31 +561,29 @@ onUnmounted(() => {
               >
             </div>
             <!-- </router-link> -->
-            <div class="card-title d-flex flex-column justify-space-between">
+            <div
+              class="card-title d-flex flex-column justify-space-between ga-3"
+            >
               <p class="font-weight-black text-body-2 two-lines">
                 {{ menu?.rent_name }}
               </p>
-              <div class="d-flex align-center justify-space-between">
-                <p
-                  class="font-weight-bold text-grey-darken-1 text-caption mt-1"
+              <p class="font-weight-black text-body-2">
+                <span
+                  v-if="
+                    menu?.display_construction == 'Y' && menu?.construction_name
+                  "
+                  >(<span class="text-blue-darken-4">{{
+                    menu?.construction_name
+                  }}</span
+                  >)</span
                 >
-                  <!-- <span>{{ menu?.rent_parent_name }}</span> | -->
-                  <span>{{ menu?.bedQty }} Beds</span> |
-                  <span>{{ menu?.bathQty }} Bathrooms</span>
-                </p>
-                <p class="font-weight-black text-body-2">
-                  <span
-                    v-if="
-                      menu?.display_construction == 'Y' &&
-                      menu?.construction_name
-                    "
-                    >(<span class="text-blue-darken-4">{{
-                      menu?.construction_name
-                    }}</span
-                    >)</span
-                  >
-                </p>
-              </div>
+              </p>
+              <p class="font-weight-bold text-grey-darken-1 text-caption mt-1">
+                <!-- <span>{{ menu?.rent_parent_name }}</span> | -->
+                <span>{{ menu?.bedQty }} Beds</span> |
+                <span>{{ menu?.bathQty }} Bathrooms</span>
+              </p>
+
               <!-- <p class="font-weight-bold text-blue-darken-4 text-caption mt-1">
                 <span>{{ menu?.address }}</span>
               </p> -->
@@ -628,7 +652,7 @@ onUnmounted(() => {
                   @click="goWhatsapp(menu)"
                   class="font-weight-bold px-8"
                 >
-                  Check Availability
+                  Inquire Now
                 </v-btn>
                 <v-btn
                   elevation="2"
@@ -652,6 +676,16 @@ onUnmounted(() => {
         <span class="arrow-icon">→</span>
       </v-btn>
     </div>
+    <v-dialog v-model="isBestViewed" persistent width="auto">
+      <v-card width="350">
+        <v-card-text class="">
+          <h4 class="mt-4 mb-8 text-center">Best Viewed on Mobile</h4>
+          <v-btn class="mb-4 w-100 bg-primary" @click="isBestViewed = false">
+            OK
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
